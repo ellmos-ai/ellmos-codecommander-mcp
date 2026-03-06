@@ -1,4 +1,10 @@
+<p align="center">
+  <img src="ellmos-logo.jpg" alt="CodeCommander logo" width="400">
+</p>
+
 # BACH CodeCommander MCP Server
+
+*Part of the [ellmos-ai](https://github.com/ellmos-ai) family.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/bach-codecommander-mcp.svg)](https://www.npmjs.com/package/bach-codecommander-mcp)
