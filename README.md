@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="ellmos-logo.jpg" alt="CodeCommander logo" width="400">
+  <img src="codecommander_banner.jpg" alt="CodeCommander banner" width="700">
 </p>
 
 # BACH CodeCommander MCP Server
