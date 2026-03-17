@@ -2,6 +2,13 @@
   <img src="codecommander_banner.jpg" alt="CodeCommander banner" width="700">
 </p>
 
+> **DEPRECATED:** This package has been renamed. Use [`ellmos-codecommander-mcp`](https://www.npmjs.com/package/ellmos-codecommander-mcp) instead.
+> ```bash
+> npm uninstall -g bach-codecommander-mcp
+> npm i -g ellmos-codecommander-mcp
+> ```
+> GitHub: [ellmos-ai/ellmos-codecommander-mcp](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
+
 # BACH CodeCommander MCP Server
 
 *Part of the [ellmos-ai](https://github.com/ellmos-ai) family.*
