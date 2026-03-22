@@ -2,24 +2,17 @@
   <img src="codecommander_banner.jpg" alt="CodeCommander banner" width="700">
 </p>
 
-> **DEPRECATED:** This package has been renamed. Use [`ellmos-codecommander-mcp`](https://www.npmjs.com/package/ellmos-codecommander-mcp) instead.
-> ```bash
-> npm uninstall -g bach-codecommander-mcp
-> npm i -g ellmos-codecommander-mcp
-> ```
-> GitHub: [ellmos-ai/ellmos-codecommander-mcp](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
-
-# BACH CodeCommander MCP Server
+# ellmos CodeCommander MCP Server
 
 *Part of the [ellmos-ai](https://github.com/ellmos-ai) family.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm version](https://img.shields.io/npm/v/bach-codecommander-mcp.svg)](https://www.npmjs.com/package/bach-codecommander-mcp)
+[![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
 
 A developer-focused **Model Context Protocol (MCP) server** that gives AI assistants code analysis, JSON repair, encoding fix, import organization, format conversion, file diff, and regex testing capabilities.
 
-**17 tools** optimized for developers - the coding companion to [FileCommander](https://github.com/lukisch/bach-filecommander-mcp).
+**17 tools** optimized for developers - the coding companion to [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
 
 ---
 
@@ -49,14 +42,14 @@ While FileCommander handles filesystem operations, CodeCommander focuses on **co
 ### Option 1: Install from NPM
 
 ```bash
-npm install -g bach-codecommander-mcp
+npm install -g ellmos-codecommander-mcp
 ```
 
 ### Option 2: Install from Source
 
 ```bash
-git clone https://github.com/lukisch/bach-codecommander-mcp.git
-cd bach-codecommander-mcp
+git clone https://github.com/ellmos-ai/ellmos-codecommander-mcp.git
+cd ellmos-codecommander-mcp
 npm install
 npm run build
 ```
@@ -78,7 +71,7 @@ Add to your `claude_desktop_config.json`:
 {
   "mcpServers": {
     "codecommander": {
-      "command": "bach-codecommander"
+      "command": "ellmos-codecommander"
     }
   }
 }
@@ -91,7 +84,7 @@ Add to your `claude_desktop_config.json`:
   "mcpServers": {
     "codecommander": {
       "command": "node",
-      "args": ["/absolute/path/to/bach-codecommander-mcp/dist/index.js"]
+      "args": ["/absolute/path/to/ellmos-codecommander-mcp/dist/index.js"]
     }
   }
 }
@@ -105,10 +98,10 @@ FileCommander and CodeCommander are designed to work side by side:
 {
   "mcpServers": {
     "filecommander": {
-      "command": "bach-filecommander"
+      "command": "ellmos-filecommander"
     },
     "codecommander": {
-      "command": "bach-codecommander"
+      "command": "ellmos-codecommander"
     }
   }
 }
@@ -232,4 +225,17 @@ See [CHANGELOG.md](CHANGELOG.md) for the full version history.
 
 ## License
 
-[MIT](LICENSE) - Lukas (BACH)
+[MIT](LICENSE) - Lukas Geiger ([ellmos-ai](https://github.com/ellmos-ai))
+
+---
+
+## History
+
+This project was originally developed as **BACH CodeCommander** (`bach-codecommander-mcp`). It has been renamed to **ellmos CodeCommander** (`ellmos-codecommander-mcp`) as part of the [ellmos-ai](https://github.com/ellmos-ai) organization.
+
+The old npm package [`bach-codecommander-mcp`](https://www.npmjs.com/package/bach-codecommander-mcp) is deprecated. Please use [`ellmos-codecommander-mcp`](https://www.npmjs.com/package/ellmos-codecommander-mcp) instead:
+
+```bash
+npm uninstall -g bach-codecommander-mcp
+npm install -g ellmos-codecommander-mcp
+```
