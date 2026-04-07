@@ -1,8 +1,9 @@
 <p align="center">
-  <img src="codecommander_banner.jpg" alt="CodeCommander banner" width="700">
+  <img src="assets/codecommander_banner.jpg" alt="CodeCommander banner" width="700">
 </p>
 
 # ellmos CodeCommander MCP Server
+**🇩🇪 [Deutsche Version](README_de.md)**
 
 *Part of the [ellmos-ai](https://github.com/ellmos-ai) family.*
 
