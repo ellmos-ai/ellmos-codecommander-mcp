@@ -1,20 +1,20 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.lukisch/bach-codecommander-mcp",
-  "version": "1.3.2",
+  "name": "io.github.ellmos-ai/ellmos-codecommander-mcp",
+  "version": "1.3.8",
   "title": "BACH CodeCommander",
   "description": "17 tools for code analysis, JSON repair, encoding fix, format conversion, diff, and regex.",
-  "websiteUrl": "https://github.com/lukisch/bach-codecommander-mcp",
+  "websiteUrl": "https://github.com/ellmos-ai/ellmos-codecommander-mcp",
   "repository": {
-    "url": "https://github.com/lukisch/bach-codecommander-mcp",
+    "url": "https://github.com/ellmos-ai/ellmos-codecommander-mcp",
     "source": "github",
-    "id": "lukisch/bach-codecommander-mcp"
+    "id": "ellmos-ai/ellmos-codecommander-mcp"
   },
   "packages": [
     {
       "registryType": "npm",
-      "identifier": "bach-codecommander-mcp",
-      "version": "1.3.2",
+      "identifier": "ellmos-codecommander-mcp",
+      "version": "1.3.8",
       "transport": { "type": "stdio" },
       "runtimeHint": "npx"
     }
