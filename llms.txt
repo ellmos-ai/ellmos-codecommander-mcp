@@ -1,0 +1,30 @@
+# ellmos-codecommander-mcp - MCP Server for Code Intelligence
+
+> CodeCommander is a developer-focused MCP (Model Context Protocol) server that gives AI assistants code analysis, JSON repair, encoding fix, import organization, format conversion, file diff, and regex testing capabilities. 17 tools optimized for developers -- the coding companion to FileCommander in the ellmos MCP family.
+
+Core capabilities: Python AST-based class/method extraction with complexity metrics and import analysis, JSON repair (trailing commas, single quotes, BOM, comments), PEP 8 import sorting and deduplication, Mojibake/double-encoded UTF-8 repair (27+ patterns), German umlaut repair (70+ patterns), format conversion across JSON / CSV / INI / YAML / TOML / XML / TOON, unified diff output (LCS algorithm), regex tester with match details and replace preview, Markdown-to-HTML/PDF export with code blocks, tables, nested lists, and blockquotes. Cross-platform: Windows, macOS, Linux.
+
+Node.js >= 18, MIT. Published as `ellmos-codecommander-mcp` on npm. Listed in public MCP registries (pulsemcp, modelcontextprotocol.io).
+
+## Docs
+
+- [README (English)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/main/README.md): Tools, installation, configuration for Claude Desktop / Claude Code / Cursor
+- [README (Deutsch)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/main/README_de.md): German version
+- [LICENSE](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/main/LICENSE): MIT license text
+- [npm package](https://www.npmjs.com/package/ellmos-codecommander-mcp): Published artifact
+
+## ellmos MCP family (sibling servers)
+
+- [ellmos-filecommander-mcp](https://github.com/ellmos-ai/ellmos-filecommander-mcp): Filesystem operations, process management, interactive sessions (43 tools)
+- [ellmos-clatcher-mcp](https://github.com/ellmos-ai/ellmos-clatcher-mcp): Utility tools -- repair, convert, detect, batch ops (12 tools)
+- [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp): n8n workflow management via MCP (13 tools)
+
+## Broader ellmos ecosystem
+
+- [BACH](https://github.com/ellmos-ai/bach): Full text-based OS for LLMs -- primary consumer of the MCP servers
+- [Rinnsal](https://github.com/ellmos-ai/rinnsal): Lightweight LLM agent infrastructure
+- [USMC](https://github.com/ellmos-ai/usmc): Shared memory primitive
+
+## Optional
+
+- [GitHub Issues](https://github.com/ellmos-ai/ellmos-codecommander-mcp/issues): Bug reports and feature requests
