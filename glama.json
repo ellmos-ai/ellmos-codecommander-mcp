@@ -1,1 +1,33 @@
-{"$schema":"https://glama.ai/mcp/schemas/server.json","maintainers":["lukisch"]}
+{
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "name": "ellmos-codecommander-mcp",
+  "version": "1.3.8",
+  "description": "Developer-focused MCP server for code analysis, JSON repair, encoding fixes, import organization, format conversion, diff, and regex testing.",
+  "maintainers": [
+    "lukisch"
+  ],
+  "author": "Lukas (BACH)",
+  "homepage": "https://github.com/ellmos-ai/ellmos-codecommander-mcp",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "developer-tools",
+    "code-analysis",
+    "json-repair",
+    "encoding-fix",
+    "import-organizer",
+    "mcp-server"
+  ],
+  "tools": {
+    "count": 17
+  },
+  "features": [
+    "Code analysis",
+    "JSON repair",
+    "Encoding fixes",
+    "Import organization",
+    "Format conversion",
+    "Regex testing"
+  ]
+}
