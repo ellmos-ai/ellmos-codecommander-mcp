@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.9] - 2026-05-17
+
+### Added
+- Comprehensive test suite with 137 tests covering all 17 tools (vitest)
+- Cross-platform compatibility verified on Windows, macOS, and Linux
+- Development/Testing section in README.md and README_de.md
+
 ## [1.3.2] - 2026-02-20
 
 ### Fixed

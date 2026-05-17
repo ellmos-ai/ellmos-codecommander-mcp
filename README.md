@@ -214,7 +214,20 @@ npm install
 npm run dev    # Watch mode
 npm run build  # One-time build
 npm start      # Start server
+npm test       # Run test suite (vitest)
 ```
+
+### Testing
+
+The project includes a comprehensive test suite with **137 tests** covering all 17 tools.
+
+```bash
+npm test              # Run all tests
+npx vitest run        # Same as above
+npx vitest --watch    # Watch mode
+```
+
+Tests are verified on **Windows**, **macOS**, and **Linux**.
 
 ---
 
