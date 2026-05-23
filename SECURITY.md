@@ -2,7 +2,7 @@
 
 ## Overview
 
-BACH CodeCommander MCP Server is a developer tool that analyzes and modifies source code files. It operates with the running user's filesystem permissions.
+ellmos CodeCommander MCP Server is a developer tool that analyzes and modifies source code files. It operates with the running user's filesystem permissions.
 
 ## Risk Assessment
 
@@ -41,4 +41,4 @@ BACH CodeCommander MCP Server is a developer tool that analyzes and modifies sou
 
 ## Reporting
 
-Report security issues at https://github.com/lukisch/bach-codecommander-mcp/issues
+Report security issues at https://github.com/ellmos-ai/ellmos-codecommander-mcp/issues

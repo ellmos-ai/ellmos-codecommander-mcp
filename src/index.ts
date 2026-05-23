@@ -34,8 +34,8 @@ const execAsync = promisify(exec);
 // ============================================================================
 
 const server = new McpServer({
-  name: "bach-codecommander-mcp",
-  version: "1.3.0"
+  name: "ellmos-codecommander-mcp",
+  version: "1.3.10"
 });
 
 // ============================================================================
