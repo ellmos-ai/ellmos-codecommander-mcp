@@ -1633,17 +1633,25 @@ describe("Tool 15: cc_md_to_pdf", () => {
 
 describe("Tool 16: cc_set_language", () => {
   it("should accept 'de' as valid language", () => {
-    const valid = ["de", "en"];
+    const valid = ["de", "en", "es", "zh", "ja", "ru"];
     expect(valid.includes("de")).toBe(true);
   });
 
   it("should accept 'en' as valid language", () => {
-    const valid = ["de", "en"];
+    const valid = ["de", "en", "es", "zh", "ja", "ru"];
     expect(valid.includes("en")).toBe(true);
   });
 
+  it("should accept fallback language packs", () => {
+    const valid = ["de", "en", "es", "zh", "ja", "ru"];
+    expect(valid.includes("es")).toBe(true);
+    expect(valid.includes("zh")).toBe(true);
+    expect(valid.includes("ja")).toBe(true);
+    expect(valid.includes("ru")).toBe(true);
+  });
+
   it("should reject invalid language codes", () => {
-    const valid = ["de", "en"];
+    const valid = ["de", "en", "es", "zh", "ja", "ru"];
     expect(valid.includes("fr")).toBe(false);
     expect(valid.includes("")).toBe(false);
   });

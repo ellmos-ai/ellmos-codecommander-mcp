@@ -2250,7 +2250,7 @@ server.registerTool(
 server.tool(
   "cc_set_language",
   "Set the output language for CodeCommander tools",
-  { language: z.enum(["de", "en"]).describe("Language code") },
+  { language: z.enum(["de", "en", "es", "zh", "ja", "ru"]).describe("Language code") },
   async ({ language }) => {
     setLanguage(language);
     return { content: [{ type: "text", text: t().cc_set_language.languageSet(language) }] };
