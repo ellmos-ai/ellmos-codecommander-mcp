@@ -19,8 +19,9 @@ import { z } from "zod";
 import * as fs from "fs/promises";
 import * as path from "path";
 import * as fsSync from "fs";
-import { exec, execSync } from "child_process";
+import { exec, execFileSync, execSync } from "child_process";
 import { promisify } from "util";
+import { pathToFileURL } from "url";
 import { t, setLanguage } from './i18n/index.js';
 import * as yaml from 'js-yaml';
 import * as toml from 'smol-toml';
@@ -2073,8 +2074,14 @@ ${html}
       }
 
       try {
-        const fileUrl = `file:///${tempHtml.replace(/\\/g, '/')}`;
-        execSync(`"${browser}" --headless --disable-gpu --print-to-pdf="${outputPath}" --no-pdf-header-footer "${fileUrl}"`, { timeout: 30000 });
+        const fileUrl = pathToFileURL(tempHtml).href;
+        execFileSync(browser, [
+          '--headless',
+          '--disable-gpu',
+          `--print-to-pdf=${outputPath}`,
+          '--no-pdf-header-footer',
+          fileUrl
+        ], { timeout: 30000 });
       } catch (browserError) {
         // If browser fails, keep HTML as fallback
         const htmlFallback = outputPath.replace(/\.pdf$/i, '.html');

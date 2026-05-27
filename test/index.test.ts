@@ -11,6 +11,7 @@ import * as fs from "fs/promises";
 import * as fsSync from "fs";
 import * as path from "path";
 import * as os from "os";
+import { pathToFileURL } from "url";
 import * as yaml from "js-yaml";
 import * as toml from "smol-toml";
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
@@ -638,6 +639,16 @@ function inlineFmt(text: string): string {
   text = text.replace(/\[x\]/gi, "&#9745;");
   text = text.replace(/\[ \]/g, "&#9744;");
   return text;
+}
+
+function buildPdfBrowserArgs(outputPath: string, tempHtml: string): string[] {
+  return [
+    "--headless",
+    "--disable-gpu",
+    `--print-to-pdf=${outputPath}`,
+    "--no-pdf-header-footer",
+    pathToFileURL(tempHtml).href,
+  ];
 }
 
 // Emoji detection pattern
@@ -1624,6 +1635,16 @@ describe("Tool 15: cc_md_to_pdf", () => {
     expect(line.trimStart().startsWith("```")).toBe(true);
     const lang = line.trim().slice(3).trim();
     expect(lang).toBe("python");
+  });
+
+  it("should pass PDF paths as argv values", () => {
+    const outputPath = path.join(os.tmpdir(), 'report"; echo injected; ".pdf');
+    const tempHtml = outputPath.replace(/\.pdf$/i, ".tmp.html");
+    const args = buildPdfBrowserArgs(outputPath, tempHtml);
+
+    expect(args).toHaveLength(5);
+    expect(args[2]).toBe(`--print-to-pdf=${outputPath}`);
+    expect(args[4]).toBe(pathToFileURL(tempHtml).href);
   });
 });
 
