@@ -16,6 +16,8 @@ Ein entwicklerfokussierter **Model Context Protocol (MCP) Server**, der KI-Assis
 
 **17 Tools** optimiert für Entwickler – das Coding-Gegenstück zu [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
 
+**Auffindbarkeit:** Veröffentlicht auf [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) als `ellmos-codecommander-mcp`, auf [Glama](https://glama.ai/mcp/servers/b9kjs4uaav) sichtbar und mit [`server.json`](server.json) für die offizielle MCP Registry unter `io.github.ellmos-ai/ellmos-codecommander-mcp` vorbereitet.
+
 ---
 
 ## Warum CodeCommander?
@@ -220,7 +222,7 @@ npm test       # Tests ausführen (vitest)
 
 ### Tests
 
-Das Projekt enthält eine umfassende Test-Suite mit **137 Tests** für alle 17 Tools.
+Das Projekt enthält eine umfassende Test-Suite mit **139 Tests** für alle 17 Tools.
 
 ```bash
 npm test              # Alle Tests ausführen
@@ -285,3 +287,11 @@ Dieser MCP-Server ist Teil des **[ellmos-ai](https://github.com/ellmos-ai)**-Ök
 ### Desktop-Software
 
 Unsere Partnerorganisation **[open-bricks](https://github.com/open-bricks)** bündelt KI-native Desktop-Anwendungen: eine moderne Open-Source-Softwaresuite für Datei-, Dokumenten- und Entwicklerwerkzeuge.
+
+---
+
+## Haftung
+
+Dieses Projekt ist eine **unentgeltliche Open-Source-Schenkung** im Sinne der §§ 516 ff. BGB. Die Haftung des Urhebers ist gemäß **§ 521 BGB** auf **Vorsatz und grobe Fahrlässigkeit** beschränkt. Ergänzend gilt der Haftungsausschluss der MIT-Lizenz.
+
+Nutzung auf eigenes Risiko. Keine Wartungszusage, keine Verfügbarkeitsgarantie, keine Gewähr für Fehlerfreiheit oder Eignung für einen bestimmten Zweck.

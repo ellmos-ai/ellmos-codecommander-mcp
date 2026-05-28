@@ -14,7 +14,8 @@
     "README.md",
     "README_de.md",
     "CHANGELOG.md",
-    "SECURITY.md"
+    "SECURITY.md",
+    "server.json"
   ],
   "scripts": {
     "build": "node node_modules/typescript/bin/tsc",
@@ -37,9 +38,13 @@
     "bach",
     "python",
     "ast-analysis",
-    "import-organizer"
+    "import-organizer",
+    "mcp-registry",
+    "regex-tester",
+    "markdown-export",
+    "pdf-export"
   ],
-  "author": "Lukas (BACH)",
+  "author": "Lukas Geiger",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -4,13 +4,13 @@
 
 Core capabilities: Python AST-based class/method extraction with complexity metrics and import analysis, JSON repair (trailing commas, single quotes, BOM, comments), PEP 8 import sorting and deduplication, Mojibake/double-encoded UTF-8 repair (27+ patterns), German umlaut repair (70+ patterns), format conversion across JSON / CSV / INI / YAML / TOML / XML / TOON, unified diff output (LCS algorithm), regex tester with match details and replace preview, Markdown-to-HTML/PDF export with code blocks, tables, nested lists, and blockquotes. Cross-platform: Windows, macOS, Linux.
 
-Node.js >= 18, MIT. Published as `ellmos-codecommander-mcp` on npm. Listed in public MCP registries (pulsemcp, modelcontextprotocol.io).
+Node.js >= 18, MIT. Published as `ellmos-codecommander-mcp` on npm. Visible on Glama at `https://glama.ai/mcp/servers/b9kjs4uaav`. MCP Registry metadata is provided in `server.json` for the namespace `io.github.ellmos-ai/ellmos-codecommander-mcp`.
 
 ## Docs
 
-- [README (English)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/main/README.md): Tools, installation, configuration for Claude Desktop / Claude Code / Cursor
-- [README (Deutsch)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/main/README_de.md): German version
-- [LICENSE](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/main/LICENSE): MIT license text
+- [README (English)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/README.md): Tools, installation, configuration for Claude Desktop / Claude Code / Cursor
+- [README (Deutsch)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/README_de.md): German version
+- [LICENSE](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/LICENSE): MIT license text
 - [npm package](https://www.npmjs.com/package/ellmos-codecommander-mcp): Published artifact
 
 ## ellmos MCP family (sibling servers)
@@ -18,6 +18,7 @@ Node.js >= 18, MIT. Published as `ellmos-codecommander-mcp` on npm. Listed in pu
 - [ellmos-filecommander-mcp](https://github.com/ellmos-ai/ellmos-filecommander-mcp): Filesystem operations, process management, interactive sessions (43 tools)
 - [ellmos-clatcher-mcp](https://github.com/ellmos-ai/ellmos-clatcher-mcp): Utility tools -- repair, convert, detect, batch ops (12 tools)
 - [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp): n8n workflow management via MCP (18 tools)
+- [ellmos-controlcenter-mcp](https://github.com/ellmos-ai/ellmos-controlcenter-mcp): MCP stack discovery, profile management, and local control plane (10 tools)
 
 ## Broader ellmos ecosystem
 

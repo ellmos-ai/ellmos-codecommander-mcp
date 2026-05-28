@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-05-28
+
+### Changed
+- Align README, README_de, llms.txt, package metadata, and server.json with ellmos CodeCommander naming, npm packaging, and MCP Registry metadata.
+- Update README test-count references to the current 139-test Vitest suite.
+- Include `server.json` explicitly in the npm package file list for MCP Registry ingestion.
+- Update community workflows to `actions/stale@v10` and `actions/first-interaction@v3`.
+
 ## [1.3.10] - 2026-05-23
 
 ### Fixed
