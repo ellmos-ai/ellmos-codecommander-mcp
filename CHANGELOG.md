@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Update README test-count references to the current 139-test Vitest suite.
 - Include `server.json` explicitly in the npm package file list for MCP Registry ingestion.
 - Update community workflows to `actions/stale@v10` and `actions/first-interaction@v3`.
+- Lock Vitest/Rolldown WASM peer dependencies explicitly so Linux `npm ci` stays deterministic in GitHub Actions.
 
 ## [1.3.10] - 2026-05-23
 
