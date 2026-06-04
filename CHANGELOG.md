@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased] - 2026-05-28
 
+### Added
+- Add a dedicated GitHub Actions test workflow for Node.js 20, 22, and 24 with `npm ci`, TypeScript build, Vitest, and npm package dry-run checks.
+
 ### Changed
 - Align README, README_de, llms.txt, package metadata, and server.json with ellmos CodeCommander naming, npm packaging, and MCP Registry metadata.
 - Update README test-count references to the current 139-test Vitest suite.
