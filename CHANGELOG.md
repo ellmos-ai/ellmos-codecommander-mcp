@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2026-05-28
+## [Unreleased] - 2026-06-04
 
 ### Added
 - Add a dedicated GitHub Actions test workflow for Node.js 20, 22, and 24 with `npm ci`, TypeScript build, Vitest, and npm package dry-run checks.
@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Include `server.json` explicitly in the npm package file list for MCP Registry ingestion.
 - Update community workflows to `actions/stale@v10` and `actions/first-interaction@v3`.
 - Lock Vitest/Rolldown WASM peer dependencies explicitly so Linux `npm ci` stays deterministic in GitHub Actions.
+- Re-verify the npm package dry-run contents after the deterministic lockfile refresh.
 
 ## [1.3.10] - 2026-05-23
 
