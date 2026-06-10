@@ -9,7 +9,7 @@
  * See LICENSE file for details.
  *
  * @author Lukas (BACH)
- * @version 1.3.0
+ * @version 1.3.10
  * @license MIT
  */
 
@@ -467,7 +467,7 @@ Returns:
 
       const output = [
         t().cc_analyze_code.header(path.basename(filePath)), '',
-        `| ${t().cc_analyze_code.metricTotalLines} | ${analysis.totalLines} |`, `|---|---|`,
+        `| Metric | Value |`, `|---|---|`,
         `| ${t().cc_analyze_code.metricTotalLines} | ${analysis.totalLines} |`,
         `| ${t().cc_analyze_code.metricCodeLines} | ${analysis.codeLines} |`,
         `| ${t().cc_analyze_code.metricCommentLines} | ${analysis.commentLines} |`,
@@ -787,7 +787,7 @@ Groups: 1) __future__ 2) stdlib 3) third-party 4) local`,
 
       const output = [
         t().cc_organize_imports.header(path.basename(filePath)), '',
-        `| ${t().cc_organize_imports.categoryFuture} | ${futureImports.length} |`, `|---|---|`,
+        `| Category | Count |`, `|---|---|`,
         `| ${t().cc_organize_imports.categoryFuture} | ${futureImports.length} |`,
         `| ${t().cc_organize_imports.categoryStdlib} | ${stdlibImports.length} |`,
         `| ${t().cc_organize_imports.categoryThirdParty} | ${thirdPartyImports.length} |`,
