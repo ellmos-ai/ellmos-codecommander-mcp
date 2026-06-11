@@ -15,7 +15,7 @@ Node.js >= 18, MIT. Published as `ellmos-codecommander-mcp` on npm. Visible on G
 
 ## ellmos MCP family (sibling servers)
 
-- [ellmos-filecommander-mcp](https://github.com/ellmos-ai/ellmos-filecommander-mcp): Filesystem operations, process management, interactive sessions (43 tools)
+- [ellmos-filecommander-mcp](https://github.com/ellmos-ai/ellmos-filecommander-mcp): Filesystem operations, process management, interactive sessions (44 tools)
 - [ellmos-clatcher-mcp](https://github.com/ellmos-ai/ellmos-clatcher-mcp): Utility tools -- repair, convert, detect, batch ops (12 tools)
 - [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp): n8n workflow management via MCP (18 tools)
 - [ellmos-controlcenter-mcp](https://github.com/ellmos-ai/ellmos-controlcenter-mcp): MCP stack discovery, profile management, and local control plane (10 tools)
@@ -29,3 +29,24 @@ Node.js >= 18, MIT. Published as `ellmos-codecommander-mcp` on npm. Visible on G
 ## Optional
 
 - [GitHub Issues](https://github.com/ellmos-ai/ellmos-codecommander-mcp/issues): Bug reports and feature requests
+
+## Audience
+
+- Backend developers and DevOps engineers who need AI assistants to analyze Python code, repair broken JSON, or fix encoding issues in CI/CD pipelines
+- AI/LLM assistant power users who want code-intelligence tools integrated into Claude Desktop, Claude Code, or Cursor via MCP
+- Open-source maintainers and tool builders who need reliable format conversion (JSON/CSV/YAML/TOML/XML/TOON) and file diff tools accessible to AI agents
+- German-language developers and researchers who work with text containing broken umlauts or Mojibake and need automated repair
+
+## Search Phrases
+
+```
+ellmos CodeCommander MCP server code analysis
+AI assistant code intelligence MCP tools
+Python AST class method extraction MCP
+JSON repair encoding fix MCP server
+ellmos-ai MCP developer tools
+Claude Code MCP code analysis import organization
+regex tester format conversion markdown PDF MCP
+```
+
+## Last-checked: 2026-06-11

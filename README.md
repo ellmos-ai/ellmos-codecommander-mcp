@@ -269,7 +269,7 @@ This MCP server is part of the **[ellmos-ai](https://github.com/ellmos-ai)** eco
 
 | Server | Tools | Focus | npm |
 |--------|-------|-------|-----|
-| [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp) | 43 | Filesystem, process management, interactive sessions | [`ellmos-filecommander-mcp`](https://www.npmjs.com/package/ellmos-filecommander-mcp) |
+| [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp) | 44 | Filesystem, process management, interactive sessions | [`ellmos-filecommander-mcp`](https://www.npmjs.com/package/ellmos-filecommander-mcp) |
 | **[CodeCommander](https://github.com/ellmos-ai/ellmos-codecommander-mcp)** | **17** | **Code analysis, AST parsing, import management** | **[`ellmos-codecommander-mcp`](https://www.npmjs.com/package/ellmos-codecommander-mcp)** |
 | [Clatcher](https://github.com/ellmos-ai/ellmos-clatcher-mcp) | 12 | File repair, format conversion, batch operations | [`ellmos-clatcher-mcp`](https://www.npmjs.com/package/ellmos-clatcher-mcp) |
 | [n8n Manager](https://github.com/ellmos-ai/n8n-manager-mcp) | 18 | n8n workflow management via AI assistants | [`n8n-manager-mcp`](https://www.npmjs.com/package/n8n-manager-mcp) |
@@ -279,7 +279,7 @@ This MCP server is part of the **[ellmos-ai](https://github.com/ellmos-ai)** eco
 
 | Project | Description |
 |---------|-------------|
-| [BACH](https://github.com/ellmos-ai/bach) | Text-based OS for LLMs — 109+ handlers, 373+ tools, 932+ skills |
+| [BACH](https://github.com/ellmos-ai/bach) | Text-based OS for LLMs — 113+ handlers, 550+ tools, 1870+ skills |
 | [clutch](https://github.com/ellmos-ai/clutch) | Provider-neutral LLM orchestration with auto-routing and budget tracking |
 | [rinnsal](https://github.com/ellmos-ai/rinnsal) | Lightweight agent memory, connectors, and automation infrastructure |
 | [ellmos-stack](https://github.com/ellmos-ai/ellmos-stack) | Self-hosted AI research stack (Ollama + n8n + Rinnsal + KnowledgeDigest) |

@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2026-06-04
+## [Unreleased] - 2026-06-10
 
 ### Added
 - Add a dedicated GitHub Actions test workflow for Node.js 20, 22, and 24 with `npm ci`, TypeScript build, Vitest, and npm package dry-run checks.
@@ -14,6 +14,10 @@ All notable changes to this project will be documented in this file.
 - Update community workflows to `actions/stale@v10` and `actions/first-interaction@v3`.
 - Lock Vitest/Rolldown WASM peer dependencies explicitly so Linux `npm ci` stays deterministic in GitHub Actions.
 - Re-verify the npm package dry-run contents after the deterministic lockfile refresh.
+
+### Fixed
+- `cc_analyze_code` and `cc_organize_imports` tool-reference tables had a duplicate first data row rendered as the column header — replaced with proper `Metric` / `Category` header labels.
+- `@version` annotation in `src/index.ts` corrected from `1.3.0` to `1.3.10`.
 
 ## [1.3.10] - 2026-05-23
 
