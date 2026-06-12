@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
- * BACH CodeCommander MCP Server
+ * ellmos CodeCommander MCP Server
  *
  * A developer-focused MCP server for code analysis, JSON repair,
  * encoding fix, import organization, and format conversion.
  *
- * Copyright (c) 2025-2026 Lukas (BACH). Licensed under MIT License.
+ * Copyright (c) 2025-2026 Lukas Geiger. Licensed under MIT License.
  * See LICENSE file for details.
  *
- * @author Lukas (BACH)
+ * @author Lukas Geiger
  * @version 1.3.10
  * @license MIT
  */

@@ -1,5 +1,5 @@
 /**
- * Test Script for bach-codecommander-mcp new tools:
+ * Test Script for ellmos-codecommander-mcp new tools:
  *   - cc_convert_format (YAML, TOML, XML, TOON)
  *   - cc_diff_files
  *   - cc_regex_test
@@ -54,7 +54,7 @@ function assert(testName, condition, detail = '') {
 }
 
 async function runTests() {
-  console.log('Starting bach-codecommander-mcp test suite...\n');
+  console.log('Starting ellmos-codecommander-mcp test suite...\n');
   console.log(`Server: ${serverPath}`);
   console.log(`Fixtures: ${fixturesDir}\n`);
 

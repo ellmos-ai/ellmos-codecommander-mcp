@@ -7,7 +7,7 @@ export const en: Translations = {
     sourceFileNotFound: (path) => `\u274C Source file not found: ${path}`,
     pathNotFound: (path) => `\u274C Path not found: ${path}`,
     error: (msg) => `\u274C Error: ${msg}`,
-    serverStarted: '\uD83D\uDE80 BACH CodeCommander MCP Server started',
+    serverStarted: '\uD83D\uDE80 ellmos CodeCommander MCP Server started',
   },
 
   // === Tool 1: cc_analyze_code ===

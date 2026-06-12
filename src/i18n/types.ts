@@ -1,5 +1,5 @@
 /**
- * i18n Type Definitions for BACH CodeCommander MCP Server
+ * i18n Type Definitions for ellmos CodeCommander MCP Server
  */
 
 export interface Translations {

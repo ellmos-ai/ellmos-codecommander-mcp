@@ -7,7 +7,7 @@ export const de: Translations = {
     sourceFileNotFound: (path) => `\u274C Quelldatei nicht gefunden: ${path}`,
     pathNotFound: (path) => `\u274C Pfad nicht gefunden: ${path}`,
     error: (msg) => `\u274C Fehler: ${msg}`,
-    serverStarted: '\uD83D\uDE80 BACH CodeCommander MCP Server gestartet',
+    serverStarted: '\uD83D\uDE80 ellmos CodeCommander MCP Server gestartet',
   },
 
   // === Tool 1: cc_analyze_code ===
@@ -20,8 +20,8 @@ export const de: Translations = {
     metricClasses: 'Klassen',
     metricFunctions: 'Funktionen',
     metricImports: 'Imports',
-    metricCyclomaticComplexity: 'Zyklomatische Komplexitaet',
-    metricFileSize: 'Dateigroesse',
+    metricCyclomaticComplexity: 'Zyklomatische Komplexität',
+    metricFileSize: 'Dateigröße',
     classesHeader: '**Klassen:**',
     classInfo: (name, bases, startLine, endLine, methodCount) =>
       `  \uD83D\uDCE6 **${name}${bases}** (Z.${startLine}-${endLine}, ${methodCount} Methoden)`,
@@ -38,12 +38,12 @@ export const de: Translations = {
   cc_analyze_methods: {
     header: (filename) => `\uD83D\uDD0D **Methoden-Analyse: ${filename}**`,
     classNotFound: (name, available) =>
-      `\u274C Klasse "${name}" nicht gefunden. Verfuegbar: ${available}`,
+      `\u274C Klasse "${name}" nicht gefunden. Verfügbar: ${available}`,
     inheritsFrom: (bases) => `Erbt von: ${bases}`,
     visibility: 'Sichtbarkeit',
-    complexity: 'Komplexitaet',
+    complexity: 'Komplexität',
     visibilityLabel: (visibility, complexity) =>
-      `  Sichtbarkeit: ${visibility} | Komplexitaet: ${complexity}`,
+      `  Sichtbarkeit: ${visibility} | Komplexität: ${complexity}`,
     decorators: (decorators) => `  Dekoratoren: ${decorators}`,
     calls: (calls) => `  Ruft auf: ${calls}`,
     topLevelFunctions: '## Top-Level Funktionen',
@@ -92,10 +92,10 @@ export const de: Translations = {
 
   // === Tool 6: cc_fix_json ===
   cc_fix_json: {
-    validJson: (filename) => `\u2705 ${filename} ist gueltiges JSON.`,
+    validJson: (filename) => `\u2705 ${filename} ist gültiges JSON.`,
     analysisHeader: (filename) => `\uD83D\uDD0D **JSON-Analyse: ${filename}**`,
-    validAfterRepair: '\u2705 Gueltig nach Reparatur',
-    stillInvalid: (error) => `\u26A0\uFE0F Noch ungueltig: ${error}`,
+    validAfterRepair: '\u2705 Gültig nach Reparatur',
+    stillInvalid: (error) => `\u26A0\uFE0F Noch ungültig: ${error}`,
     repairedHeader: (filename) => `\u2705 **JSON repariert: ${filename}**`,
     fixBomRemoved: 'BOM entfernt',
     fixNulRemoved: 'NUL-Bytes entfernt',
@@ -107,18 +107,18 @@ export const de: Translations = {
 
   // === Tool 7: cc_validate_json ===
   cc_validate_json: {
-    validHeader: (filename) => `\u2705 **Gueltiges JSON: ${filename}**`,
-    invalidHeader: (filename) => `\u274C **Ungueltiges JSON: ${filename}**`,
+    validHeader: (filename) => `\u2705 **Gültiges JSON: ${filename}**`,
+    invalidHeader: (filename) => `\u274C **Ungültiges JSON: ${filename}**`,
     typeArray: (count) => `Array (${count} Elemente)`,
-    typeObject: (count) => `Objekt (${count} Schluessel)`,
+    typeObject: (count) => `Objekt (${count} Schlüssel)`,
     labelType: 'Typ',
-    labelSize: 'Groesse',
+    labelSize: 'Größe',
     labelBom: 'BOM',
     bomYes: '\u26A0\uFE0F Ja',
     bomNo: 'Nein',
     positionInfo: (line, col) => `\n**Position:** Zeile ${line}, Spalte ${col}`,
     errorLabel: (msg) => `**Fehler:** ${msg}`,
-    hintFix: `\uD83D\uDCA1 Nutze \`cc_fix_json\` fuer automatische Reparatur.`,
+    hintFix: `\uD83D\uDCA1 Nutze \`cc_fix_json\` für automatische Reparatur.`,
   },
 
   // === Tool 8: cc_fix_encoding ===
@@ -141,13 +141,13 @@ export const de: Translations = {
   // === Tool 10: cc_convert_format ===
   cc_convert_format: {
     conversionHeader: (inputFormat, outputFormat) => `\u2705 **${inputFormat} \u2192 ${outputFormat}**`,
-    csvMinRows: `\u274C CSV: mindestens Header + 1 Datenzeile noetig.`,
+    csvMinRows: `\u274C CSV: mindestens Header + 1 Datenzeile nötig.`,
     csvRequiresArray: `\u274C CSV-Export erfordert ein Array.`,
     iniRequiresObject: `\u274C INI-Export erfordert ein Objekt.`,
-    unsupportedFormat: (format) => `\u274C Nicht unterstuetztes Format: ${format}`,
+    unsupportedFormat: (format) => `\u274C Nicht unterstütztes Format: ${format}`,
     labelSource: 'Quelle',
     labelTarget: 'Ziel',
-    labelSize: 'Groesse',
+    labelSize: 'Größe',
   },
 
   // === Tool 11: cc_fix_umlauts ===
@@ -183,8 +183,8 @@ export const de: Translations = {
     conversionHeader: (filename) => `\u2705 **Markdown \u2192 HTML: ${filename}**`,
     labelSource: 'Quelle',
     labelTarget: 'Ziel',
-    labelSize: 'Groesse',
-    hintPrint: `\uD83D\uDCA1 Oeffne die HTML-Datei im Browser und drucke als PDF.`,
+    labelSize: 'Größe',
+    hintPrint: `\uD83D\uDCA1 Öffne die HTML-Datei im Browser und drucke als PDF.`,
   },
 
   // === Tool 15: cc_md_to_pdf ===
@@ -192,7 +192,7 @@ export const de: Translations = {
     conversionHeader: (filename) => `\u2705 **Markdown \u2192 PDF: ${filename}**`,
     labelSource: 'Quelle',
     labelTarget: 'Ziel',
-    labelSize: 'Groesse',
+    labelSize: 'Größe',
     noBrowser: 'Kein Browser (Edge/Chrome) gefunden. HTML-Datei wurde stattdessen erstellt.',
     browserUsed: (name) => `PDF erstellt mit ${name}`,
   },
@@ -207,12 +207,12 @@ export const de: Translations = {
     description: 'Vergleicht zwei Dateien und zeigt Unterschiede im Unified-Diff-Format',
     header: (fileA, fileB) => `**Diff: ${fileA} \u2194 ${fileB}**`,
     identical: 'Die Dateien sind identisch.',
-    linesChanged: (added, removed) => `${added} Zeilen hinzugefuegt, ${removed} Zeilen entfernt`,
+    linesChanged: (added, removed) => `${added} Zeilen hinzugefügt, ${removed} Zeilen entfernt`,
   },
 
   // === Tool 18: cc_regex_test ===
   cc_regex_test: {
-    description: 'Testet regulaere Ausdruecke gegen Text oder Dateiinhalt',
+    description: 'Testet reguläre Ausdrücke gegen Text oder Dateiinhalt',
     header: (pattern, flags) => `**Regex: /${pattern}/${flags}**`,
     matchCount: (count) => `${count} Treffer gefunden`,
     noMatches: 'Keine Treffer gefunden.',

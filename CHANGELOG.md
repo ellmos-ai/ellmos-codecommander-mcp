@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - Add a dedicated GitHub Actions test workflow for Node.js 20, 22, and 24 with `npm ci`, TypeScript build, Vitest, and npm package dry-run checks.
 
 ### Changed
+- Replace non-historical `BACH CodeCommander` branding in source headers, i18n startup text, test labels, Glama metadata, and license metadata with current ellmos CodeCommander naming.
+- Use real German umlauts in German runtime output strings instead of `ae`/`oe`/`ue` transliterations.
 - Align README, README_de, llms.txt, package metadata, and server.json with ellmos CodeCommander naming, npm packaging, and MCP Registry metadata.
 - Update README test-count references to the current 139-test Vitest suite.
 - Include `server.json` explicitly in the npm package file list for MCP Registry ingestion.

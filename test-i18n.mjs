@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * i18n Test for BACH CodeCommander MCP Server
+ * i18n Test for ellmos CodeCommander MCP Server
  * Tests: default language, setLanguage(), getLanguage(), t() translations
  */
 
