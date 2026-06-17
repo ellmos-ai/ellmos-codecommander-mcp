@@ -8,5 +8,6 @@ dist/
 *.swp
 *.swo
 *~
+*-protocoll.txt
 .DS_Store
 Thumbs.db
