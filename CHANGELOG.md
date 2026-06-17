@@ -2,10 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2026-06-10
+## [1.3.12] - 2026-06-17
 
 ### Added
 - Add a dedicated GitHub Actions test workflow for Node.js 20, 22, and 24 with `npm ci`, TypeScript build, Vitest, and npm package dry-run checks.
+- Add a TTY-guarded `update-notifier` check for interactive CLI starts while keeping MCP stdio output unchanged.
 
 ### Changed
 - Replace non-historical `BACH CodeCommander` branding in source headers, i18n startup text, test labels, Glama metadata, and license metadata with current ellmos CodeCommander naming.
@@ -20,6 +21,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - `cc_analyze_code` and `cc_organize_imports` tool-reference tables had a duplicate first data row rendered as the column header — replaced with proper `Metric` / `Category` header labels.
 - `@version` annotation in `src/index.ts` corrected from `1.3.0` to `1.3.10`.
+- Align `package.json`, lockfile, MCP runtime version, and `server.json` metadata after the update-notifier release.
+- Refresh npm dependency locks so production audit findings for `hono` and `js-yaml` are resolved.
 
 ## [1.3.10] - 2026-05-23
 

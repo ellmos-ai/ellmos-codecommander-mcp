@@ -39,7 +39,7 @@ const execAsync = promisify(exec);
 
 const server = new McpServer({
   name: "ellmos-codecommander-mcp",
-  version: "1.3.10"
+  version: "1.3.12"
 });
 
 // ============================================================================
