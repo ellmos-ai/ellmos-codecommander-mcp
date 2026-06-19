@@ -15,7 +15,7 @@
 
 Ein entwicklerfokussierter **Model Context Protocol (MCP) Server**, der KI-Assistenten Fähigkeiten für Code-Analyse, JSON-Reparatur, Encoding-Korrektur, Import-Organisation, Formatkonvertierung, Datei-Vergleich und Regex-Tests verleiht.
 
-**17 Tools** optimiert für Entwickler – das Coding-Gegenstück zu [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
+**19 Tools** optimiert für Entwickler – das Coding-Gegenstück zu [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
 
 **Auffindbarkeit:** Veröffentlicht auf [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) als `ellmos-codecommander-mcp`, auf [Glama](https://glama.ai/mcp/servers/b9kjs4uaav) sichtbar und mit [`server.json`](server.json) für die offizielle MCP Registry unter `io.github.ellmos-ai/ellmos-codecommander-mcp` vorbereitet.
 
@@ -26,6 +26,7 @@ Ein entwicklerfokussierter **Model Context Protocol (MCP) Server**, der KI-Assis
 Während FileCommander Dateisystem-Operationen übernimmt, konzentriert sich CodeCommander auf **Code-Intelligenz**:
 
 - **Python Code-Analyse** – AST-basierte Klassen-/Methodenextraktion, Komplexitätsmetriken, Import-Analyse
+- **BACH-abgeleitete Python-Helfer** – Einrückungsdiagnose und Template-basierte Codegenerierung
 - **JSON-Reparatur** – Automatische Korrektur von fehlerhaftem JSON (Trailing Commas, einfache Anführungszeichen, BOM, Kommentare)
 - **Import-Organisation** – Python-Imports sortieren und deduplizieren gemäß PEP 8
 - **Encoding-Korrektur** – Reparatur von Mojibake und doppelt kodiertem UTF-8 (27+ Muster)
@@ -166,6 +167,13 @@ FileCommander und CodeCommander sind für den parallelen Einsatz konzipiert:
 | `cc_diff_files` | Zwei Dateien vergleichen mit Unified-Diff-Ausgabe (konfigurierbare Kontextzeilen) |
 | `cc_regex_test` | Regex-Muster gegen Text/Dateien testen mit Match-Details, Gruppen und Ersetzungsvorschau |
 
+### Python-Assistenz (2 Tools)
+
+| Tool | Beschreibung |
+|------|-------------|
+| `cc_check_indentation` | Fehlende Doppelpunkte, unindentierte return/yield-Zeilen und gemischte Tab-/Leerzeichen-Einrückung erkennen |
+| `cc_generate_python_code` | Python-Funktionen, Klassen, Dataclasses, CLI-Stubs, Tests, Exceptions und Module aus Templates erzeugen |
+
 ### Export (2 Tools)
 
 | Tool | Beschreibung |
@@ -173,7 +181,7 @@ FileCommander und CodeCommander sind für den parallelen Einsatz konzipiert:
 | `cc_md_to_html` | Markdown zu eigenständigem HTML mit CSS-Styling (Überschriften, Code-Blöcke, Tabellen, verschachtelte Listen, Zitate, Bilder, Checkboxen) |
 | `cc_md_to_pdf` | Markdown zu PDF über Headless-Browser (Edge/Chrome). Fallback auf HTML wenn kein Browser verfügbar |
 
-**Gesamt: 17 Tools**
+**Gesamt: 19 Entwickler-Tools** (`cc_set_language` ist zusätzlich für Sprachumschaltung verfügbar)
 
 ---
 
@@ -223,7 +231,7 @@ npm test       # Tests ausführen (vitest)
 
 ### Tests
 
-Das Projekt enthält eine umfassende Test-Suite mit **139 Tests** für alle 17 Tools.
+Das Projekt enthält eine umfassende Test-Suite mit **154 Tests** für alle 19 Entwickler-Tools und i18n-Verhalten.
 
 ```bash
 npm test              # Alle Tests ausführen

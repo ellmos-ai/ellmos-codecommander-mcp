@@ -192,6 +192,24 @@ export interface Translations {
     browserUsed: (name: string) => string;
   };
 
+  // === Tool 16: cc_check_indentation ===
+  cc_check_indentation: {
+    description: string;
+    header: (path: string) => string;
+    filesChecked: string;
+    filesWithIssues: string;
+    totalIssues: string;
+    noIssues: string;
+    issuesHeader: string;
+    andMore: (count: number) => string;
+  };
+
+  // === Tool 17: cc_generate_python_code ===
+  cc_generate_python_code: {
+    description: string;
+    header: (kind: string) => string;
+  };
+
   // === Tool 16: cc_set_language ===
   cc_set_language: {
     languageSet: (lang: string) => string;

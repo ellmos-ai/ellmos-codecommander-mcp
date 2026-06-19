@@ -197,6 +197,24 @@ export const de: Translations = {
     browserUsed: (name) => `PDF erstellt mit ${name}`,
   },
 
+  // === Tool 16: cc_check_indentation ===
+  cc_check_indentation: {
+    description: 'Prüft Python-Dateien auf fehlende Doppelpunkte, unindentierte return/yield-Zeilen und gemischte Tab-/Leerzeichen-Einrückung',
+    header: (path) => `**Python-Einrückungsprüfung: ${path}**`,
+    filesChecked: 'Dateien geprüft',
+    filesWithIssues: 'Dateien mit Problemen',
+    totalIssues: 'Probleme gesamt',
+    noIssues: '\u2705 Keine Einrückungsprobleme gefunden.',
+    issuesHeader: '**Probleme:**',
+    andMore: (count) => `... und ${count} weitere Probleme`,
+  },
+
+  // === Tool 17: cc_generate_python_code ===
+  cc_generate_python_code: {
+    description: 'Generiert Python-Code-Snippets aus BACH-abgeleiteten Templates ohne Dateien zu schreiben',
+    header: (kind) => `**Generierter Python-${kind}**`,
+  },
+
   // === Tool 16: cc_set_language ===
   cc_set_language: {
     languageSet: (lang) => `Sprache gesetzt auf: ${lang}`,

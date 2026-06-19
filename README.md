@@ -14,7 +14,7 @@
 
 A developer-focused **Model Context Protocol (MCP) server** that gives AI assistants code analysis, JSON repair, encoding fix, import organization, format conversion, file diff, and regex testing capabilities.
 
-**17 tools** optimized for developers - the coding companion to [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
+**19 tools** optimized for developers - the coding companion to [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
 
 **Discoverability:** Published on [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) as `ellmos-codecommander-mcp`, visible on [Glama](https://glama.ai/mcp/servers/b9kjs4uaav), and prepared for the official MCP Registry with [`server.json`](server.json) under `io.github.ellmos-ai/ellmos-codecommander-mcp`.
 
@@ -25,6 +25,7 @@ A developer-focused **Model Context Protocol (MCP) server** that gives AI assist
 While FileCommander handles filesystem operations, CodeCommander focuses on **code intelligence**:
 
 - **Python Code Analysis** - AST-based class/method extraction, complexity metrics, import analysis
+- **BACH-derived Python Helpers** - indentation diagnostics and template-based code generation
 - **JSON Repair** - Fix broken JSON automatically (trailing commas, single quotes, BOM, comments)
 - **Import Organization** - Sort and deduplicate Python imports per PEP 8
 - **Encoding Fix** - Repair Mojibake and double-encoded UTF-8 (27+ patterns)
@@ -165,6 +166,13 @@ FileCommander and CodeCommander are designed to work side by side:
 | `cc_diff_files` | Compare two files with unified diff output (configurable context lines) |
 | `cc_regex_test` | Test regex patterns against text/files with match details, groups, and replace preview |
 
+### Python Assistance (2 tools)
+
+| Tool | Description |
+|------|-------------|
+| `cc_check_indentation` | Detect missing colons, unindented return/yield statements, and mixed tab/space indentation |
+| `cc_generate_python_code` | Generate Python functions, classes, dataclasses, CLI stubs, tests, exceptions, and modules from templates |
+
 ### Export (2 tools)
 
 | Tool | Description |
@@ -172,7 +180,7 @@ FileCommander and CodeCommander are designed to work side by side:
 | `cc_md_to_html` | Markdown to standalone HTML with CSS styling (headers, code blocks, tables, nested lists, blockquotes, images, checkboxes) |
 | `cc_md_to_pdf` | Markdown to PDF via headless browser (Edge/Chrome). Falls back to HTML if no browser is available |
 
-**Total: 17 tools**
+**Total: 19 developer tools** (`cc_set_language` is also available for runtime language switching)
 
 ---
 
@@ -222,7 +230,7 @@ npm test       # Run test suite (vitest)
 
 ### Testing
 
-The project includes a comprehensive test suite with **139 tests** covering all 17 tools.
+The project includes a comprehensive test suite with **154 tests** covering all 19 developer tools and i18n behavior.
 
 ```bash
 npm test              # Run all tests

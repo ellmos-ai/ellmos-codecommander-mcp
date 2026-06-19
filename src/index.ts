@@ -285,6 +285,314 @@ function analyzePythonCode(content: string): CodeAnalysis {
   return { classes, functions, imports, totalLines, codeLines, commentLines, blankLines, complexity };
 }
 
+interface IndentationIssue {
+  file: string;
+  line: number;
+  type: 'missing_colon' | 'unindented_return' | 'mixed_indent' | 'read_error';
+  message: string;
+}
+
+interface IndentationReport {
+  path: string;
+  filesChecked: number;
+  filesWithIssues: number;
+  totalIssues: number;
+  issues: IndentationIssue[];
+}
+
+function checkPythonIndentationContent(content: string, filePath: string): IndentationIssue[] {
+  const issues: IndentationIssue[] = [];
+  const lines = content.split(/\r?\n/);
+  const structurePattern = /^(async\s+def|async\s+for|async\s+with|def|if|elif|else|for|while|try|except|finally|class|with)\b/;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const stripped = line.trim();
+    const indentMatch = line.match(/^[ \t]*/);
+    const leading = indentMatch ? indentMatch[0] : '';
+    const indentLevel = leading.length;
+
+    if (structurePattern.test(stripped) && !stripped.endsWith(':') && !stripped.endsWith(':\\') && !stripped.endsWith('\\')) {
+      const preview = stripped.length > 50 ? `${stripped.substring(0, 50)}...` : stripped;
+      issues.push({
+        file: filePath,
+        line: i + 1,
+        type: 'missing_colon',
+        message: `Structure without ':' - '${preview}'`
+      });
+    }
+
+    if (/^(return|yield)\b/.test(stripped) && indentLevel === 0) {
+      const keyword = stripped.split(/\s+/)[0];
+      issues.push({
+        file: filePath,
+        line: i + 1,
+        type: 'unindented_return',
+        message: `'${keyword}' outside an indented block`
+      });
+    }
+
+    if (leading.includes('\t') && leading.includes(' ')) {
+      issues.push({
+        file: filePath,
+        line: i + 1,
+        type: 'mixed_indent',
+        message: 'Mixed tabs and spaces in indentation'
+      });
+    }
+  }
+
+  return issues;
+}
+
+async function collectPythonFiles(targetPath: string, recursive: boolean): Promise<string[]> {
+  const stat = await fs.stat(targetPath);
+  if (stat.isFile()) return [targetPath];
+  if (!stat.isDirectory()) return [];
+
+  const files: string[] = [];
+  const entries = await fs.readdir(targetPath, { withFileTypes: true });
+  for (const entry of entries) {
+    const childPath = path.join(targetPath, entry.name);
+    if (entry.isDirectory()) {
+      if (recursive) files.push(...await collectPythonFiles(childPath, true));
+    } else if (entry.isFile() && entry.name.endsWith('.py')) {
+      files.push(childPath);
+    }
+  }
+  return files;
+}
+
+async function checkPythonIndentationPath(targetPath: string, recursive: boolean): Promise<IndentationReport> {
+  const files = await collectPythonFiles(targetPath, recursive);
+  const report: IndentationReport = {
+    path: targetPath,
+    filesChecked: 0,
+    filesWithIssues: 0,
+    totalIssues: 0,
+    issues: []
+  };
+
+  for (const filePath of files) {
+    report.filesChecked++;
+    let fileIssues: IndentationIssue[];
+    try {
+      const content = await fs.readFile(filePath, 'utf-8');
+      fileIssues = checkPythonIndentationContent(content, filePath);
+    } catch (error) {
+      fileIssues = [{
+        file: filePath,
+        line: 0,
+        type: 'read_error',
+        message: error instanceof Error ? error.message : String(error)
+      }];
+    }
+
+    if (fileIssues.length > 0) {
+      report.filesWithIssues++;
+      report.totalIssues += fileIssues.length;
+      report.issues.push(...fileIssues);
+    }
+  }
+
+  return report;
+}
+
+interface CodeParam {
+  name: string;
+  type?: string;
+  default?: string;
+}
+
+interface CodeSpec {
+  kind?: string;
+  type?: string;
+  name?: string;
+  params?: CodeParam[];
+  fields?: CodeParam[];
+  init_params?: CodeParam[];
+  bases?: string[];
+  imports?: string[];
+  return_type?: string;
+  docstring?: string;
+  body?: string;
+  description?: string;
+  content?: string;
+  arguments?: Array<Record<string, unknown>>;
+  main_body?: string;
+  target?: string;
+  arrange?: string;
+  act?: string;
+  assertions?: string;
+  base?: string;
+}
+
+function parseJsonValue(value: string | undefined, label: string): unknown {
+  if (!value) return undefined;
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    throw new Error(`${label} must be valid JSON: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function normalizeCodeParams(value: unknown): CodeParam[] | undefined {
+  if (value === undefined) return undefined;
+  if (!Array.isArray(value)) throw new Error('params/fields/init_params must be JSON arrays');
+  return value.map((entry, index) => {
+    if (!isRecord(entry) || typeof entry.name !== 'string') {
+      throw new Error(`Parameter at index ${index} must include a string name`);
+    }
+    const item: CodeParam = { name: entry.name };
+    if (typeof entry.type === 'string') item.type = entry.type;
+    if (typeof entry.default === 'string') item.default = entry.default;
+    return item;
+  });
+}
+
+function normalizeStringList(value: unknown, label: string): string[] | undefined {
+  if (value === undefined) return undefined;
+  if (!Array.isArray(value) || !value.every((item) => typeof item === 'string')) {
+    throw new Error(`${label} must be a JSON array of strings`);
+  }
+  return value;
+}
+
+function mergeCodeSpec(params: {
+  spec_json?: string;
+  kind?: string;
+  name?: string;
+  params_json?: string;
+  fields_json?: string;
+  init_params_json?: string;
+  bases_json?: string;
+  imports_json?: string;
+  return_type?: string;
+  docstring?: string;
+  body?: string;
+  description?: string;
+  content?: string;
+  main_body?: string;
+  target?: string;
+  arrange?: string;
+  act?: string;
+  assertions?: string;
+  base?: string;
+}): CodeSpec {
+  const fromJson = parseJsonValue(params.spec_json, 'spec_json');
+  const spec: CodeSpec = isRecord(fromJson) ? { ...fromJson } as CodeSpec : {};
+  if (fromJson !== undefined && !isRecord(fromJson)) throw new Error('spec_json must be a JSON object');
+
+  const assignString = (key: keyof CodeSpec, value: string | undefined): void => {
+    if (value !== undefined) (spec as Record<string, unknown>)[key] = value;
+  };
+
+  assignString('kind', params.kind);
+  assignString('name', params.name);
+  assignString('return_type', params.return_type);
+  assignString('docstring', params.docstring);
+  assignString('body', params.body);
+  assignString('description', params.description);
+  assignString('content', params.content);
+  assignString('main_body', params.main_body);
+  assignString('target', params.target);
+  assignString('arrange', params.arrange);
+  assignString('act', params.act);
+  assignString('assertions', params.assertions);
+  assignString('base', params.base);
+
+  const parsedParams = parseJsonValue(params.params_json, 'params_json');
+  const parsedFields = parseJsonValue(params.fields_json, 'fields_json');
+  const parsedInitParams = parseJsonValue(params.init_params_json, 'init_params_json');
+  const parsedBases = parseJsonValue(params.bases_json, 'bases_json');
+  const parsedImports = parseJsonValue(params.imports_json, 'imports_json');
+
+  if (parsedParams !== undefined) spec.params = normalizeCodeParams(parsedParams);
+  if (parsedFields !== undefined) spec.fields = normalizeCodeParams(parsedFields);
+  if (parsedInitParams !== undefined) spec.init_params = normalizeCodeParams(parsedInitParams);
+  if (parsedBases !== undefined) spec.bases = normalizeStringList(parsedBases, 'bases_json');
+  if (parsedImports !== undefined) spec.imports = normalizeStringList(parsedImports, 'imports_json');
+
+  return spec;
+}
+
+function formatPythonParams(params: CodeParam[] | undefined): string {
+  if (!params || params.length === 0) return '';
+  return params.map((param) => {
+    let text = param.name;
+    if (param.type) text += `: ${param.type}`;
+    if (param.default !== undefined) text += ` = ${param.default}`;
+    return text;
+  }).join(', ');
+}
+
+function indentPythonBlock(body: string | undefined, spaces: number): string {
+  const content = body && body.trim().length > 0 ? body : 'pass';
+  const prefix = ' '.repeat(spaces);
+  return content.split(/\r?\n/).map((line) => line.trim().length > 0 ? `${prefix}${line}` : '').join('\n');
+}
+
+function generatePythonCode(spec: CodeSpec): string {
+  const kind = spec.kind || spec.type || 'function';
+  const name = spec.name || (kind === 'module' ? 'generated_module' : 'generated_item');
+  const docstring = spec.docstring || `${name} generated by CodeCommander`;
+
+  if (kind === 'function') {
+    const params = formatPythonParams(spec.params);
+    const returnHint = spec.return_type ? ` -> ${spec.return_type}` : '';
+    return `def ${name}(${params})${returnHint}:\n    """${docstring}"""\n${indentPythonBlock(spec.body, 4)}\n`;
+  }
+
+  if (kind === 'class') {
+    const bases = spec.bases && spec.bases.length > 0 ? `(${spec.bases.join(', ')})` : '';
+    const initParams = spec.init_params || [];
+    const initSignature = formatPythonParams(initParams);
+    const initSuffix = initSignature ? `, ${initSignature}` : '';
+    const initBody = initParams.length > 0
+      ? initParams.map((param) => `        self.${param.name} = ${param.name}`).join('\n')
+      : '        pass';
+    return `class ${name}${bases}:\n    """${docstring}"""\n\n    def __init__(self${initSuffix}):\n${initBody}\n`;
+  }
+
+  if (kind === 'dataclass') {
+    const fields = spec.fields || [];
+    const fieldLines = fields.length > 0
+      ? fields.map((field) => {
+          let text = `    ${field.name}: ${field.type || 'Any'}`;
+          if (field.default !== undefined) text += ` = ${field.default}`;
+          return text;
+        }).join('\n')
+      : '    pass';
+    return `@dataclass\nclass ${name}:\n    """${docstring}"""\n${fieldLines}\n`;
+  }
+
+  if (kind === 'cli') {
+    const description = spec.description || `${name} command line interface`;
+    return `def main():\n    """CLI entry point."""\n    import argparse\n\n    parser = argparse.ArgumentParser(description=${JSON.stringify(description)})\n    args = parser.parse_args()\n\n${indentPythonBlock(spec.main_body, 4)}\n\n\nif __name__ == "__main__":\n    main()\n`;
+  }
+
+  if (kind === 'test') {
+    const target = spec.target || name;
+    return `def test_${name}():\n    """Test for ${target}."""\n    # Arrange\n${indentPythonBlock(spec.arrange || '# Setup', 4)}\n\n    # Act\n${indentPythonBlock(spec.act || 'result = None', 4)}\n\n    # Assert\n${indentPythonBlock(spec.assertions || 'assert True', 4)}\n`;
+  }
+
+  if (kind === 'exception') {
+    return `class ${name}(${spec.base || 'Exception'}):\n    """${docstring}"""\n    pass\n`;
+  }
+
+  if (kind === 'module') {
+    const imports = spec.imports ? spec.imports.join('\n') : '';
+    const date = new Date().toISOString().slice(0, 10);
+    return `#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n"""\n${name}\n${spec.description || docstring}\n\nGenerated by ellmos CodeCommander\nDate: ${date}\n"""\n\n${imports}\n\n${spec.content || ''}`;
+  }
+
+  throw new Error(`Unsupported code kind: ${kind}`);
+}
+
 // ============================================================================
 // TOON Format Parser/Serializer
 // ============================================================================
@@ -935,7 +1243,110 @@ Detects: Missing modules, suspected circular imports, import issues`,
 );
 
 // ============================================================================
-// Tool 6: Fix JSON (shared with FileCommander)
+// Tool 6: Check Python Indentation
+// ============================================================================
+
+server.registerTool(
+  "cc_check_indentation",
+  {
+    title: "Check Python Indentation",
+    description: t().cc_check_indentation.description,
+    inputSchema: {
+      path: z.string().min(1).describe("Python file or directory to check"),
+      recursive: z.boolean().default(false).describe("Recurse into subdirectories when path is a directory"),
+      max_issues: z.number().int().min(1).max(200).default(50).describe("Maximum number of issues to include")
+    },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  },
+  async (params) => {
+    try {
+      const targetPath = normalizePath(params.path);
+      if (!await pathExists(targetPath)) {
+        return { isError: true, content: [{ type: "text", text: t().common.pathNotFound(targetPath) }] };
+      }
+
+      const report = await checkPythonIndentationPath(targetPath, params.recursive ?? false);
+      const output = [
+        t().cc_check_indentation.header(path.basename(targetPath)),
+        '',
+        `| | |`,
+        `|---|---|`,
+        `| ${t().cc_check_indentation.filesChecked} | ${report.filesChecked} |`,
+        `| ${t().cc_check_indentation.filesWithIssues} | ${report.filesWithIssues} |`,
+        `| ${t().cc_check_indentation.totalIssues} | ${report.totalIssues} |`
+      ];
+
+      if (report.totalIssues === 0) {
+        output.push('', t().cc_check_indentation.noIssues);
+      } else {
+        output.push('', t().cc_check_indentation.issuesHeader);
+        const maxIssues = params.max_issues ?? 50;
+        for (const issue of report.issues.slice(0, maxIssues)) {
+          const displayPath = report.filesChecked === 1 ? path.basename(issue.file) : path.relative(targetPath, issue.file);
+          output.push(`- ${displayPath}:${issue.line} [${issue.type}] ${issue.message}`);
+        }
+        if (report.issues.length > maxIssues) {
+          output.push(t().cc_check_indentation.andMore(report.issues.length - maxIssues));
+        }
+      }
+
+      return { content: [{ type: "text", text: output.join('\n') }] };
+    } catch (error) {
+      return { isError: true, content: [{ type: "text", text: t().common.error(error instanceof Error ? error.message : String(error)) }] };
+    }
+  }
+);
+
+// ============================================================================
+// Tool 7: Generate Python Code
+// ============================================================================
+
+server.registerTool(
+  "cc_generate_python_code",
+  {
+    title: "Generate Python Code",
+    description: t().cc_generate_python_code.description,
+    inputSchema: {
+      spec_json: z.string().optional().describe("Optional full JSON spec. If set, it is merged with the explicit fields."),
+      kind: z.enum(["function", "class", "dataclass", "cli", "test", "exception", "module"]).optional().describe("Template kind"),
+      name: z.string().optional().describe("Generated item name"),
+      params_json: z.string().optional().describe("JSON array of parameters: [{\"name\":\"x\",\"type\":\"int\",\"default\":\"0\"}]"),
+      fields_json: z.string().optional().describe("JSON array of dataclass fields"),
+      init_params_json: z.string().optional().describe("JSON array of __init__ parameters for classes"),
+      bases_json: z.string().optional().describe("JSON array of class base names"),
+      imports_json: z.string().optional().describe("JSON array of import lines for module generation"),
+      return_type: z.string().optional().describe("Return type annotation for functions"),
+      docstring: z.string().optional().describe("Docstring"),
+      body: z.string().optional().describe("Function or method body"),
+      description: z.string().optional().describe("Module or CLI description"),
+      content: z.string().optional().describe("Module content"),
+      main_body: z.string().optional().describe("CLI main body"),
+      target: z.string().optional().describe("Target name for test generation"),
+      arrange: z.string().optional().describe("Arrange block for test generation"),
+      act: z.string().optional().describe("Act block for test generation"),
+      assertions: z.string().optional().describe("Assert block for test generation"),
+      base: z.string().optional().describe("Base exception class for exception generation")
+    },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  },
+  async (params) => {
+    try {
+      const spec = mergeCodeSpec(params);
+      const code = generatePythonCode(spec);
+      return {
+        content: [{
+          type: "text",
+          text: [t().cc_generate_python_code.header(spec.kind || spec.type || 'function'), '', '```python', code.trimEnd(), '```'].join('\n')
+        }]
+      };
+    } catch (error) {
+      return { isError: true, content: [{ type: "text", text: t().common.error(error instanceof Error ? error.message : String(error)) }] };
+    }
+  }
+);
+
+// ============================================================================
+// Tool 8: Fix JSON (shared with FileCommander)
 // ============================================================================
 
 server.registerTool(

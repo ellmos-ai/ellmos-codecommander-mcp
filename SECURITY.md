@@ -25,6 +25,8 @@ ellmos CodeCommander MCP Server is a developer tool that analyzes and modifies s
 | `cc_analyze_methods` | Reads and analyzes methods |
 | `cc_extract_classes` | Reads and extracts class info |
 | `cc_diagnose_imports` | Reads and diagnoses imports |
+| `cc_check_indentation` | Reads and checks Python indentation |
+| `cc_generate_python_code` | Generates text output only |
 | `cc_validate_json` | Reads and validates JSON |
 | `cc_scan_emoji` | Reads and scans for emojis |
 | `cc_generate_licenses` | Reads installed packages |

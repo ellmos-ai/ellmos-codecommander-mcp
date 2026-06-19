@@ -197,6 +197,24 @@ export const en: Translations = {
     browserUsed: (name) => `PDF created with ${name}`,
   },
 
+  // === Tool 16: cc_check_indentation ===
+  cc_check_indentation: {
+    description: 'Check Python files for missing colons, unindented return/yield statements, and mixed tab/space indentation',
+    header: (path) => `**Python indentation check: ${path}**`,
+    filesChecked: 'Files checked',
+    filesWithIssues: 'Files with issues',
+    totalIssues: 'Issues total',
+    noIssues: '\u2705 No indentation issues found.',
+    issuesHeader: '**Issues:**',
+    andMore: (count) => `... and ${count} more issues`,
+  },
+
+  // === Tool 17: cc_generate_python_code ===
+  cc_generate_python_code: {
+    description: 'Generate Python code snippets from BACH-derived templates without writing files',
+    header: (kind) => `**Generated Python ${kind}**`,
+  },
+
   // === Tool 16: cc_set_language ===
   cc_set_language: {
     languageSet: (lang) => `Language set to: ${lang}`,

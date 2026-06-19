@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+- Add BACH-derived `cc_check_indentation` for Python indentation diagnostics.
+- Add BACH-derived `cc_generate_python_code` for template-based Python code snippets.
+- Replace Spanish, Simplified Chinese, Japanese, and Russian i18n fallbacks with maintained CodeCommander translations.
+- Update README, README_de, llms.txt, server metadata, i18n and security notes for 19 developer tools.
+- Extend the local Vitest suite to 154 tests.
+
 ## [1.3.12] - 2026-06-17
 
 ### Added
