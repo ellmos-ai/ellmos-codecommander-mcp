@@ -9,7 +9,7 @@
  * See LICENSE file for details.
  *
  * @author Lukas Geiger
- * @version 1.3.10
+ * @version 1.3.14
  * @license MIT
  */
 
@@ -22,7 +22,7 @@ import { z } from "zod";
 import * as fs from "fs/promises";
 import * as path from "path";
 import * as fsSync from "fs";
-import { exec, execFileSync, execSync } from "child_process";
+import { exec, execFile, execFileSync, execSync } from "child_process";
 import { promisify } from "util";
 import { pathToFileURL } from "url";
 import { t, setLanguage } from './i18n/index.js';
@@ -32,6 +32,7 @@ import { XMLParser, XMLBuilder } from 'fast-xml-parser';
 import { encode as toonEncode, decode as toonDecode } from '@toon-format/toon';
 
 const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 // ============================================================================
 // Server Initialization
@@ -39,7 +40,7 @@ const execAsync = promisify(exec);
 
 const server = new McpServer({
   name: "ellmos-codecommander-mcp",
-  version: "1.3.12"
+  version: "1.3.14"
 });
 
 // ============================================================================
@@ -300,6 +301,105 @@ interface IndentationReport {
   issues: IndentationIssue[];
 }
 
+interface SignalCallbackIssue {
+  method: string;
+  line: number;
+}
+
+interface AttributeOrderIssue {
+  attr: string;
+  usedLine: number;
+  definedLine: number | null;
+}
+
+interface UnderscoreMismatchIssue {
+  called: string;
+  defined: string;
+}
+
+interface MethodGuardrailReport {
+  missingSignalCallbacks: SignalCallbackIssue[];
+  attributeIssues: AttributeOrderIssue[];
+  underscoreMismatches: UnderscoreMismatchIssue[];
+}
+
+const PYTHON_INHERITED_METHODS = new Set([
+  '__enter__', '__exit__', '__eq__', '__hash__', '__init__', '__str__', '__repr__',
+  'accept', 'reject', 'done', 'exec', 'exec_', 'open', 'close', 'show', 'hide',
+  'connect', 'disconnect', 'emit', 'setText', 'text', 'setValue', 'value',
+  'setEnabled', 'setDisabled', 'setVisible', 'clear', 'update', 'repaint'
+]);
+
+function methodExists(methodName: string, methods: Set<string>): boolean {
+  if (methods.has(methodName) || PYTHON_INHERITED_METHODS.has(methodName)) return true;
+  const alternate = methodName.startsWith('_') ? methodName.slice(1) : `_${methodName}`;
+  return methods.has(alternate);
+}
+
+function analyzeMethodGuardrails(cls: PythonClass, lines: string[]): MethodGuardrailReport {
+  const methods = new Set(cls.methods);
+  const missingSignalCallbacks: SignalCallbackIssue[] = [];
+  const attributeIssues: AttributeOrderIssue[] = [];
+  const underscoreMismatches: UnderscoreMismatchIssue[] = [];
+  const definedAttrs = new Map<string, number>();
+  const reportedAttrs = new Set<string>();
+  const reportedSignals = new Set<string>();
+  const reportedMismatches = new Set<string>();
+
+  for (let index = cls.startLine; index < cls.endLine && index < lines.length; index++) {
+    const line = lines[index];
+    const lineNo = index + 1;
+
+    const signalPattern = /\.(?:connect|disconnect)\s*\(\s*(?:lambda[^:]*:\s*)?self\.(\w+)/g;
+    for (const match of line.matchAll(signalPattern)) {
+      const methodName = match[1];
+      const key = `${methodName}:${lineNo}`;
+      if (!methodExists(methodName, methods) && !reportedSignals.has(key)) {
+        missingSignalCallbacks.push({ method: methodName, line: lineNo });
+        reportedSignals.add(key);
+      }
+    }
+
+    const callPattern = /self\.(\w+)\s*\(/g;
+    for (const match of line.matchAll(callPattern)) {
+      const called = match[1];
+      if (methods.has(called) || PYTHON_INHERITED_METHODS.has(called)) continue;
+      const alternate = called.startsWith('_') ? called.slice(1) : `_${called}`;
+      if (methods.has(alternate) && !reportedMismatches.has(called)) {
+        underscoreMismatches.push({ called, defined: alternate });
+        reportedMismatches.add(called);
+      }
+    }
+
+    const assignmentPattern = /self\.(\w+)\s*(?::[^=]+)?(?:[+\-*/%&|^]?=)/g;
+    const assignedOnLine = new Set<string>();
+    for (const match of line.matchAll(assignmentPattern)) {
+      assignedOnLine.add(match[1]);
+    }
+
+    const attrPattern = /self\.(\w+)/g;
+    for (const match of line.matchAll(attrPattern)) {
+      const attr = match[1];
+      if (methods.has(attr) || PYTHON_INHERITED_METHODS.has(attr)) continue;
+      if (assignedOnLine.has(attr)) continue;
+      if (!definedAttrs.has(attr) && !reportedAttrs.has(attr)) {
+        attributeIssues.push({ attr, usedLine: lineNo, definedLine: null });
+        reportedAttrs.add(attr);
+      }
+    }
+
+    for (const attr of assignedOnLine) {
+      if (!definedAttrs.has(attr)) definedAttrs.set(attr, lineNo);
+    }
+  }
+
+  for (const issue of attributeIssues) {
+    issue.definedLine = definedAttrs.get(issue.attr) ?? null;
+  }
+
+  return { missingSignalCallbacks, attributeIssues, underscoreMismatches };
+}
+
 function checkPythonIndentationContent(content: string, filePath: string): IndentationIssue[] {
   const issues: IndentationIssue[] = [];
   const lines = content.split(/\r?\n/);
@@ -396,6 +496,40 @@ async function checkPythonIndentationPath(targetPath: string, recursive: boolean
   }
 
   return report;
+}
+
+interface ExtractedContentBlock {
+  name: string;
+  content: string;
+}
+
+function appendExtractedContentBlocks(output: string[], blocks: ExtractedContentBlock[], maxChars: number): void {
+  let remaining = Math.max(1000, Math.min(maxChars, 100000));
+  let truncated = false;
+
+  output.push('', t().cc_extract_classes.contentHeader);
+  for (const block of blocks) {
+    if (remaining <= 0) {
+      truncated = true;
+      break;
+    }
+
+    const content = block.content.trimEnd();
+    let visible = content;
+    if (visible.length > remaining) {
+      visible = visible.slice(0, remaining);
+      truncated = true;
+    }
+
+    output.push('', `### ${block.name}`, '````python', visible, '````');
+    remaining -= visible.length;
+
+    if (truncated) break;
+  }
+
+  if (truncated) {
+    output.push('', t().cc_extract_classes.contentTruncated(maxChars));
+  }
 }
 
 interface CodeParam {
@@ -591,6 +725,741 @@ function generatePythonCode(spec: CodeSpec): string {
   }
 
   throw new Error(`Unsupported code kind: ${kind}`);
+}
+
+interface RuntimeImportTarget {
+  module: string;
+  className?: string;
+}
+
+interface RuntimeImportResult {
+  module: string;
+  className?: string;
+  success: boolean;
+  exitCode: number | null;
+  output: string;
+  durationMs: number;
+  timedOut: boolean;
+}
+
+interface RuntimeInitFileInfo {
+  file: string;
+  hasLazyImports: boolean;
+  directImportCount: number;
+  size: number;
+}
+
+interface RuntimeCircularImport {
+  moduleA: string;
+  moduleB: string;
+}
+
+interface RuntimeImportReport {
+  projectPath: string;
+  pythonPath: string;
+  targets: RuntimeImportTarget[];
+  results: RuntimeImportResult[];
+  initFiles: RuntimeInitFileInfo[];
+  circularImports: RuntimeCircularImport[];
+  recommendations: string[];
+}
+
+type ExecFileError = Error & {
+  stdout?: string | Buffer;
+  stderr?: string | Buffer;
+  code?: number | string;
+  signal?: string;
+  killed?: boolean;
+};
+
+const PYTHON_IDENTIFIER_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
+const PYTHON_MODULE_PATH_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*$/;
+const PYTHON_SCAN_SKIP_DIRS = new Set([
+  '__pycache__', '.git', '.hg', '.svn', '.venv', 'venv', 'env', 'node_modules',
+  'dist', 'build', '.mypy_cache', '.pytest_cache', '.ruff_cache'
+]);
+const WINDOWS_NATIVE_CRASH_CODES = new Set([3221225477, 3221225725]);
+
+function validateRuntimeImportTarget(target: RuntimeImportTarget): void {
+  if (!PYTHON_MODULE_PATH_PATTERN.test(target.module)) {
+    throw new Error(`Invalid Python module path: ${target.module}`);
+  }
+  if (target.className && !PYTHON_IDENTIFIER_PATTERN.test(target.className)) {
+    throw new Error(`Invalid Python class/name: ${target.className}`);
+  }
+}
+
+function parseRuntimeImportTargets(raw: string | undefined): RuntimeImportTarget[] | undefined {
+  if (!raw || raw.trim() === '') return undefined;
+  return raw.split(',')
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0)
+    .map((item) => {
+      const [moduleName, className, extra] = item.split(':');
+      if (extra !== undefined) throw new Error(`Invalid module target: ${item}`);
+      const target: RuntimeImportTarget = {
+        module: moduleName.trim(),
+        className: className?.trim() || undefined
+      };
+      validateRuntimeImportTarget(target);
+      return target;
+    });
+}
+
+async function collectPythonProjectFiles(rootDir: string, limit = 1000): Promise<string[]> {
+  const files: string[] = [];
+
+  async function visit(currentDir: string): Promise<void> {
+    if (files.length >= limit) return;
+    const entries = await fs.readdir(currentDir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (files.length >= limit) break;
+      const childPath = path.join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        if (!PYTHON_SCAN_SKIP_DIRS.has(entry.name)) await visit(childPath);
+      } else if (entry.isFile() && entry.name.endsWith('.py')) {
+        files.push(childPath);
+      }
+    }
+  }
+
+  await visit(rootDir);
+  return files;
+}
+
+function pythonModuleNameFromFile(projectPath: string, filePath: string): string | null {
+  const parsed = path.parse(filePath);
+  if (parsed.name.startsWith('_') || parsed.base === '__init__.py') return null;
+  const relative = path.relative(projectPath, filePath);
+  const withoutExtension = relative.slice(0, -path.extname(relative).length);
+  const moduleName = withoutExtension.split(path.sep).join('.');
+  return PYTHON_MODULE_PATH_PATTERN.test(moduleName) ? moduleName : null;
+}
+
+function firstPythonClassName(content: string): string | undefined {
+  const match = content.match(/^class\s+([A-Za-z_][A-Za-z0-9_]*)\s*(?:\(|:)/m);
+  return match?.[1];
+}
+
+async function discoverRuntimeImportTargets(projectPath: string, maxModules: number): Promise<RuntimeImportTarget[]> {
+  const files = await collectPythonProjectFiles(projectPath);
+  const targets: RuntimeImportTarget[] = [];
+
+  for (const filePath of files) {
+    if (targets.length >= maxModules) break;
+    const moduleName = pythonModuleNameFromFile(projectPath, filePath);
+    if (!moduleName) continue;
+    const content = await fs.readFile(filePath, 'utf-8');
+    const target: RuntimeImportTarget = { module: moduleName };
+    const className = firstPythonClassName(content);
+    if (className) target.className = className;
+    validateRuntimeImportTarget(target);
+    targets.push(target);
+  }
+
+  return targets;
+}
+
+function runtimeImportStatement(target: RuntimeImportTarget): string {
+  return target.className
+    ? `from ${target.module} import ${target.className}`
+    : `import ${target.module}`;
+}
+
+async function runIsolatedPythonImport(
+  target: RuntimeImportTarget,
+  projectPath: string,
+  pythonPath: string,
+  timeoutSeconds: number
+): Promise<RuntimeImportResult> {
+  validateRuntimeImportTarget(target);
+  const importStatement = runtimeImportStatement(target);
+  const code = [
+    'import sys',
+    `sys.path.insert(0, ${JSON.stringify(projectPath)})`,
+    'try:',
+    `    ${importStatement}`,
+    '    print("SUCCESS")',
+    'except Exception as e:',
+    '    print(f"ERROR: {type(e).__name__}: {e}")',
+    '    sys.exit(1)'
+  ].join('\n');
+
+  const started = Date.now();
+  try {
+    const { stdout, stderr } = await execFileAsync(pythonPath, ['-c', code], {
+      cwd: projectPath,
+      timeout: timeoutSeconds * 1000,
+      maxBuffer: 1024 * 1024,
+      windowsHide: true,
+      env: { ...process.env, PYTHONIOENCODING: 'utf-8' }
+    });
+    return {
+      module: target.module,
+      className: target.className,
+      success: String(stdout).includes('SUCCESS'),
+      exitCode: 0,
+      output: `${String(stdout).trim()}${String(stderr).trim()}`.slice(0, 2000),
+      durationMs: Date.now() - started,
+      timedOut: false
+    };
+  } catch (error) {
+    const err = error as ExecFileError;
+    const output = `${String(err.stdout ?? '').trim()}${String(err.stderr ?? '').trim()}`.slice(0, 2000);
+    const timedOut = err.killed === true || err.signal === 'SIGTERM';
+    return {
+      module: target.module,
+      className: target.className,
+      success: false,
+      exitCode: typeof err.code === 'number' ? err.code : null,
+      output: timedOut && output.length === 0 ? 'TIMEOUT' : (output || err.message),
+      durationMs: Date.now() - started,
+      timedOut
+    };
+  }
+}
+
+async function analyzeRuntimeInitFiles(projectPath: string): Promise<RuntimeInitFileInfo[]> {
+  const files = await collectPythonProjectFiles(projectPath);
+  const initInfos: RuntimeInitFileInfo[] = [];
+
+  for (const filePath of files.filter((file) => path.basename(file) === '__init__.py')) {
+    const content = await fs.readFile(filePath, 'utf-8');
+    const lines = content.split(/\r?\n/);
+    const directImportCount = lines.filter((line) => {
+      const trimmed = line.trim();
+      return trimmed.startsWith('from .') || trimmed.startsWith('import ');
+    }).length;
+    initInfos.push({
+      file: path.relative(projectPath, filePath),
+      hasLazyImports: content.includes('__getattr__'),
+      directImportCount,
+      size: content.length
+    });
+  }
+
+  return initInfos;
+}
+
+function parsePythonImportReferences(content: string, currentModule: string): string[] {
+  const refs: string[] = [];
+  const currentPackage = currentModule.split('.').slice(0, -1);
+
+  const resolveRelative = (moduleText: string, importedNames: string[]): string[] => {
+    const match = moduleText.match(/^(\.+)(.*)$/);
+    if (!match) return [moduleText];
+    const level = match[1].length;
+    const rest = match[2];
+    const base = currentPackage.slice(0, Math.max(0, currentPackage.length - (level - 1)));
+    if (rest) return [[...base, rest].filter(Boolean).join('.')];
+    return importedNames
+      .map((name) => name.split(' as ')[0].trim())
+      .filter((name) => PYTHON_IDENTIFIER_PATTERN.test(name))
+      .map((name) => [...base, name].filter(Boolean).join('.'));
+  };
+
+  for (const rawLine of content.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    const fromMatch = line.match(/^from\s+([^\s]+)\s+import\s+(.+)$/);
+    if (fromMatch) {
+      const importedNames = fromMatch[2].split(',').map((name) => name.trim());
+      refs.push(...resolveRelative(fromMatch[1], importedNames));
+      continue;
+    }
+
+    const importMatch = line.match(/^import\s+(.+)$/);
+    if (importMatch) {
+      refs.push(...importMatch[1].split(',').map((name) => name.trim().split(' as ')[0].trim()));
+    }
+  }
+
+  return refs.filter((ref) => PYTHON_MODULE_PATH_PATTERN.test(ref));
+}
+
+function resolveKnownImport(ref: string, knownModules: Set<string>): string | undefined {
+  if (knownModules.has(ref)) return ref;
+  const parts = ref.split('.');
+  while (parts.length > 1) {
+    parts.pop();
+    const candidate = parts.join('.');
+    if (knownModules.has(candidate)) return candidate;
+  }
+  return undefined;
+}
+
+async function detectRuntimeCircularImports(projectPath: string): Promise<RuntimeCircularImport[]> {
+  const files = await collectPythonProjectFiles(projectPath);
+  const importMap = new Map<string, string[]>();
+
+  for (const filePath of files) {
+    const moduleName = pythonModuleNameFromFile(projectPath, filePath);
+    if (!moduleName) continue;
+    const content = await fs.readFile(filePath, 'utf-8');
+    importMap.set(moduleName, parsePythonImportReferences(content, moduleName));
+  }
+
+  const knownModules = new Set(importMap.keys());
+  const circular: RuntimeCircularImport[] = [];
+  const seen = new Set<string>();
+
+  for (const [moduleName, refs] of importMap) {
+    for (const ref of refs) {
+      const target = resolveKnownImport(ref, knownModules);
+      if (!target || target === moduleName) continue;
+      const targetRefs = importMap.get(target) ?? [];
+      const backReferencesModule = targetRefs.some((targetRef) => resolveKnownImport(targetRef, knownModules) === moduleName);
+      const key = [moduleName, target].sort().join('<->');
+      if (backReferencesModule && !seen.has(key)) {
+        circular.push({ moduleA: moduleName, moduleB: target });
+        seen.add(key);
+      }
+    }
+  }
+
+  return circular.slice(0, 25);
+}
+
+async function diagnoseRuntimeImports(params: {
+  path: string;
+  modules?: string;
+  max_modules?: number;
+  timeout_seconds?: number;
+  python_path?: string;
+}): Promise<RuntimeImportReport> {
+  const inputPath = normalizePath(params.path);
+  const stat = await fs.stat(inputPath);
+  const projectPath = stat.isDirectory() ? inputPath : path.dirname(inputPath);
+  const maxModules = Math.max(1, Math.min(params.max_modules ?? 20, 100));
+  const timeoutSeconds = Math.max(1, Math.min(params.timeout_seconds ?? 10, 60));
+  const pythonPath = params.python_path || process.env.PYTHON || process.env.PYTHON_EXECUTABLE || 'python';
+  const explicitTargets = parseRuntimeImportTargets(params.modules);
+  const targets = explicitTargets ?? await discoverRuntimeImportTargets(projectPath, maxModules);
+
+  const results: RuntimeImportResult[] = [];
+  for (const target of targets.slice(0, maxModules)) {
+    results.push(await runIsolatedPythonImport(target, projectPath, pythonPath, timeoutSeconds));
+  }
+
+  const initFiles = await analyzeRuntimeInitFiles(projectPath);
+  const circularImports = await detectRuntimeCircularImports(projectPath);
+  const recommendations: string[] = [];
+
+  for (const result of results) {
+    const label = result.className ? `${result.module}:${result.className}` : result.module;
+    if (result.timedOut) {
+      recommendations.push(`${label}: import timed out; check top-level startup work or blocking IO.`);
+    } else if (result.exitCode !== null && WINDOWS_NATIVE_CRASH_CODES.has(result.exitCode)) {
+      recommendations.push(`${label}: native crash/access violation; isolate GUI, DLL, or QApplication-style imports.`);
+    } else if (!result.success) {
+      recommendations.push(`${label}: import failed; inspect the isolated subprocess output.`);
+    }
+  }
+
+  for (const initFile of initFiles) {
+    if (initFile.directImportCount > 3 && !initFile.hasLazyImports) {
+      recommendations.push(`${initFile.file}: many direct __init__.py imports; consider lazy imports.`);
+    }
+  }
+
+  if (circularImports.length > 0) {
+    recommendations.push('Circular imports detected; move shared code to lower-level modules or defer imports locally.');
+  }
+
+  return { projectPath, pythonPath, targets, results, initFiles, circularImports, recommendations };
+}
+
+type PythonStructuralOperation = 'inspect' | 'insert' | 'delete' | 'replace_line' | 'create_edit_file' | 'merge_edit_file';
+type PythonStructuralMode = 'preview' | 'test' | 'apply';
+type PythonElementType = 'class' | 'function' | 'method';
+
+interface PythonElementRange {
+  type: PythonElementType;
+  name: string;
+  displayName: string;
+  startLine: number;
+  endLine: number;
+  parent?: string;
+}
+
+interface PythonStructuralEditResult {
+  operation: PythonStructuralOperation;
+  mode: PythonStructuralMode;
+  changed: boolean;
+  syntaxOk: boolean | null;
+  originalContent: string;
+  newContent: string;
+  outputPath?: string;
+  backupPath?: string;
+  editFileContent?: string;
+  summary: string[];
+}
+
+function splitPythonContent(content: string): { lines: string[]; trailingNewline: boolean } {
+  const normalized = content.replace(/\r\n/g, '\n');
+  const trailingNewline = normalized.endsWith('\n');
+  const lines = normalized.split('\n');
+  if (trailingNewline) lines.pop();
+  return { lines, trailingNewline };
+}
+
+function joinPythonContent(lines: string[], trailingNewline: boolean): string {
+  return `${lines.join('\n')}${trailingNewline ? '\n' : ''}`;
+}
+
+function findPythonBlockEnd(lines: string[], startIndex: number, baseIndent: number, parentEndIndex?: number): number {
+  const limit = parentEndIndex ?? lines.length;
+  let endLine = startIndex + 1;
+  for (let index = startIndex + 1; index < limit; index++) {
+    const line = lines[index];
+    const indent = line.search(/\S/);
+    if (indent >= 0 && indent <= baseIndent && line.trim() !== '') {
+      endLine = index;
+      break;
+    }
+    endLine = index + 1;
+  }
+  return endLine;
+}
+
+function findPythonElementRanges(content: string): PythonElementRange[] {
+  const { lines } = splitPythonContent(content);
+  const analysis = analyzePythonCode(content);
+  const ranges: PythonElementRange[] = [];
+
+  for (const cls of analysis.classes) {
+    ranges.push({
+      type: 'class',
+      name: cls.name,
+      displayName: cls.name,
+      startLine: cls.startLine,
+      endLine: cls.endLine
+    });
+
+    for (let index = cls.startLine; index < cls.endLine && index < lines.length; index++) {
+      const methodMatch = lines[index].match(/^\s+(?:async\s+)?def\s+(\w+)\s*\(/);
+      if (!methodMatch) continue;
+      const methodIndent = lines[index].search(/\S/);
+      const endLine = findPythonBlockEnd(lines, index, methodIndent, cls.endLine);
+      ranges.push({
+        type: 'method',
+        name: methodMatch[1],
+        displayName: `${cls.name}.${methodMatch[1]}`,
+        startLine: index + 1,
+        endLine,
+        parent: cls.name
+      });
+    }
+  }
+
+  for (const func of analysis.functions) {
+    ranges.push({
+      type: 'function',
+      name: func.name,
+      displayName: func.name,
+      startLine: func.startLine,
+      endLine: func.endLine
+    });
+  }
+
+  return ranges.sort((left, right) => left.startLine - right.startLine);
+}
+
+function findPythonElement(content: string, elementName: string): PythonElementRange | undefined {
+  const ranges = findPythonElementRanges(content);
+  return ranges.find((range) => range.displayName === elementName)
+    ?? ranges.find((range) => range.name === elementName);
+}
+
+function findPythonImportInsertionIndex(lines: string[]): number {
+  let index = 0;
+  if (lines[index]?.startsWith('#!')) index++;
+  if (/^#.*coding[:=]\s*[-\w.]+/.test(lines[index] ?? '')) index++;
+  while (lines[index]?.trim() === '') index++;
+
+  const first = lines[index]?.trim();
+  if (first?.startsWith('"""') || first?.startsWith("'''")) {
+    const quote = first.slice(0, 3);
+    index++;
+    if (!(first.endsWith(quote) && first.length > 6)) {
+      while (index < lines.length && !lines[index].trim().endsWith(quote)) index++;
+      if (index < lines.length) index++;
+    }
+    while (lines[index]?.trim() === '') index++;
+  }
+
+  let lastImportIndex = -1;
+  for (let current = index; current < lines.length; current++) {
+    const trimmed = lines[current].trim();
+    if (trimmed === '' || trimmed.startsWith('#')) continue;
+    if (trimmed.startsWith('import ') || trimmed.startsWith('from ')) {
+      lastImportIndex = current;
+      continue;
+    }
+    break;
+  }
+
+  return lastImportIndex >= 0 ? lastImportIndex + 1 : index;
+}
+
+function normalizeInsertedPythonContent(content: string, indentSpaces: number): string[] {
+  const normalized = content.replace(/\r\n/g, '\n').replace(/\n$/, '');
+  const lines = normalized.split('\n');
+  if (indentSpaces <= 0) return lines;
+  const indent = ' '.repeat(indentSpaces);
+  return lines.map((line) => line.trim().length > 0 ? `${indent}${line}` : line);
+}
+
+function resolveStructuralInsertIndex(params: {
+  lines: string[];
+  content: string;
+  position?: string;
+  line?: number;
+  element?: string;
+  class_name?: string;
+}): { index: number; defaultIndent: number } {
+  const position = params.position || 'end';
+
+  if (position === 'start') return { index: 0, defaultIndent: 0 };
+  if (position === 'after_imports') return { index: findPythonImportInsertionIndex(params.lines), defaultIndent: 0 };
+  if (position === 'end') return { index: params.lines.length, defaultIndent: 0 };
+  if (position === 'line') {
+    if (!params.line) throw new Error('line is required for position=line');
+    return { index: Math.max(0, Math.min(params.line - 1, params.lines.length)), defaultIndent: 0 };
+  }
+
+  if (position === 'before_element' || position === 'after_element') {
+    if (!params.element) throw new Error('element is required for before_element/after_element');
+    const range = findPythonElement(params.content, params.element);
+    if (!range) throw new Error(t().cc_python_structural_edit.elementNotFound(params.element));
+    return {
+      index: position === 'before_element' ? range.startLine - 1 : range.endLine,
+      defaultIndent: 0
+    };
+  }
+
+  if (position === 'in_class') {
+    if (!params.class_name) throw new Error('class_name is required for position=in_class');
+    const range = findPythonElement(params.content, params.class_name);
+    if (!range || range.type !== 'class') throw new Error(t().cc_python_structural_edit.elementNotFound(params.class_name));
+    return { index: range.endLine, defaultIndent: 4 };
+  }
+
+  throw new Error(`Unsupported position: ${position}`);
+}
+
+function createPythonEditFileContent(sourcePath: string, content: string, elementsRaw: string | undefined): string {
+  const elements = (elementsRaw || '').split(',').map((item) => item.trim()).filter(Boolean);
+  if (elements.length === 0) throw new Error('elements is required for create_edit_file');
+
+  const { lines } = splitPythonContent(content);
+  const output: string[] = [
+    `# EDIT FILE - generated from ${path.basename(sourcePath)}`,
+    `# Elements: ${elements.join(', ')}`,
+    '# Edit code below the markers, then merge explicitly.',
+    '# ============================================================',
+    ''
+  ];
+
+  for (const element of elements) {
+    const range = findPythonElement(content, element);
+    if (!range) {
+      output.push(`# WARNING: element not found: ${element}`, '');
+      continue;
+    }
+    output.push(`# === ${range.type.toUpperCase()}: ${range.displayName} [Lines ${range.startLine}-${range.endLine}] ===`);
+    output.push(...lines.slice(range.startLine - 1, range.endLine));
+    output.push('');
+  }
+
+  return output.join('\n');
+}
+
+function mergePythonEditFileContent(sourceContent: string, editContent: string): string {
+  const parsed = splitPythonContent(sourceContent);
+  const sourceLines = [...parsed.lines];
+  const markerPattern = /^# === (CLASS|FUNCTION|METHOD): ([^\[]+) \[(?:Lines|Zeile) (\d+)-(\d+)\] ===$/;
+  const replacements: Array<{ startLine: number; endLine: number; lines: string[]; label: string }> = [];
+  let current: { startLine: number; endLine: number; lines: string[]; label: string } | null = null;
+
+  for (const line of editContent.replace(/\r\n/g, '\n').split('\n')) {
+    const marker = line.match(markerPattern);
+    if (marker) {
+      if (current) replacements.push(current);
+      current = {
+        startLine: Number(marker[3]),
+        endLine: Number(marker[4]),
+        lines: [],
+        label: `${marker[1]} ${marker[2].trim()}`
+      };
+      continue;
+    }
+    if (current) current.lines.push(line);
+  }
+  if (current) replacements.push(current);
+  if (replacements.length === 0) throw new Error('No edit markers found in edit_file');
+
+  replacements.sort((left, right) => right.startLine - left.startLine);
+  for (const replacement of replacements) {
+    if (replacement.startLine < 1 || replacement.endLine > sourceLines.length || replacement.startLine > replacement.endLine) {
+      throw new Error(`Invalid edit marker range for ${replacement.label}: ${replacement.startLine}-${replacement.endLine}`);
+    }
+    while (replacement.lines.length > 0 && replacement.lines[replacement.lines.length - 1].trim() === '') {
+      replacement.lines.pop();
+    }
+    sourceLines.splice(replacement.startLine - 1, replacement.endLine - replacement.startLine + 1, ...replacement.lines);
+  }
+
+  return joinPythonContent(sourceLines, parsed.trailingNewline);
+}
+
+function safeTimestamp(): string {
+  return new Date().toISOString().replace(/[-:T.Z]/g, '').slice(0, 14);
+}
+
+function backupPathForPythonFile(filePath: string): string {
+  const parsed = path.parse(filePath);
+  return path.join(parsed.dir, `${parsed.name}.backup_${safeTimestamp()}${parsed.ext || '.py'}`);
+}
+
+async function checkPythonSyntax(content: string, pythonPath: string): Promise<{ ok: boolean; output: string }> {
+  const code = [
+    'import ast, sys',
+    'source = sys.stdin.read()',
+    'try:',
+    '    ast.parse(source)',
+    'except SyntaxError as exc:',
+    '    print(f"{exc.msg} at line {exc.lineno}:{exc.offset}")',
+    '    sys.exit(1)'
+  ].join('\n');
+  try {
+    execFileSync(pythonPath, ['-c', code], {
+      input: content,
+      timeout: 10000,
+      maxBuffer: 1024 * 1024,
+      windowsHide: true,
+      env: { ...process.env, PYTHONIOENCODING: 'utf-8' }
+    });
+    return { ok: true, output: '' };
+  } catch (error) {
+    const err = error as ExecFileError;
+    return {
+      ok: false,
+      output: `${String(err.stdout ?? '').trim()}${String(err.stderr ?? '').trim()}` || err.message
+    };
+  }
+}
+
+async function runPythonStructuralEdit(params: {
+  path: string;
+  operation: PythonStructuralOperation;
+  mode?: PythonStructuralMode;
+  position?: string;
+  line?: number;
+  element?: string;
+  class_name?: string;
+  content?: string;
+  elements?: string;
+  edit_file?: string;
+  output_path?: string;
+  indent_spaces?: number;
+  create_backup?: boolean;
+  syntax_check?: boolean;
+  python_path?: string;
+}): Promise<PythonStructuralEditResult> {
+  const filePath = normalizePath(params.path);
+  const mode = params.mode ?? 'preview';
+  const originalContent = await fs.readFile(filePath, 'utf-8');
+  const parsed = splitPythonContent(originalContent);
+  let newLines = [...parsed.lines];
+  let newContent = originalContent;
+  const summary: string[] = [];
+  let editFileContent: string | undefined;
+  let outputPath: string | undefined;
+  let backupPath: string | undefined;
+
+  if (params.operation === 'inspect') {
+    const ranges = findPythonElementRanges(originalContent);
+    summary.push(t().cc_python_structural_edit.structureHeader);
+    for (const range of ranges) {
+      if (range.type === 'class') summary.push(t().cc_python_structural_edit.classLine(range.displayName, range.startLine, range.endLine));
+      if (range.type === 'function') summary.push(t().cc_python_structural_edit.functionLine(range.displayName, range.startLine, range.endLine));
+      if (range.type === 'method') summary.push(t().cc_python_structural_edit.methodLine(range.displayName, range.startLine, range.endLine));
+    }
+    return { operation: params.operation, mode, changed: false, syntaxOk: null, originalContent, newContent, summary };
+  }
+
+  if (params.operation === 'create_edit_file') {
+    editFileContent = createPythonEditFileContent(filePath, originalContent, params.elements);
+    if (mode !== 'preview') {
+      outputPath = normalizePath(params.output_path || path.join(path.dirname(filePath), `${path.parse(filePath).name}.edit.py`));
+      await fs.writeFile(outputPath, editFileContent, 'utf-8');
+      summary.push(t().cc_python_structural_edit.editFileReady(outputPath));
+    }
+    return { operation: params.operation, mode, changed: mode !== 'preview', syntaxOk: null, originalContent, newContent, outputPath, editFileContent, summary };
+  }
+
+  if (params.operation === 'merge_edit_file') {
+    if (!params.edit_file) throw new Error('edit_file is required for merge_edit_file');
+    const editContent = await fs.readFile(normalizePath(params.edit_file), 'utf-8');
+    newContent = mergePythonEditFileContent(originalContent, editContent);
+    newLines = splitPythonContent(newContent).lines;
+  } else if (params.operation === 'insert') {
+    if (params.content === undefined) throw new Error('content is required for insert');
+    const resolved = resolveStructuralInsertIndex({
+      lines: newLines,
+      content: originalContent,
+      position: params.position,
+      line: params.line,
+      element: params.element,
+      class_name: params.class_name
+    });
+    const indentSpaces = params.indent_spaces ?? resolved.defaultIndent;
+    newLines.splice(resolved.index, 0, ...normalizeInsertedPythonContent(params.content, indentSpaces));
+    newContent = joinPythonContent(newLines, parsed.trailingNewline);
+    summary.push(t().cc_python_structural_edit.insertedAt(resolved.index + 1));
+  } else if (params.operation === 'delete') {
+    if (!params.element) throw new Error('element is required for delete');
+    const range = findPythonElement(originalContent, params.element);
+    if (!range) throw new Error(t().cc_python_structural_edit.elementNotFound(params.element));
+    newLines.splice(range.startLine - 1, range.endLine - range.startLine + 1);
+    newContent = joinPythonContent(newLines, parsed.trailingNewline);
+    summary.push(t().cc_python_structural_edit.deletedElement(range.displayName, range.startLine, range.endLine));
+  } else if (params.operation === 'replace_line') {
+    if (!params.line) throw new Error('line is required for replace_line');
+    if (params.content === undefined) throw new Error('content is required for replace_line');
+    if (params.line < 1 || params.line > newLines.length) throw new Error(`line out of range: ${params.line}`);
+    newLines[params.line - 1] = params.content;
+    newContent = joinPythonContent(newLines, parsed.trailingNewline);
+    summary.push(t().cc_python_structural_edit.replacedLine(params.line));
+  } else {
+    throw new Error(`Unsupported operation: ${params.operation}`);
+  }
+
+  const changed = newContent !== originalContent;
+  let syntaxOk: boolean | null = null;
+  if (changed && (params.syntax_check ?? true)) {
+    const pythonPath = params.python_path || process.env.PYTHON || process.env.PYTHON_EXECUTABLE || 'python';
+    const syntax = await checkPythonSyntax(newContent, pythonPath);
+    syntaxOk = syntax.ok;
+    if (!syntax.ok) throw new Error(t().cc_python_structural_edit.syntaxFailed(syntax.output));
+  }
+
+  if (changed && mode === 'test') {
+    outputPath = normalizePath(params.output_path || path.join(path.dirname(filePath), `${path.parse(filePath).name}.test.py`));
+    await fs.writeFile(outputPath, newContent, 'utf-8');
+    summary.push(t().cc_python_structural_edit.testWritten(outputPath));
+  } else if (changed && mode === 'apply') {
+    if (params.create_backup ?? true) {
+      backupPath = backupPathForPythonFile(filePath);
+      await fs.writeFile(backupPath, originalContent, 'utf-8');
+      summary.push(t().cc_python_structural_edit.backupCreated(backupPath));
+    }
+    await fs.writeFile(filePath, newContent, 'utf-8');
+    outputPath = filePath;
+    summary.push(t().cc_python_structural_edit.appliedTo(filePath));
+  }
+
+  return { operation: params.operation, mode, changed, syntaxOk, originalContent, newContent, outputPath, backupPath, summary };
 }
 
 // ============================================================================
@@ -874,6 +1743,38 @@ Returns:
         if (cls.bases.length > 0) output.push(t().cc_analyze_methods.inheritsFrom(cls.bases.join(', ')));
         output.push('');
 
+        const guardrails = analyzeMethodGuardrails(cls, lines);
+        if (guardrails.missingSignalCallbacks.length > 0 ||
+            guardrails.attributeIssues.length > 0 ||
+            guardrails.underscoreMismatches.length > 0) {
+          output.push(t().cc_analyze_methods.guardrailsHeader);
+
+          if (guardrails.missingSignalCallbacks.length > 0) {
+            output.push(t().cc_analyze_methods.missingSignalCallbacksHeader);
+            for (const issue of guardrails.missingSignalCallbacks) {
+              output.push(t().cc_analyze_methods.missingSignalCallback(issue.line, issue.method));
+            }
+          }
+
+          if (guardrails.attributeIssues.length > 0) {
+            output.push(t().cc_analyze_methods.attributeIssuesHeader);
+            for (const issue of guardrails.attributeIssues) {
+              output.push(issue.definedLine === null
+                ? t().cc_analyze_methods.attributeNeverDefined(issue.usedLine, issue.attr)
+                : t().cc_analyze_methods.attributeBeforeDefinition(issue.usedLine, issue.attr, issue.definedLine));
+            }
+          }
+
+          if (guardrails.underscoreMismatches.length > 0) {
+            output.push(t().cc_analyze_methods.underscoreMismatchesHeader);
+            for (const issue of guardrails.underscoreMismatches) {
+              output.push(t().cc_analyze_methods.underscoreMismatch(issue.called, issue.defined));
+            }
+          }
+
+          output.push('');
+        }
+
         // Analyze each method
         for (let i = cls.startLine; i < cls.endLine && i < lines.length; i++) {
           const methodMatch = lines[i].match(/^\s+(async\s+)?def\s+(\w+)\s*\(([^)]*)\)\s*(?:->\s*(.+?))?\s*:/);
@@ -953,11 +1854,15 @@ server.registerTool(
 Args:
   - path (string): Path to the Python file
   - output_dir (string, optional): Output directory (otherwise display only)
+  - include_content (boolean, optional): Include pycutter-style code blocks in the response
+  - max_chars (number, optional): Maximum response characters for included code
 
 Useful for code review and documentation.`,
     inputSchema: {
       path: z.string().min(1).describe("Path to the Python file"),
-      output_dir: z.string().optional().describe("Output directory")
+      output_dir: z.string().optional().describe("Output directory"),
+      include_content: z.boolean().default(false).describe("Include extracted class/helper content in the MCP response"),
+      max_chars: z.number().int().min(1000).max(100000).default(12000).describe("Maximum characters of included extracted content")
     },
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   },
@@ -974,7 +1879,7 @@ Useful for code review and documentation.`,
 
       const output: string[] = [t().cc_extract_classes.header(path.basename(filePath)), ''];
 
-      const extractedFiles: { name: string; content: string }[] = [];
+      const extractedFiles: ExtractedContentBlock[] = [];
 
       for (const cls of analysis.classes) {
         const classContent = lines.slice(cls.startLine - 1, cls.endLine).join('\n');
@@ -1002,6 +1907,10 @@ Useful for code review and documentation.`,
         output.push('', t().cc_extract_classes.filesWritten(extractedFiles.length, outDir));
       } else {
         output.push('', t().cc_extract_classes.hintUseOutputDir);
+      }
+
+      if (params.include_content) {
+        appendExtractedContentBlocks(output, extractedFiles, params.max_chars ?? 12000);
       }
 
       return { content: [{ type: "text", text: output.join('\n') }] };
@@ -1346,7 +2255,193 @@ server.registerTool(
 );
 
 // ============================================================================
-// Tool 8: Fix JSON (shared with FileCommander)
+// Tool 8: Runtime Import Diagnose
+// ============================================================================
+
+server.registerTool(
+  "cc_runtime_import_diagnose",
+  {
+    title: "Runtime Import Diagnose",
+    description: t().cc_runtime_import_diagnose.description,
+    inputSchema: {
+      path: z.string().min(1).describe("Python project directory or file"),
+      modules: z.string().optional().describe("Optional module list: package.mod:Class,other.module"),
+      max_modules: z.number().int().min(1).max(100).default(20).describe("Maximum auto-discovered modules to import"),
+      timeout_seconds: z.number().int().min(1).max(60).default(10).describe("Timeout per isolated import subprocess"),
+      python_path: z.string().optional().describe("Python executable path; defaults to PYTHON/PYTHON_EXECUTABLE/python")
+    },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: false, openWorldHint: false }
+  },
+  async (params) => {
+    try {
+      const targetPath = normalizePath(params.path);
+      if (!await pathExists(targetPath)) {
+        return { isError: true, content: [{ type: "text", text: t().common.pathNotFound(targetPath) }] };
+      }
+
+      const report = await diagnoseRuntimeImports(params);
+      const okCount = report.results.filter((result) => result.success).length;
+      const failed = report.results.filter((result) => !result.success);
+      const timeoutSeconds = Math.max(1, Math.min(params.timeout_seconds ?? 10, 60));
+      const output: string[] = [
+        t().cc_runtime_import_diagnose.header(path.basename(report.projectPath) || report.projectPath),
+        '',
+        `| | |`,
+        `|---|---|`,
+        `| ${t().cc_runtime_import_diagnose.python} | ${report.pythonPath} |`,
+        `| ${t().cc_runtime_import_diagnose.modulesTested} | ${report.results.length} |`,
+        `| ${t().cc_runtime_import_diagnose.importsOk} | ${okCount} |`,
+        `| ${t().cc_runtime_import_diagnose.failures} | ${failed.length} |`,
+        `| ${t().cc_runtime_import_diagnose.circularImports} | ${report.circularImports.length} |`,
+        `| ${t().cc_runtime_import_diagnose.initFiles} | ${report.initFiles.length} |`,
+        `| ${t().cc_runtime_import_diagnose.timeoutSeconds} | ${timeoutSeconds} |`
+      ];
+
+      if (report.results.length === 0) {
+        output.push('', t().cc_runtime_import_diagnose.noTargets);
+      } else {
+        output.push('', t().cc_runtime_import_diagnose.singleImportsHeader);
+        for (const result of report.results) {
+          const label = result.className ? `${result.module}:${result.className}` : result.module;
+          if (result.success) {
+            output.push(t().cc_runtime_import_diagnose.importOk(label, result.durationMs));
+          } else if (result.timedOut) {
+            output.push(t().cc_runtime_import_diagnose.importTimedOut(label, result.durationMs));
+          } else {
+            output.push(t().cc_runtime_import_diagnose.importFailed(label, result.exitCode ?? 'n/a', result.output || ''));
+          }
+        }
+      }
+
+      if (report.initFiles.length > 0) {
+        output.push('', t().cc_runtime_import_diagnose.initFilesHeader);
+        for (const initFile of report.initFiles.slice(0, 15)) {
+          output.push(t().cc_runtime_import_diagnose.initFileInfo(
+            initFile.file,
+            initFile.directImportCount,
+            initFile.hasLazyImports
+          ));
+        }
+        if (report.initFiles.length > 15) {
+          output.push(t().cc_runtime_import_diagnose.andMore(report.initFiles.length - 15));
+        }
+      }
+
+      if (report.circularImports.length > 0) {
+        output.push('', t().cc_runtime_import_diagnose.circularHeader);
+        for (const issue of report.circularImports) {
+          output.push(t().cc_runtime_import_diagnose.circularPair(issue.moduleA, issue.moduleB));
+        }
+      }
+
+      if (report.recommendations.length > 0) {
+        output.push('', t().cc_runtime_import_diagnose.recommendationsHeader);
+        output.push(...report.recommendations.map((recommendation) => `- ${recommendation}`));
+      } else if (failed.length === 0 && report.circularImports.length === 0) {
+        output.push('', t().cc_runtime_import_diagnose.noProblems);
+      }
+
+      return { content: [{ type: "text", text: output.join('\n') }] };
+    } catch (error) {
+      return { isError: true, content: [{ type: "text", text: t().common.error(error instanceof Error ? error.message : String(error)) }] };
+    }
+  }
+);
+
+// ============================================================================
+// Tool 9: Python Structural Edit
+// ============================================================================
+
+server.registerTool(
+  "cc_python_structural_edit",
+  {
+    title: "Python Structural Edit",
+    description: t().cc_python_structural_edit.description,
+    inputSchema: {
+      path: z.string().min(1).describe("Python file to inspect or edit"),
+      operation: z.enum(["inspect", "insert", "delete", "replace_line", "create_edit_file", "merge_edit_file"]).describe("Structural edit operation"),
+      mode: z.enum(["preview", "test", "apply"]).default("preview").describe("preview returns a diff, test writes a .test.py file, apply writes the source"),
+      position: z.enum(["start", "after_imports", "end", "line", "before_element", "after_element", "in_class"]).optional().describe("Insert position for operation=insert"),
+      line: z.number().int().min(1).optional().describe("1-based line for position=line or replace_line"),
+      element: z.string().optional().describe("Class/function/method name, e.g. MyClass.method"),
+      class_name: z.string().optional().describe("Target class for position=in_class"),
+      content: z.string().optional().describe("Inserted code or replacement line content"),
+      elements: z.string().optional().describe("Comma-separated element names for create_edit_file"),
+      edit_file: z.string().optional().describe("Edit file path for merge_edit_file"),
+      output_path: z.string().optional().describe("Optional output path for test or edit-file modes"),
+      indent_spaces: z.number().int().min(0).max(32).optional().describe("Indent inserted non-empty lines"),
+      create_backup: z.boolean().default(true).describe("Create a backup when mode=apply"),
+      syntax_check: z.boolean().default(true).describe("Compile-check edited Python before writing"),
+      python_path: z.string().optional().describe("Python executable path for syntax checks")
+    },
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false }
+  },
+  async (params) => {
+    try {
+      const filePath = normalizePath(params.path);
+      if (!await pathExists(filePath)) {
+        return { isError: true, content: [{ type: "text", text: t().common.fileNotFound(filePath) }] };
+      }
+
+      const result = await runPythonStructuralEdit({
+        path: filePath,
+        operation: params.operation,
+        mode: params.mode,
+        position: params.position,
+        line: params.line,
+        element: params.element,
+        class_name: params.class_name,
+        content: params.content,
+        elements: params.elements,
+        edit_file: params.edit_file,
+        output_path: params.output_path,
+        indent_spaces: params.indent_spaces,
+        create_backup: params.create_backup,
+        syntax_check: params.syntax_check,
+        python_path: params.python_path
+      });
+
+      const output: string[] = [
+        t().cc_python_structural_edit.header(path.basename(filePath)),
+        '',
+        `| | |`,
+        `|---|---|`,
+        `| ${t().cc_python_structural_edit.operationLabel} | ${result.operation} |`,
+        `| ${t().cc_python_structural_edit.modeLabel} | ${result.mode} |`,
+        `| ${t().cc_python_structural_edit.changedLabel} | ${result.changed ? 'yes' : 'no'} |`,
+        `| ${t().cc_python_structural_edit.syntaxLabel} | ${result.syntaxOk === null ? 'n/a' : result.syntaxOk ? 'ok' : 'failed'} |`
+      ];
+
+      if (result.outputPath) output.push(`| ${t().cc_python_structural_edit.outputLabel} | ${result.outputPath} |`);
+      if (result.backupPath) output.push(`| ${t().cc_python_structural_edit.backupLabel} | ${result.backupPath} |`);
+      if (result.summary.length > 0) output.push('', ...result.summary);
+
+      if (result.editFileContent && result.mode === 'preview') {
+        output.push('', t().cc_python_structural_edit.editFilePreview, '```python', result.editFileContent.trimEnd(), '```');
+      }
+
+      if (result.changed && result.mode === 'preview') {
+        const diff = computeUnifiedDiff(
+          splitPythonContent(result.originalContent).lines,
+          splitPythonContent(result.newContent).lines,
+          3,
+          path.basename(filePath),
+          `${path.basename(filePath)} (edited)`
+        );
+        output.push('', t().cc_python_structural_edit.diffHeader, '```diff', diff || t().cc_python_structural_edit.noChanges, '```');
+      } else if (!result.changed && result.operation !== 'inspect' && !result.editFileContent) {
+        output.push('', t().cc_python_structural_edit.noChanges);
+      }
+
+      return { content: [{ type: "text", text: output.join('\n') }] };
+    } catch (error) {
+      return { isError: true, content: [{ type: "text", text: t().common.error(error instanceof Error ? error.message : String(error)) }] };
+    }
+  }
+);
+
+// ============================================================================
+// Tool 10: Fix JSON (shared with FileCommander)
 // ============================================================================
 
 server.registerTool(

@@ -43,6 +43,14 @@ export interface Translations {
     visibilityLabel: (visibility: string, complexity: number) => string;
     decorators: (decorators: string) => string;
     calls: (calls: string) => string;
+    guardrailsHeader: string;
+    missingSignalCallbacksHeader: string;
+    missingSignalCallback: (line: number, method: string) => string;
+    attributeIssuesHeader: string;
+    attributeNeverDefined: (line: number, attr: string) => string;
+    attributeBeforeDefinition: (useLine: number, attr: string, defLine: number) => string;
+    underscoreMismatchesHeader: string;
+    underscoreMismatch: (called: string, defined: string) => string;
     topLevelFunctions: string;
   };
 
@@ -52,6 +60,8 @@ export interface Translations {
     classInfo: (name: string, lineCount: number, methodCount: number) => string;
     helperFunctions: string;
     helperFunctionsInfo: (lineCount: number) => string;
+    contentHeader: string;
+    contentTruncated: (maxChars: number) => string;
     filesWritten: (count: number, dir: string) => string;
     hintUseOutputDir: string;
   };
@@ -208,6 +218,59 @@ export interface Translations {
   cc_generate_python_code: {
     description: string;
     header: (kind: string) => string;
+  };
+
+  // === Tool 18: cc_runtime_import_diagnose ===
+  cc_runtime_import_diagnose: {
+    description: string;
+    header: (path: string) => string;
+    python: string;
+    modulesTested: string;
+    importsOk: string;
+    failures: string;
+    circularImports: string;
+    initFiles: string;
+    timeoutSeconds: string;
+    noTargets: string;
+    singleImportsHeader: string;
+    importOk: (target: string, durationMs: number) => string;
+    importFailed: (target: string, exitCode: number | string, output: string) => string;
+    importTimedOut: (target: string, durationMs: number) => string;
+    initFilesHeader: string;
+    initFileInfo: (file: string, directImports: number, hasLazy: boolean) => string;
+    circularHeader: string;
+    circularPair: (moduleA: string, moduleB: string) => string;
+    recommendationsHeader: string;
+    noProblems: string;
+    andMore: (count: number) => string;
+  };
+
+  // === Tool 19: cc_python_structural_edit ===
+  cc_python_structural_edit: {
+    description: string;
+    header: (path: string) => string;
+    operationLabel: string;
+    modeLabel: string;
+    changedLabel: string;
+    syntaxLabel: string;
+    outputLabel: string;
+    backupLabel: string;
+    structureHeader: string;
+    classLine: (name: string, startLine: number, endLine: number) => string;
+    functionLine: (name: string, startLine: number, endLine: number) => string;
+    methodLine: (name: string, startLine: number, endLine: number) => string;
+    insertedAt: (line: number) => string;
+    deletedElement: (name: string, startLine: number, endLine: number) => string;
+    replacedLine: (line: number) => string;
+    editFileReady: (path: string) => string;
+    editFilePreview: string;
+    testWritten: (path: string) => string;
+    backupCreated: (path: string) => string;
+    appliedTo: (path: string) => string;
+    diffHeader: string;
+    noChanges: string;
+    elementNotFound: (name: string) => string;
+    syntaxFailed: (output: string) => string;
   };
 
   // === Tool 16: cc_set_language ===

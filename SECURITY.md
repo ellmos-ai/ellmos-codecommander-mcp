@@ -17,13 +17,19 @@ ellmos CodeCommander MCP Server is a developer tool that analyzes and modifies s
 | `cc_convert_format` | Creates files | Converts between formats |
 | `cc_md_to_html` | Creates files | Generates HTML output |
 | `cc_md_to_pdf` | Creates files | Generates PDF output |
+| `cc_python_structural_edit` | Modifies Python source when `mode=apply` | Defaults to preview; supports syntax checks, test-file output and backups |
+
+### Runtime Diagnostic Tools
+| Tool | Risk | Description |
+|------|------|-------------|
+| `cc_runtime_import_diagnose` | Executes target-project imports in isolated Python subprocesses | CodeCommander writes no files, but imported Python modules may run top-level side effects; use explicit `modules`, short timeouts and trusted project paths |
 
 ### Low Risk Tools (Read-Only)
 | Tool | Description |
 |------|-------------|
 | `cc_analyze_code` | Reads and analyzes code |
-| `cc_analyze_methods` | Reads and analyzes methods |
-| `cc_extract_classes` | Reads and extracts class info |
+| `cc_analyze_methods` | Reads and analyzes methods, callbacks and self-attribute order |
+| `cc_extract_classes` | Reads and extracts class info; creates files only when `output_dir` is set |
 | `cc_diagnose_imports` | Reads and diagnoses imports |
 | `cc_check_indentation` | Reads and checks Python indentation |
 | `cc_generate_python_code` | Generates text output only |
@@ -36,8 +42,9 @@ ellmos CodeCommander MCP Server is a developer tool that analyzes and modifies s
 
 ## Recommendations
 
-- All file-modifying tools support `dry_run` and/or `create_backup` options
-- Use `dry_run=true` to preview changes before applying
+- File-modifying tools support `dry_run`, `mode=preview` and/or `create_backup` options
+- Preview changes before applying (`dry_run=true` or `mode=preview`)
+- Treat runtime import diagnostics as code execution of the inspected project
 - Review changes before deploying to production
 - This server is designed for local development use via stdio transport
 

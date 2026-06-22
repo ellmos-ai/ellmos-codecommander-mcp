@@ -2,14 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [1.3.13] - 2026-06-22
 
 ### Added
 - Add BACH-derived `cc_check_indentation` for Python indentation diagnostics.
 - Add BACH-derived `cc_generate_python_code` for template-based Python code snippets.
+- Extend `cc_extract_classes` with optional pycutter-style inline class/helper content for LLM context packaging.
+- Extend `cc_analyze_methods` with BACH-derived guardrails for missing signal callbacks, self-attributes used before definition, and underscore method mismatches.
+- Add BACH-derived `cc_runtime_import_diagnose` for isolated Python runtime import checks, `__init__.py` analysis, and circular-import hints.
+- Add BACH-derived `cc_python_structural_edit` for structural Python edits with preview, test-file, syntax-check and backup safety modes.
 - Replace Spanish, Simplified Chinese, Japanese, and Russian i18n fallbacks with maintained CodeCommander translations.
-- Update README, README_de, llms.txt, server metadata, i18n and security notes for 19 developer tools.
-- Extend the local Vitest suite to 154 tests.
+- Update README, README_de, llms.txt, server metadata, i18n and security notes for 21 developer tools.
+- Extend the local Vitest suite to 167 tests.
 
 ## [1.3.12] - 2026-06-17
 

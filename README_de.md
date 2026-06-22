@@ -13,9 +13,9 @@
 [![CodeCommander tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
 
-Ein entwicklerfokussierter **Model Context Protocol (MCP) Server**, der KI-Assistenten Fähigkeiten für Code-Analyse, JSON-Reparatur, Encoding-Korrektur, Import-Organisation, Formatkonvertierung, Datei-Vergleich und Regex-Tests verleiht.
+Ein entwicklerfokussierter **Model Context Protocol (MCP) Server**, der KI-Assistenten Fähigkeiten für Code-Analyse, strukturelles Python-Editing, JSON-Reparatur, Encoding-Korrektur, Import-Organisation, Formatkonvertierung, Datei-Vergleich und Regex-Tests verleiht.
 
-**19 Tools** optimiert für Entwickler – das Coding-Gegenstück zu [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
+**21 Tools** optimiert für Entwickler – das Coding-Gegenstück zu [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
 
 **Auffindbarkeit:** Veröffentlicht auf [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) als `ellmos-codecommander-mcp`, auf [Glama](https://glama.ai/mcp/servers/b9kjs4uaav) sichtbar und mit [`server.json`](server.json) für die offizielle MCP Registry unter `io.github.ellmos-ai/ellmos-codecommander-mcp` vorbereitet.
 
@@ -26,7 +26,7 @@ Ein entwicklerfokussierter **Model Context Protocol (MCP) Server**, der KI-Assis
 Während FileCommander Dateisystem-Operationen übernimmt, konzentriert sich CodeCommander auf **Code-Intelligenz**:
 
 - **Python Code-Analyse** – AST-basierte Klassen-/Methodenextraktion, Komplexitätsmetriken, Import-Analyse
-- **BACH-abgeleitete Python-Helfer** – Einrückungsdiagnose und Template-basierte Codegenerierung
+- **BACH-abgeleitete Python-Helfer** – Runtime-Importdiagnose, strukturelle Edits, Einrückungsprüfung und Template-basierte Codegenerierung
 - **JSON-Reparatur** – Automatische Korrektur von fehlerhaftem JSON (Trailing Commas, einfache Anführungszeichen, BOM, Kommentare)
 - **Import-Organisation** – Python-Imports sortieren und deduplizieren gemäß PEP 8
 - **Encoding-Korrektur** – Reparatur von Mojibake und doppelt kodiertem UTF-8 (27+ Muster)
@@ -122,15 +122,16 @@ FileCommander und CodeCommander sind für den parallelen Einsatz konzipiert:
 | Tool | Beschreibung |
 |------|-------------|
 | `cc_analyze_code` | Vollständige Code-Analyse: Klassen, Funktionen, Imports, LOC, Komplexität |
-| `cc_analyze_methods` | Detaillierte Methodenanalyse: Parameter, Decorators, Sichtbarkeit, Datenfluss |
-| `cc_extract_classes` | Python-Klassen/-Funktionen als separate Textblöcke extrahieren |
+| `cc_analyze_methods` | Detaillierte Methodenanalyse: Parameter, Decorators, Sichtbarkeit, Datenfluss, BACH-Prüfungen |
+| `cc_extract_classes` | Python-Klassen/-Funktionen als separate Textblöcke extrahieren, optional mit pycutter-artigem Inline-Inhalt |
 
-### Import-Verwaltung (2 Tools)
+### Import-Verwaltung (3 Tools)
 
 | Tool | Beschreibung |
 |------|-------------|
 | `cc_organize_imports` | Python-Imports sortieren & deduplizieren gemäß PEP 8 |
 | `cc_diagnose_imports` | Ungenutzte Imports, Duplikate und zirkuläre Import-Risiken erkennen |
+| `cc_runtime_import_diagnose` | Python-Runtime-Imports isoliert mit Timeouts, __init__.py-Analyse und Zirkularitäts-Hinweisen prüfen |
 
 ### JSON-Tools (2 Tools)
 
@@ -167,12 +168,13 @@ FileCommander und CodeCommander sind für den parallelen Einsatz konzipiert:
 | `cc_diff_files` | Zwei Dateien vergleichen mit Unified-Diff-Ausgabe (konfigurierbare Kontextzeilen) |
 | `cc_regex_test` | Regex-Muster gegen Text/Dateien testen mit Match-Details, Gruppen und Ersetzungsvorschau |
 
-### Python-Assistenz (2 Tools)
+### Python-Assistenz (3 Tools)
 
 | Tool | Beschreibung |
 |------|-------------|
 | `cc_check_indentation` | Fehlende Doppelpunkte, unindentierte return/yield-Zeilen und gemischte Tab-/Leerzeichen-Einrückung erkennen |
 | `cc_generate_python_code` | Python-Funktionen, Klassen, Dataclasses, CLI-Stubs, Tests, Exceptions und Module aus Templates erzeugen |
+| `cc_python_structural_edit` | Strukturelle Python-Edits mit Vorschau, Testdatei, Syntaxprüfung und Backup-Modus prüfen und anwenden |
 
 ### Export (2 Tools)
 
@@ -181,7 +183,7 @@ FileCommander und CodeCommander sind für den parallelen Einsatz konzipiert:
 | `cc_md_to_html` | Markdown zu eigenständigem HTML mit CSS-Styling (Überschriften, Code-Blöcke, Tabellen, verschachtelte Listen, Zitate, Bilder, Checkboxen) |
 | `cc_md_to_pdf` | Markdown zu PDF über Headless-Browser (Edge/Chrome). Fallback auf HTML wenn kein Browser verfügbar |
 
-**Gesamt: 19 Entwickler-Tools** (`cc_set_language` ist zusätzlich für Sprachumschaltung verfügbar)
+**Gesamt: 21 Entwickler-Tools** (`cc_set_language` ist zusätzlich für Sprachumschaltung verfügbar)
 
 ---
 
@@ -212,7 +214,7 @@ Alle Tools verwenden das Präfix `cc_` (CodeCommander), um Konflikte mit dem `fc
 Siehe [SECURITY.md](SECURITY.md) für detaillierte Sicherheitsinformationen.
 
 Wichtige Punkte:
-- Alle dateiverändernden Tools unterstützen den `dry_run`-Modus
+- Dateiverändernde Tools unterstützen Vorschau-/Dry-run-Modi, wo anwendbar
 - Backup-Erstellung ist standardmäßig bei destruktiven Operationen aktiviert
 - Kein integriertes Sandboxing – die Sicherheit wird an den MCP-Client delegiert
 - Konzipiert für die lokale Entwicklungsnutzung über stdio-Transport
@@ -231,7 +233,7 @@ npm test       # Tests ausführen (vitest)
 
 ### Tests
 
-Das Projekt enthält eine umfassende Test-Suite mit **154 Tests** für alle 19 Entwickler-Tools und i18n-Verhalten.
+Das Projekt enthält eine umfassende Test-Suite für alle 21 Entwickler-Tools und i18n-Verhalten.
 
 ```bash
 npm test              # Alle Tests ausführen
