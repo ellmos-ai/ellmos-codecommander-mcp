@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Add a metadata regression test for package/server version alignment and the README family tool count.
+
+### Fixed
+- Correct the CodeCommander tool count in the README and README_de MCP family tables from the stale 17-tool value to 21.
+
 ## [1.3.13] - 2026-06-22
 
 ### Added
