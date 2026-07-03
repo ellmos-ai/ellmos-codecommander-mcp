@@ -18,6 +18,7 @@ import * as yaml from "js-yaml";
 import * as toml from "smol-toml";
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
 import { encode as toonEncode, decode as toonDecode } from "@toon-format/toon";
+import { convertSingleQuotedDelimiters } from "../src/index.js";
 
 const execFileAsync = promisify(execFile);
 
@@ -2870,5 +2871,42 @@ describe("Cross-cutting: Temp directories", () => {
     const result = path.join(os.tmpdir(), "test", "file.txt");
     expect(result).toContain("test");
     expect(result).toContain("file.txt");
+  });
+});
+
+// ============================================================================
+// Regression: cc_fix_json single-quote conversion must not corrupt valid JSON
+// ============================================================================
+// Unlike the rest of this file, these tests import the real function from
+// src/index.ts instead of a replicated copy, so they actually exercise the
+// shipped implementation.
+
+describe("convertSingleQuotedDelimiters (cc_fix_json single-quote step)", () => {
+  it("leaves already-valid JSON with multiple apostrophes inside double-quoted strings untouched", () => {
+    const input = '{"a": "it\'s fine", "b": "another\'s value"}';
+    const output = convertSingleQuotedDelimiters(input);
+    expect(output).toBe(input);
+    expect(() => JSON.parse(output)).not.toThrow();
+  });
+
+  it("does not corrupt a double-quoted value containing a literal 'word': sequence", () => {
+    const input = '{"example": "use \'key\': \'value\' syntax", "b": "ok"}';
+    const output = convertSingleQuotedDelimiters(input);
+    expect(output).toBe(input);
+    expect(() => JSON.parse(output)).not.toThrow();
+  });
+
+  it("still converts JSON5-style single-quoted keys and values to double quotes", () => {
+    const input = "{'a': 'hello', 'b': 1}";
+    const output = convertSingleQuotedDelimiters(input);
+    expect(output).toBe('{"a": "hello", "b": 1}');
+    expect(() => JSON.parse(output)).not.toThrow();
+  });
+
+  it("preserves a literal apostrophe inside a double-quoted string next to a single-quoted key", () => {
+    const input = "{'note': \"it's ok\"}";
+    const output = convertSingleQuotedDelimiters(input);
+    expect(output).toBe('{"note": "it\'s ok"}');
+    expect(() => JSON.parse(output)).not.toThrow();
   });
 });

@@ -24,7 +24,7 @@ import * as path from "path";
 import * as fsSync from "fs";
 import { exec, execFile, execFileSync, execSync } from "child_process";
 import { promisify } from "util";
-import { pathToFileURL } from "url";
+import { pathToFileURL, fileURLToPath } from "url";
 import { t, setLanguage } from './i18n/index.js';
 import * as yaml from 'js-yaml';
 import * as toml from 'smol-toml';
@@ -53,6 +53,32 @@ function normalizePath(inputPath: string): string {
 
 async function pathExists(targetPath: string): Promise<boolean> {
   try { await fs.access(targetPath); return true; } catch { return false; }
+}
+
+// Converts JSON5-style single-quoted string delimiters to double quotes, while
+// leaving apostrophes inside already-double-quoted strings untouched. The
+// previous key/value-position regexes still mangled a double-quoted string
+// value that happened to contain a literal `'word':` sequence (e.g. prose
+// documenting JSON5 syntax), because they only anchor on what follows a
+// candidate quote pair, not on whether that pair is inside a real string.
+// This scanner tracks double-quote context explicitly and only rewrites
+// single-quote delimiters when outside of one.
+export function convertSingleQuotedDelimiters(content: string): string {
+  let out = "";
+  let inDouble = false;
+  let inSingle = false;
+  for (let i = 0; i < content.length; i++) {
+    const ch = content[i];
+    if (ch === "\\" && i + 1 < content.length) {
+      out += ch + content[i + 1];
+      i++;
+      continue;
+    }
+    if (!inSingle && ch === '"') { inDouble = !inDouble; out += ch; continue; }
+    if (!inDouble && ch === "'") { inSingle = !inSingle; out += '"'; continue; }
+    out += ch;
+  }
+  return out;
 }
 
 function formatFileSize(bytes: number): string {
@@ -2487,8 +2513,7 @@ Repairs: BOM, trailing commas, single quotes, comments, NUL bytes`,
       if (content !== c3) fixes.push(t().cc_fix_json.fixTrailingCommas);
 
       const c4 = content;
-      content = content.replace(/(\s*)'([^'\\]*(?:\\.[^'\\]*)*)'\s*:/g, '$1"$2":');
-      content = content.replace(/:\s*'([^'\\]*(?:\\.[^'\\]*)*)'/g, ': "$1"');
+      content = convertSingleQuotedDelimiters(content);
       if (content !== c4) fixes.push(t().cc_fix_json.fixSingleQuotes);
 
       let isValid = false;
@@ -3789,7 +3814,14 @@ async function main(): Promise<void> {
   console.error(t().common.serverStarted);
 }
 
-main().catch((error) => {
-  console.error("Fatal error:", error);
-  process.exit(1);
-});
+// Only start the stdio server when this file is run directly (CLI/bin entry),
+// not when imported as a module -- e.g. by tests that import pure helpers.
+const isMainModule = process.argv[1] !== undefined
+  && path.resolve(fileURLToPath(import.meta.url)) === path.resolve(process.argv[1]);
+
+if (isMainModule) {
+  main().catch((error) => {
+    console.error("Fatal error:", error);
+    process.exit(1);
+  });
+}

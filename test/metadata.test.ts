@@ -1,6 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
 
+const RUNTIME_VERSION_PATTERN = /^\s*version:\s*"([^"]+)"/m;
+
 const EXPECTED_TOOL_COUNT = 21;
 
 type PackageMetadata = {
@@ -44,6 +46,15 @@ describe("project metadata", () => {
     expect(server.version).toBe(pkg.version);
     expect(server.packages[0]?.identifier).toBe(pkg.name);
     expect(server.packages[0]?.version).toBe(pkg.version);
+  });
+
+  it("keeps the McpServer runtime version in src/index.ts aligned with package.json", async () => {
+    const pkg = await readJson<PackageMetadata>("package.json");
+    const source = await readText("src/index.ts");
+    const match = source.match(RUNTIME_VERSION_PATTERN);
+
+    expect(match, "src/index.ts should declare a McpServer runtime version").not.toBeNull();
+    expect(match?.[1]).toBe(pkg.version);
   });
 
   it("keeps README family tool counts aligned with the current tool surface", async () => {

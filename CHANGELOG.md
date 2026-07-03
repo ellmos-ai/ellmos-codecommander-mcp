@@ -2,13 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.3.14] - 2026-07-03
 
 ### Added
 - Add a metadata regression test for package/server version alignment and the README family tool count.
+- Add a metadata regression test guarding the McpServer runtime version in `src/index.ts` against `package.json`.
 
 ### Fixed
 - Correct the CodeCommander tool count in the README and README_de MCP family tables from the stale 17-tool value to 21.
+- `cc_fix_json`: stop the single-quote-to-double-quote repair step from corrupting valid JSON. The previous key/value-position regexes still mangled a double-quoted string value containing a literal `'word':` sequence (e.g. prose documenting JSON5 syntax) into invalid JSON. The conversion is now a context-aware scanner that only rewrites real single-quote delimiters outside of double-quoted strings.
+- Realign `package.json`/`server.json`/lockfile with the McpServer runtime version, which had already drifted ahead to 1.3.14 in `src/index.ts` without the packaging metadata being bumped to match.
+
+### Changed
+- Only start the stdio server when `dist/index.js` is run directly (CLI entry), not when its pure helpers are imported, e.g. by tests -- lets a regression test import and exercise the real `cc_fix_json` single-quote logic instead of a re-implementation copy.
 
 ## [1.3.13] - 2026-06-22
 
