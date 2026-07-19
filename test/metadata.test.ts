@@ -9,6 +9,7 @@ type PackageMetadata = {
   name: string;
   version: string;
   mcpName: string;
+  files?: string[];
 };
 
 type ServerMetadata = {
@@ -64,5 +65,11 @@ describe("project metadata", () => {
       expect(row).toContain(`**${EXPECTED_TOOL_COUNT}**`);
       expect(row).not.toContain("**17**");
     }
+  });
+
+  it("ships the LLM discovery index in the npm package payload", async () => {
+    const pkg = await readJson<PackageMetadata>("package.json");
+
+    expect(pkg.files).toContain("llms.txt");
   });
 });

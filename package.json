@@ -15,7 +15,8 @@
     "README_de.md",
     "CHANGELOG.md",
     "SECURITY.md",
-    "server.json"
+    "server.json",
+    "llms.txt"
   ],
   "scripts": {
     "build": "node node_modules/typescript/bin/tsc",

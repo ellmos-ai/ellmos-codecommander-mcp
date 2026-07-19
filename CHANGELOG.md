@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Include `llms.txt` in the `files` array of `package.json` for npm package distribution.
+- Update `llms.txt` Last-checked metadata to 2026-07-06.
+
 ## [1.3.14] - 2026-07-03
 
 ### Added
