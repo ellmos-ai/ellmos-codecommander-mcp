@@ -2,11 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.3.15] - 2026-07-24
 
 ### Changed
 - Include `llms.txt` in the `files` array of `package.json` for npm package distribution.
 - Update `llms.txt` Last-checked metadata to 2026-07-06.
+
+### Changed
+- Unified the ellmos-ai ecosystem section in README.md and README_de.md: full 9-server MCP family table with refreshed tool counts, AI infrastructure, and desktop software links.
+- Refreshed `glama.json` for the Glama MCP directory listing.
+- Synced `server.json` version metadata.
 
 ## [1.3.14] - 2026-07-03
 
