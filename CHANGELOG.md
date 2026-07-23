@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.16] - 2026-07-24
+
+### Fixed
+- Correct FileCommander (46) and CodeCommander (22) tool counts in the ecosystem family table; counts now verified against the live MCP `tools/list` surface.
+- Align the McpServer runtime version in `src/index.ts` with package.json (was stuck at 1.3.14).
+- Update the metadata test's expected tool count to the actual 22-tool surface.
+
 ## [1.3.15] - 2026-07-24
 
 ### Changed

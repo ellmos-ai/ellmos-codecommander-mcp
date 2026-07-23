@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 const RUNTIME_VERSION_PATTERN = /^\s*version:\s*"([^"]+)"/m;
 
-const EXPECTED_TOOL_COUNT = 21;
+const EXPECTED_TOOL_COUNT = 22;
 
 type PackageMetadata = {
   name: string;
