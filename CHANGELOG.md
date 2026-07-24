@@ -9,6 +9,10 @@ All notable changes to this project will be documented in this file.
 - Align the McpServer runtime version in `src/index.ts` with package.json (was stuck at 1.3.14).
 - Update the metadata test's expected tool count to the actual 22-tool surface.
 
+### Maintenance
+- Update tool count in `package.json` description to match the full 22-tool surface.
+- Update `llms.txt` Last-checked timestamp to 2026-07-25.
+
 ## [1.3.15] - 2026-07-24
 
 ### Changed

@@ -50,4 +50,4 @@ BACH Python runtime import diagnose structural edit indentation checker code gen
 regex tester format conversion markdown PDF MCP
 ```
 
-## Last-checked: 2026-07-06
+## Last-checked: 2026-07-25
