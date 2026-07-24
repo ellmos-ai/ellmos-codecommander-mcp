@@ -3,7 +3,7 @@
   "name": "io.github.ellmos-ai/ellmos-codecommander-mcp",
   "version": "1.3.16",
   "title": "ellmos CodeCommander",
-  "description": "21 MCP tools for code analysis, JSON repair, import management, Python runtime import diagnostics, structural Python editing, indentation checks, code generation, encoding fix, format conversion, diffs, regex testing, and Markdown export.",
+  "description": "Developer MCP server: code analysis, JSON repair, imports, diffs, regex, format conversion.",
   "websiteUrl": "https://github.com/ellmos-ai/ellmos-codecommander-mcp",
   "repository": {
     "url": "https://github.com/ellmos-ai/ellmos-codecommander-mcp",
