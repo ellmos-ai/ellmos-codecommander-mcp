@@ -11,3 +11,6 @@ dist/
 *-protocoll.txt
 .DS_Store
 Thumbs.db
+
+# mcp-publisher login artifacts (credentials, never commit)
+.mcpregistry_*
