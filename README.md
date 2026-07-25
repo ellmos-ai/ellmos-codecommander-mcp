@@ -10,13 +10,74 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CodeCommander tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
+[![Vitest](https://img.shields.io/badge/Vitest-175%20passed-brightgreen.svg)](https://vitest.dev/)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
+[![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
+
+> [!NOTE]
+> **For AI Assistants & LLMs:** Machine-readable indexing documentation for this repository is available at [`llms.txt`](llms.txt). The server exposes 22 specialized tools under the `cc_` prefix.
 
 A developer-focused **Model Context Protocol (MCP) server** that gives AI assistants code analysis, structural Python editing, JSON repair, encoding fix, import organization, format conversion, file diff, and regex testing capabilities.
 
-**21 tools** optimized for developers - the coding companion to [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
+**21 tools** (+1 i18n tool) optimized for developers - the coding companion to [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
 
 **Discoverability:** Published on [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) as `ellmos-codecommander-mcp`, visible on [Glama](https://glama.ai/mcp/servers/b9kjs4uaav), and prepared for the official MCP Registry with [`server.json`](server.json) under `io.github.ellmos-ai/ellmos-codecommander-mcp`.
+
+---
+
+## Architecture Overview
+
+```mermaid
+graph TD
+    Client["MCP Clients<br/>(Claude Desktop / Claude Code / Cursor / Windsurf)"]
+    Server["ellmos CodeCommander MCP Server<br/>(stdio transport • Node.js)"]
+
+    subgraph Tools["Developer Tool Suites (22 Tools)"]
+        subgraph CodeIntel["Code & Python Intelligence"]
+            C1["cc_analyze_code"]
+            C2["cc_analyze_methods"]
+            C3["cc_extract_classes"]
+            C4["cc_check_indentation"]
+            C5["cc_generate_python_code"]
+            C6["cc_python_structural_edit"]
+        end
+
+        subgraph Imports["Import Management"]
+            I1["cc_organize_imports"]
+            I2["cc_diagnose_imports"]
+            I3["cc_runtime_import_diagnose"]
+        end
+
+        subgraph Repair["Text, JSON & Encoding Repair"]
+            R1["cc_fix_json"]
+            R2["cc_validate_json"]
+            R3["cc_fix_encoding"]
+            R4["cc_cleanup_file"]
+            R5["cc_fix_umlauts"]
+        end
+
+        subgraph Utility["Utilities & Conversion"]
+            U1["cc_convert_format (JSON/CSV/YAML/TOML/XML/TOON)"]
+            U2["cc_diff_files (Unified Diff)"]
+            U3["cc_regex_test (Regex Tester)"]
+            U4["cc_scan_emoji"]
+            U5["cc_generate_licenses"]
+        end
+
+        subgraph Export["Export & i18n"]
+            E1["cc_md_to_html"]
+            E2["cc_md_to_pdf"]
+            E3["cc_set_language"]
+        end
+    end
+
+    Client -->|Stdio JSON-RPC| Server
+    Server --> CodeIntel
+    Server --> Imports
+    Server --> Repair
+    Server --> Utility
+    Server --> Export
+```
 
 ---
 

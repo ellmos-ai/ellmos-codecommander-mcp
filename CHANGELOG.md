@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.17] - 2026-07-25
+
+### Documentation & Discoverability
+- Integrated Mermaid System Architecture diagrams into `README.md` and `README_de.md` visualizing all 22 developer tools across Code Intelligence, Import Management, Repair, Utilities, and Export.
+- Added GFM LLM note callouts (`> [!NOTE]`) for machine-readable indexing and `llms.txt` orientation.
+- Added Vitest (175 passed) and LLM-Ready Shields.io badges to `README.md` and `README_de.md`.
+
 ## [1.3.16] - 2026-07-24
 
 ### Fixed
