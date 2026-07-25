@@ -9,6 +9,11 @@ All notable changes to this project will be documented in this file.
 - Added GFM LLM note callouts (`> [!NOTE]`) for machine-readable indexing and `llms.txt` orientation.
 - Added Vitest (175 passed) and LLM-Ready Shields.io badges to `README.md` and `README_de.md`.
 
+### Security & Maintenance
+- Remediate `postcss <=8.5.17` high-severity vulnerability (`GHSA-r28c-9q8g-f849`) via dependency security updates.
+- Synchronize version string 1.3.17 across `package.json`, `package-lock.json`, `server.json`, `glama.json`, and `src/index.ts`.
+- Verify full test suite (175 tests passing).
+
 ## [1.3.16] - 2026-07-24
 
 ### Fixed
