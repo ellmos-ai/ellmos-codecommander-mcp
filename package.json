@@ -16,7 +16,6 @@
     "CHANGELOG.md",
     "SECURITY.md",
     "server.json",
-    "smithery.yaml",
     "llms.txt"
   ],
   "scripts": {
