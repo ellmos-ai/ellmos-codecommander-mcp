@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Verified Pfad B (Discoverability, README, Landing Pages, SEO) compliance and updated `llms.txt` Last-checked header to `2026-07-29`.
 - Verified 100% pass rate across the full 175-test suite (Vitest + i18n).
 - Removed the unverified legacy `smithery.yaml`; current Smithery publication for local stdio servers requires a validated MCPB bundle.
+- Raised the declared runtime floor to Node.js 20 so it matches `@hono/node-server` 2.x and the tested CI matrix.
 
 ## [1.3.17] - 2026-07-25
 
