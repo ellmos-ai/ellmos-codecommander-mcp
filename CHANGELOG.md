@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.19] - 2026-07-31
+
+### Documentation
+- Replace the custom `assets/codecommander_banner.jpg` header with the central ellmos emblem in `README.md` and `README_de.md`.
+- Remove the now-unreferenced banner/logo assets (`assets/codecommander_banner.jpg`, `assets/ellmos-logo.jpg`, `assets/ellmos_codecommander_logo_full.jpg`, `assets/ellmos_codecommander_logo_small.jpg`).
+
 ## [1.3.18] - 2026-07-29
 
 ### Documentation & Discoverability

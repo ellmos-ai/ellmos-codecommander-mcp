@@ -9,7 +9,7 @@
  * See LICENSE file for details.
  *
  * @author Lukas Geiger
- * @version 1.3.18
+ * @version 1.3.19
  * @license MIT
  */
 
@@ -40,7 +40,7 @@ const execFileAsync = promisify(execFile);
 
 const server = new McpServer({
   name: "ellmos-codecommander-mcp",
-  version: "1.3.18"
+  version: "1.3.19"
 });
 
 // ============================================================================
