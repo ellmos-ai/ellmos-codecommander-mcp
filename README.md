@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/codecommander_banner.jpg" alt="CodeCommander banner" width="700">
+  <img src="https://raw.githubusercontent.com/ellmos-ai/.github/master/profile/logo-ellmos-codecommander.jpg" alt="ellmos CodeCommander MCP emblem" width="300">
 </p>
 
 # ellmos CodeCommander MCP Server
