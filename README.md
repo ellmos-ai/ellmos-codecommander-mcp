@@ -1,3 +1,5 @@
+<img src="assets/banner.png" width="100%" alt="ELLMOS CodeCommander MCP Banner">
+
 <p align="center">
   <img src="assets/codecommander_banner.jpg" alt="CodeCommander banner" width="700">
 </p>
