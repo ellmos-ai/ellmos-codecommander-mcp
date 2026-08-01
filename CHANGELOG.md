@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Fixed
+- Reconciled the public Node.js requirements in both READMEs and `llms.txt` with the package engine and CI floor: Node.js >= 20.
+
 ## [1.3.18] - 2026-07-29
 
 ### Documentation & Discoverability
