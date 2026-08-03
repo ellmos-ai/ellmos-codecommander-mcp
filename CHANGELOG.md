@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.23] - 2026-08-03
+
+### Fixed
+- Realign the MCP Registry manifest and runtime `McpServer` version with the published package metadata, so registry consumers and protocol clients identify the same release.
+
 ## [1.3.18] - 2026-07-29
 
 ### Documentation & Discoverability
