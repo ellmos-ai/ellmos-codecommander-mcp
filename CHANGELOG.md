@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.23] - 2026-08-04
+
+### Technical Hygiene & Maintenance
+- Synchronized version string `1.3.23` across `package.json`, `server.json`, and `src/index.ts` to pass metadata alignment tests.
+- Updated `llms.txt` `Last-checked` timestamp to `2026-08-04`.
+- Added `ellmos-ai` Ecosystem and `open-bricks` Umbrella badges to `README.md` and `README_de.md`.
+- Verified 100% pass rate across all 175 tests in Vitest test suite (`test/metadata.test.ts`, `test/i18n.test.ts`, `test/index.test.ts`).
+
 ## [1.3.18] - 2026-07-29
 
 ### Documentation & Discoverability
