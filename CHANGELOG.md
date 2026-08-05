@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [1.3.22] - 2026-08-04
 
+### Security (2026-08-05)
+- Close all four open Dependabot advisories via lockfile update:
+  `ip-address` (3× high — GHSA-mwp4-54f8-5fhr, GHSA-4xrf-jv44-h6hh,
+  GHSA-22jq-vg5j-6vgg, pulled in through `express-rate-limit`) and `hono`
+  (moderate, GHSA-8j4g-w8fx-2239). `npm audit` reports 0 vulnerabilities;
+  build and 175/175 Vitest tests stay green.
+
 ### Technical Hygiene & Maintenance
 - Synchronized version string `1.3.22` across `package.json`, `server.json`, and `src/index.ts` to pass metadata alignment tests.
 - Updated `llms.txt` `Last-checked` timestamp to `2026-08-04`.
