@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Fixed
+- Realign `glama.json` with the published release: it had been left at 1.3.18
+  while `package.json`, `server.json`, `src/index.ts` and the npm release all
+  moved to 1.3.22. The metadata test now covers `glama.json` too, so the
+  directory manifest can no longer drift unnoticed (verified: the new
+  assertion fails when the version is reverted).
 - Raise the declared Node.js floor from 18 to 20 across `package.json`
   (`engines`), the lockfile, both READMEs and `llms.txt`. The CI matrix has
   only ever tested 20/22/24 and `@hono/node-server` 2.x requires 20, so the
