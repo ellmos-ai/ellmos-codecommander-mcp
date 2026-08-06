@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Security
+- Close the `js-yaml` advisory (quadratic CPU consumption in `!!omap`
+  resolution, affecting 4.0.0-4.3.0) by raising the direct dependency to
+  `^4.3.1`. Content of Dependabot PR #9, applied directly because branch
+  protection requires an approving review that a bot PR cannot obtain.
+  `npm audit` reports 0 vulnerabilities; build and 176/176 Vitest tests
+  stay green.
+
 ### Fixed
 - Realign `glama.json` with the published release: it had been left at 1.3.18
   while `package.json`, `server.json`, `src/index.ts` and the npm release all
