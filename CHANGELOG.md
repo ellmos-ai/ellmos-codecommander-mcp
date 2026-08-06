@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Fixed
+- Raise the declared Node.js floor from 18 to 20 across `package.json`
+  (`engines`), the lockfile, both READMEs and `llms.txt`. The CI matrix has
+  only ever tested 20/22/24 and `@hono/node-server` 2.x requires 20, so the
+  advertised `>=18` was wrong. Content taken from PR #6, which could not be
+  merged directly: it branched off 1.3.18 and would have reverted the
+  lockfile from the current 1.3.22.
+
 ## [1.3.22] - 2026-08-04
 
 ### Security (2026-08-05)
