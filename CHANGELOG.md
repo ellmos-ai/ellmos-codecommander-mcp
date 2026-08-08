@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Release metadata and security
+- Kept `package.json`, `package-lock.json`, `server.json`, `glama.json` and the `src/index.ts` runtime declaration aligned at the published 1.3.22 release. A read-only npm check confirms version/latest `1.3.22`; no publish or registry write was performed.
+- Raised the source and container contract to Node.js >=20 because the selected `@hono/node-server` 2.x dependency requires Node 20. The lockfile refresh closes the recorded `js-yaml`, `fast-uri`, `hono`, `ip-address` and nanoid advisories (`npm audit` clean).
+- Documented that `glama.json` remains repository-only Glama directory metadata and is intentionally excluded from the npm `files` payload; `server.json` and `llms.txt` remain the shipped registry/discovery files.
+
+### Test gates
+- Added `npm run test:integration` for the 35 real MCP stdio assertions and `npm run test:i18n` for the 43 translation assertions; GitHub Actions now runs both alongside the 175-test Vitest gate on Node.js 20, 22 and 24.
+- Hardened the stdio harness so generated fixtures are removed on success, failures and termination, and the child process is terminated before the result is returned.
+
 ## [1.3.22] - 2026-08-04
 
 ### Technical Hygiene & Maintenance

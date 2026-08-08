@@ -38,5 +38,11 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Run MCP stdio integration test
+        run: npm run test:integration
+
+      - name: Run i18n checks
+        run: npm run test:i18n
+
       - name: Check npm package contents
         run: npm pack --dry-run --json

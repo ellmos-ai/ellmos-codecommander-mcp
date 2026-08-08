@@ -16,6 +16,75 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const serverPath = path.join(__dirname, '..', 'dist', 'index.js');
 const fixturesDir = path.join(__dirname, 'fixtures');
+const generatedFixtureNames = [
+  'test_out.yaml', 'test_out.toml', 'test_out.xml', 'test_out.toon', 'test_roundtrip.json'
+];
+let activeServer = null;
+let shuttingDown = false;
+
+function cleanupGeneratedFixtures() {
+  const errors = [];
+  for (const name of generatedFixtureNames) {
+    const fixturePath = path.join(fixturesDir, name);
+    try {
+      fs.rmSync(fixturePath, { force: true });
+    } catch (error) {
+      errors.push(`${name}: ${error.message}`);
+    }
+  }
+  return errors;
+}
+
+async function stopServer(server) {
+  if (!server || server.exitCode !== null || server.signalCode !== null) {
+    if (activeServer === server) activeServer = null;
+    return;
+  }
+
+  await new Promise((resolve) => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(forceKillTimer);
+      resolve();
+    };
+    const forceKillTimer = setTimeout(() => {
+      if (server.exitCode === null && server.signalCode === null) {
+        try {
+          server.kill('SIGKILL');
+        } catch {
+          // The child may have exited between the state check and kill.
+        }
+      }
+      finish();
+    }, 2000);
+    forceKillTimer.unref();
+    server.once('exit', finish);
+    server.once('error', finish);
+    try {
+      server.kill('SIGTERM');
+    } catch {
+      finish();
+    }
+  });
+
+  if (activeServer === server) activeServer = null;
+}
+
+async function abortTestRun(exitCode) {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  cleanupGeneratedFixtures();
+  await stopServer(activeServer);
+  process.exit(exitCode);
+}
+
+process.once('SIGINT', () => void abortTestRun(130));
+process.once('SIGTERM', () => void abortTestRun(143));
+process.once('exit', () => {
+  cleanupGeneratedFixtures();
+});
 
 // ============================================================================
 // MCP stdio transport helpers (newline-delimited JSON-RPC)
@@ -63,6 +132,7 @@ async function runTests() {
     stdio: ['pipe', 'pipe', 'pipe'],
     env: { ...process.env, PYTHONIOENCODING: 'utf-8' }
   });
+  activeServer = server;
 
   let stderrOutput = '';
   server.stderr.on('data', (data) => {
@@ -72,6 +142,12 @@ async function runTests() {
   // Buffer for incoming newline-delimited JSON
   let buffer = '';
   const pendingResponses = new Map(); // id -> {resolve, reject}
+
+  server.once('exit', (code, signal) => {
+    const error = new Error(`MCP server exited before responding (code=${code}, signal=${signal})`);
+    for (const pending of pendingResponses.values()) pending.reject(error);
+    pendingResponses.clear();
+  });
 
   server.stdout.on('data', (data) => {
     buffer += data.toString('utf-8');
@@ -349,6 +425,15 @@ async function runTests() {
     }
     failed++;
     results.push({ name: 'FATAL', status: 'FAIL', detail: error.message });
+  } finally {
+    const cleanupErrors = cleanupGeneratedFixtures();
+    if (cleanupErrors.length > 0) {
+      const detail = cleanupErrors.join('; ');
+      console.error(`\nCLEANUP ERROR: ${detail}`);
+      failed++;
+      results.push({ name: 'Fixture cleanup', status: 'FAIL', detail });
+    }
+    await stopServer(server);
   }
 
   // ========================================================================
@@ -366,17 +451,7 @@ async function runTests() {
     }
   }
 
-  // Cleanup generated files
-  const cleanup = [
-    'test_out.yaml', 'test_out.toml', 'test_out.xml', 'test_out.toon', 'test_roundtrip.json'
-  ];
-  for (const f of cleanup) {
-    const p = path.join(fixturesDir, f);
-    if (fs.existsSync(p)) fs.unlinkSync(p);
-  }
-
-  server.kill();
-  process.exit(failed > 0 ? 1 : 0);
+  process.exitCode = failed > 0 ? 1 : 0;
 }
 
 runTests();

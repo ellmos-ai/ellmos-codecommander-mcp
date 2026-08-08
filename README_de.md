@@ -13,7 +13,7 @@
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CodeCommander tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
 [![Vitest](https://img.shields.io/badge/Vitest-175%20passed-brightgreen.svg)](https://vitest.dev/)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -23,9 +23,9 @@
 
 Ein entwicklerfokussierter **Model Context Protocol (MCP) Server**, der KI-Assistenten Fähigkeiten für Code-Analyse, strukturelles Python-Editing, JSON-Reparatur, Encoding-Korrektur, Import-Organisation, Formatkonvertierung, Datei-Vergleich und Regex-Tests verleiht.
 
-**21 Tools** (+1 i18n Tool) optimiert für Entwickler – das Coding-Gegenstück zu [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
+**22 Tools** optimiert für Entwickler – das Coding-Gegenstück zu [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
 
-**Auffindbarkeit:** Veröffentlicht auf [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) als `ellmos-codecommander-mcp`, auf [Glama](https://glama.ai/mcp/servers/b9kjs4uaav) sichtbar und mit [`server.json`](server.json) für die offizielle MCP Registry unter `io.github.ellmos-ai/ellmos-codecommander-mcp` vorbereitet.
+**Auffindbarkeit:** Veröffentlicht auf [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) als `ellmos-codecommander-mcp`, auf [Glama](https://glama.ai/mcp/servers/b9kjs4uaav) sichtbar und mit [`server.json`](server.json) für die offizielle MCP Registry unter `io.github.ellmos-ai/ellmos-codecommander-mcp` vorbereitet. Das Repository-only-Verzeichnismanifest [`glama.json`](glama.json) ist bewusst nicht Teil des npm-Payloads; `server.json` und `llms.txt` werden als Registry-/Discovery-Metadaten ausgeliefert.
 
 ---
 
@@ -107,7 +107,7 @@ Während FileCommander Dateisystem-Operationen übernimmt, konzentriert sich Cod
 
 ### Voraussetzungen
 
-- [Node.js](https://nodejs.org/) 18 oder höher
+- [Node.js](https://nodejs.org/) 20 oder höher
 
 ### Option 1: Installation über NPM
 
@@ -247,7 +247,7 @@ FileCommander und CodeCommander sind für den parallelen Einsatz konzipiert:
 | `cc_md_to_html` | Markdown zu eigenständigem HTML mit CSS-Styling (Überschriften, Code-Blöcke, Tabellen, verschachtelte Listen, Zitate, Bilder, Checkboxen) |
 | `cc_md_to_pdf` | Markdown zu PDF über Headless-Browser (Edge/Chrome). Fallback auf HTML wenn kein Browser verfügbar |
 
-**Gesamt: 21 Entwickler-Tools** (`cc_set_language` ist zusätzlich für Sprachumschaltung verfügbar)
+**Gesamt: 22 Entwickler-Tools** (`cc_set_language` ist zusätzlich für Sprachumschaltung verfügbar)
 
 ---
 
@@ -293,20 +293,24 @@ npm run dev    # Watch-Modus
 npm run build  # Einmaliger Build
 npm start      # Server starten
 npm test       # Tests ausführen (vitest)
+npm run test:integration  # 35 echte MCP-stdio-Assertions (nach dem Build)
+npm run test:i18n         # 43 Übersetzungs-Assertions
 ```
 
 ### Tests
 
-Das Projekt enthält eine umfassende Test-Suite für alle 21 Entwickler-Tools und i18n-Verhalten.
+Die unterstützten Gates sind bewusst getrennt: `npm test` führt die 175 Vitest-Tests aus, `npm run test:integration` 35 echte MCP-stdio-Assertions gegen `dist/index.js` und `npm run test:i18n` 43 Übersetzungs-Assertions.
 
 ```bash
 npm test              # Alle Tests ausführen
+npm run test:integration  # Echter MCP-stdio-Test (zuerst builden)
+npm run test:i18n         # i18n-Assertions
 npx vitest --watch    # Watch-Modus
 ```
 
 Tests sind auf **Windows**, **macOS** und **Linux** verifiziert.
 
-GitHub Actions führt Build, Vitest-Suite und npm-Paketprüfung auf Node.js 20, 22 und 24 aus.
+GitHub Actions führt Build, alle drei Test-Gates (175 Vitest-, 35 MCP-stdio- und 43 i18n-Assertions) sowie die npm-Paketprüfung auf Node.js 20, 22 und 24 aus.
 
 ---
 

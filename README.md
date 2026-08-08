@@ -12,7 +12,7 @@
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CodeCommander tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
 [![Vitest](https://img.shields.io/badge/Vitest-175%20passed-brightgreen.svg)](https://vitest.dev/)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -22,9 +22,9 @@
 
 A developer-focused **Model Context Protocol (MCP) server** that gives AI assistants code analysis, structural Python editing, JSON repair, encoding fix, import organization, format conversion, file diff, and regex testing capabilities.
 
-**21 tools** (+1 i18n tool) optimized for developers - the coding companion to [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
+**22 tools** optimized for developers - the coding companion to [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
 
-**Discoverability:** Published on [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) as `ellmos-codecommander-mcp`, visible on [Glama](https://glama.ai/mcp/servers/b9kjs4uaav), and prepared for the official MCP Registry with [`server.json`](server.json) under `io.github.ellmos-ai/ellmos-codecommander-mcp`.
+**Discoverability:** Published on [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) as `ellmos-codecommander-mcp`, visible on [Glama](https://glama.ai/mcp/servers/b9kjs4uaav), and prepared for the official MCP Registry with [`server.json`](server.json) under `io.github.ellmos-ai/ellmos-codecommander-mcp`. The repository-only [`glama.json`](glama.json) directory manifest is intentionally not part of the npm payload; `server.json` and `llms.txt` are the shipped registry/discovery metadata.
 
 ---
 
@@ -106,7 +106,7 @@ While FileCommander handles filesystem operations, CodeCommander focuses on **co
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) 18 or higher
+- [Node.js](https://nodejs.org/) 20 or higher
 
 ### Option 1: Install from NPM
 
@@ -246,7 +246,7 @@ FileCommander and CodeCommander are designed to work side by side:
 | `cc_md_to_html` | Markdown to standalone HTML with CSS styling (headers, code blocks, tables, nested lists, blockquotes, images, checkboxes) |
 | `cc_md_to_pdf` | Markdown to PDF via headless browser (Edge/Chrome). Falls back to HTML if no browser is available |
 
-**Total: 21 developer tools** (`cc_set_language` is also available for runtime language switching)
+**Total: 22 developer tools** (`cc_set_language` is also available for runtime language switching)
 
 ---
 
@@ -292,21 +292,25 @@ npm run dev    # Watch mode
 npm run build  # One-time build
 npm start      # Start server
 npm test       # Run test suite (vitest)
+npm run test:integration  # 35 real MCP stdio assertions (after build)
+npm run test:i18n         # 43 translation assertions
 ```
 
 ### Testing
 
-The project includes a comprehensive test suite covering all 21 developer tools and i18n behavior.
+The supported gates are deliberately separated: `npm test` runs the 175-test Vitest suite, `npm run test:integration` runs 35 real MCP stdio assertions against `dist/index.js`, and `npm run test:i18n` runs 43 translation assertions.
 
 ```bash
 npm test              # Run all tests
+npm run test:integration  # Real MCP stdio test (build first)
+npm run test:i18n         # i18n assertions
 npx vitest run        # Same as above
 npx vitest --watch    # Watch mode
 ```
 
 Tests are verified on **Windows**, **macOS**, and **Linux**.
 
-GitHub Actions runs the build, Vitest suite, and npm package check on Node.js 20, 22, and 24.
+GitHub Actions runs the build, all three test gates (175 Vitest, 35 MCP stdio, 43 i18n assertions), and npm package check on Node.js 20, 22, and 24.
 
 ---
 
