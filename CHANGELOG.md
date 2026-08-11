@@ -2,28 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [1.3.23] - 2026-08-11
 
 ### Security
 - Close the `js-yaml` advisory (quadratic CPU consumption in `!!omap`
   resolution, affecting 4.0.0-4.3.0) by raising the direct dependency to
-  `^4.3.1`. Content of Dependabot PR #9, applied directly because branch
-  protection requires an approving review that a bot PR cannot obtain.
-  `npm audit` reports 0 vulnerabilities; build and 176/176 Vitest tests
-  stay green.
+  `^4.3.1`.
+- Close all open Dependabot advisories in lockfile (`ip-address`, `hono`).
 
-### Fixed
-- Realign `glama.json` with the published release: it had been left at 1.3.18
-  while `package.json`, `server.json`, `src/index.ts` and the npm release all
-  moved to 1.3.22. The metadata test now covers `glama.json` too, so the
-  directory manifest can no longer drift unnoticed (verified: the new
-  assertion fails when the version is reverted).
-- Raise the declared Node.js floor from 18 to 20 across `package.json`
-  (`engines`), the lockfile, both READMEs and `llms.txt`. The CI matrix has
-  only ever tested 20/22/24 and `@hono/node-server` 2.x requires 20, so the
-  advertised `>=18` was wrong. Content taken from PR #6, which could not be
-  merged directly: it branched off 1.3.18 and would have reverted the
-  lockfile from the current 1.3.22.
+### Maintenance & Metadata Alignment
+- Realign `glama.json`, `package.json`, `server.json`, `src/index.ts` to `1.3.23`.
+- Raise declared Node.js floor from 18 to 20 across package metadata.
+- Automated metadata test suite verified matching 1.3.23 across all manifest entries.
 
 ## [1.3.22] - 2026-08-04
 
