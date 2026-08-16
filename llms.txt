@@ -21,12 +21,16 @@ Test gates: `npm test` runs 176 Vitest tests; `npm run test:integration` runs 35
 - [ellmos-clatcher-mcp](https://github.com/ellmos-ai/ellmos-clatcher-mcp): Utility tools -- repair, convert, detect, batch ops (12 tools)
 - [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp): n8n workflow management via MCP (18 tools)
 - [ellmos-controlcenter-mcp](https://github.com/ellmos-ai/ellmos-controlcenter-mcp): MCP stack discovery, profile management, and local control plane (20 tools)
+- [ellmos-homebase-mcp](https://github.com/ellmos-ai/ellmos-homebase-mcp): Local-first LLM memory, knowledge, state, routing, swarm orchestration (45 tools)
+- [ellmos-servercommander-mcp](https://github.com/ellmos-ai/ellmos-servercommander-mcp): Server operations, health checks, log analysis, mail diagnostics (8 tools)
 
-## Broader ellmos ecosystem
+## Broader ellmos & open-bricks ecosystem
 
+- [open-bricks](https://github.com/open-bricks): Umbrella organization for open-source AI desktop tools and utilities
 - [BACH](https://github.com/ellmos-ai/bach): Full text-based OS for LLMs -- primary consumer of the MCP servers
 - [Rinnsal](https://github.com/ellmos-ai/rinnsal): Lightweight LLM agent infrastructure
 - [USMC](https://github.com/ellmos-ai/usmc): Shared memory primitive
+- [MarbleRun](https://github.com/ellmos-ai/MarbleRun): Autonomous agent chain framework for Claude Code
 
 ## Optional
 
@@ -52,4 +56,4 @@ BACH Python runtime import diagnose structural edit indentation checker code gen
 regex tester format conversion markdown PDF MCP
 ```
 
-## Last-checked: 2026-08-08
+## Last-checked: 2026-08-16 (254 tests passed: 176 Vitest, 35 MCP stdio integration, 43 i18n assertions)

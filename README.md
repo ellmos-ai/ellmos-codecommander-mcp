@@ -11,7 +11,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CodeCommander tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Vitest](https://img.shields.io/badge/Vitest-175%20passed-brightgreen.svg)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-176%20passed-brightgreen.svg)](https://vitest.dev/)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
@@ -298,19 +298,18 @@ npm run test:i18n         # 43 translation assertions
 
 ### Testing
 
-The supported gates are deliberately separated: `npm test` runs the 175-test Vitest suite, `npm run test:integration` runs 35 real MCP stdio assertions against `dist/index.js`, and `npm run test:i18n` runs 43 translation assertions.
+The supported gates are deliberately separated: `npm test` runs the 176-test Vitest suite, `npm run test:integration` runs 35 real MCP stdio assertions against `dist/index.js`, and `npm run test:i18n` runs 43 translation assertions (254 automated test assertions total).
 
 ```bash
-npm test              # Run all tests
-npm run test:integration  # Real MCP stdio test (build first)
-npm run test:i18n         # i18n assertions
-npx vitest run        # Same as above
-npx vitest --watch    # Watch mode
+npm test              # Run Vitest unit tests (176 tests)
+npm run test:integration  # Real MCP stdio test (35 assertions, build first)
+npm run test:i18n         # i18n assertions (43 assertions)
+npm run test:all          # Run full test suite (build + vitest + integration + i18n)
 ```
 
 Tests are verified on **Windows**, **macOS**, and **Linux**.
 
-GitHub Actions runs the build, all three test gates (175 Vitest, 35 MCP stdio, 43 i18n assertions), and npm package check on Node.js 20, 22, and 24.
+GitHub Actions runs the build, all three test gates (176 Vitest, 35 MCP stdio, 43 i18n assertions — 254 assertions total), and npm package check on Node.js 20, 22, and 24.
 
 ---
 

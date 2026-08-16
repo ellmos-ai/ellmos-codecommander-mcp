@@ -80,4 +80,44 @@ describe("project metadata", () => {
 
     expect(pkg.files).toContain("llms.txt");
   });
+
+  it("verifies presence of required core documentation and configuration files", async () => {
+    const requiredFiles = [
+      "README.md",
+      "README_de.md",
+      "CHANGELOG.md",
+      "SECURITY.md",
+      "LICENSE",
+      "server.json",
+      "glama.json",
+      "llms.txt",
+    ];
+
+    for (const file of requiredFiles) {
+      const content = await readText(file);
+      expect(content.length).toBeGreaterThan(50);
+    }
+  });
+
+  it("verifies ecosystem badges and links in English and German READMEs", async () => {
+    for (const fileName of ["README.md", "README_de.md"]) {
+      const content = await readText(fileName);
+      expect(content).toContain("badge/ellmos--ai-Ecosystem-blue.svg");
+      expect(content).toContain("badge/open--bricks-Umbrella-purple.svg");
+      expect(content).toContain("badge/LLM--Ready-llms.txt-blue.svg");
+      expect(content).toContain("https://github.com/ellmos-ai");
+      expect(content).toContain("https://github.com/open-bricks");
+    }
+  });
+
+  it("verifies llms.txt contains version and tool count parity", async () => {
+    const pkg = await readJson<PackageMetadata>("package.json");
+    const llms = await readText("llms.txt");
+
+    expect(llms).toContain(pkg.version);
+    expect(llms).toContain("22 tools");
+    expect(llms).toContain("ellmos-filecommander-mcp");
+    expect(llms).toContain("open-bricks");
+  });
 });
+
