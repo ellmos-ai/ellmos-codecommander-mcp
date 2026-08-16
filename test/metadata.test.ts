@@ -90,6 +90,7 @@ describe("project metadata", () => {
       "LICENSE",
       "server.json",
       "glama.json",
+      "smithery.yaml",
       "llms.txt",
     ];
 

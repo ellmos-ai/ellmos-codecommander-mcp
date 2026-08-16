@@ -25,7 +25,7 @@ Ein entwicklerfokussierter **Model Context Protocol (MCP) Server**, der KI-Assis
 
 **22 Tools** optimiert für Entwickler – das Coding-Gegenstück zu [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
 
-**Auffindbarkeit:** Veröffentlicht auf [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) als `ellmos-codecommander-mcp`, auf [Glama](https://glama.ai/mcp/servers/b9kjs4uaav) sichtbar und mit [`server.json`](server.json) für die offizielle MCP Registry unter `io.github.ellmos-ai/ellmos-codecommander-mcp` vorbereitet. Das Repository-only-Verzeichnismanifest [`glama.json`](glama.json) ist bewusst nicht Teil des npm-Payloads; `server.json` und `llms.txt` werden als Registry-/Discovery-Metadaten ausgeliefert.
+**Auffindbarkeit:** Veröffentlicht auf [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) als `ellmos-codecommander-mcp`, auf [Glama](https://glama.ai/mcp/servers/b9kjs4uaav) sichtbar und mit [`server.json`](server.json) für die offizielle MCP Registry unter `io.github.ellmos-ai/ellmos-codecommander-mcp` vorbereitet. Die Registry- und Verzeichnismanifeste [`server.json`](server.json), [`glama.json`](glama.json), [`smithery.yaml`](smithery.yaml) und [`llms.txt`](llms.txt) werden in 100%iger Parität gepflegt.
 
 ---
 
