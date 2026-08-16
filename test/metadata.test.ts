@@ -49,6 +49,14 @@ describe("project metadata", () => {
     expect(server.packages[0]?.version).toBe(pkg.version);
   });
 
+  it("keeps the Glama directory manifest version aligned with package.json", async () => {
+    const pkg = await readJson<PackageMetadata>("package.json");
+    const glama = await readJson<{ name: string; version: string }>("glama.json");
+
+    expect(glama.name).toBe(pkg.name);
+    expect(glama.version).toBe(pkg.version);
+  });
+
   it("keeps the McpServer runtime version in src/index.ts aligned with package.json", async () => {
     const pkg = await readJson<PackageMetadata>("package.json");
     const source = await readText("src/index.ts");

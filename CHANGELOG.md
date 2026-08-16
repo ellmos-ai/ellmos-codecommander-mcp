@@ -8,12 +8,24 @@ All notable changes to this project will be documented in this file.
 - Kept `package.json`, `package-lock.json`, `server.json`, `glama.json` and the `src/index.ts` runtime declaration aligned at the published 1.3.22 release. A read-only npm check confirms version/latest `1.3.22`; no publish or registry write was performed.
 - Raised the source and container contract to Node.js >=20 because the selected `@hono/node-server` 2.x dependency requires Node 20. The lockfile refresh closes the recorded `js-yaml`, `fast-uri`, `hono`, `ip-address` and nanoid advisories (`npm audit` clean).
 - Documented that `glama.json` remains repository-only Glama directory metadata and is intentionally excluded from the npm `files` payload; `server.json` and `llms.txt` remain the shipped registry/discovery files.
+- Close the `js-yaml` advisory (quadratic CPU consumption in `!!omap` resolution, affecting 4.0.0-4.3.0) by raising the direct dependency to `^4.3.1`.
+
+### Fixed
+- Realign `glama.json` with the published release: it had been left at 1.3.18 while `package.json`, `server.json`, `src/index.ts` and the npm release all moved to 1.3.22. The metadata test now covers `glama.json` too, so the directory manifest can no longer drift unnoticed.
+- Raise the declared Node.js floor from 18 to 20 across `package.json` (`engines`), the lockfile, both READMEs and `llms.txt`. The CI matrix has only ever tested 20/22/24 and `@hono/node-server` 2.x requires 20, so the advertised `>=18` was wrong.
 
 ### Test gates
-- Added `npm run test:integration` for the 35 real MCP stdio assertions and `npm run test:i18n` for the 43 translation assertions; GitHub Actions now runs both alongside the 175-test Vitest gate on Node.js 20, 22 and 24.
+- Added `npm run test:integration` for the 35 real MCP stdio assertions and `npm run test:i18n` for the 43 translation assertions; GitHub Actions now runs both alongside the Vitest gate on Node.js 20, 22 and 24.
 - Hardened the stdio harness so generated fixtures are removed on success, failures and termination, and the child process is terminated before the result is returned.
 
 ## [1.3.22] - 2026-08-04
+
+### Security (2026-08-05)
+- Close all four open Dependabot advisories via lockfile update:
+  `ip-address` (3× high — GHSA-mwp4-54f8-5fhr, GHSA-4xrf-jv44-h6hh,
+  GHSA-22jq-vg5j-6vgg, pulled in through `express-rate-limit`) and `hono`
+  (moderate, GHSA-8j4g-w8fx-2239). `npm audit` reports 0 vulnerabilities;
+  build and 175/175 Vitest tests stay green.
 
 ### Technical Hygiene & Maintenance
 - Synchronized version string `1.3.22` across `package.json`, `server.json`, and `src/index.ts` to pass metadata alignment tests.
