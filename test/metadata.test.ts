@@ -108,10 +108,13 @@ describe("project metadata", () => {
       expect(content).toContain("badge/LLM--Ready-llms.txt-blue.svg");
       expect(content).toContain("https://github.com/ellmos-ai");
       expect(content).toContain("https://github.com/open-bricks");
+      expect(content).toContain("badge/Vitest-183%20passed-brightgreen.svg");
+      expect(content).toContain("badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg");
+      expect(content).toContain("badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg");
     }
   });
 
-  it("verifies llms.txt contains version and tool count parity", async () => {
+  it("verifies llms.txt contains version, tool count, security invariants and test parity", async () => {
     const pkg = await readJson<PackageMetadata>("package.json");
     const llms = await readText("llms.txt");
 
@@ -119,6 +122,53 @@ describe("project metadata", () => {
     expect(llms).toContain("22 tools");
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
+    expect(llms).toContain("Last-checked: 2026-08-21");
+    expect(llms).toContain("261 tests passed");
+    expect(llms).toContain("Zero-Egress");
+  });
+
+  it("verifies security policy is bilingual and declares authorized contact addresses", async () => {
+    const sec = await readText("SECURITY.md");
+    expect(sec).toContain("Security Policy");
+    expect(sec).toContain("Sicherheitsrichtlinie");
+    expect(sec).toContain("security@ellmos.ai");
+    expect(sec).toContain("support@lukasgeiger.com");
+    expect(sec).toContain("Zero-Egress");
+    expect(sec).toContain("Subprocess Isolation");
+  });
+
+  it("verifies GitHub Actions CI workflow matrices include Node 20, 22, and 24", async () => {
+    const ci = await readText(".github/workflows/tests.yml");
+    expect(ci).toContain("[20, 22, 24]");
+    expect(ci).toContain("npm test");
+    expect(ci).toContain("npm run test:integration");
+    expect(ci).toContain("npm run test:i18n");
+  });
+
+  it("verifies Mermaid diagrams in both English and German READMEs", async () => {
+    const readmeEn = await readText("README.md");
+    const readmeDe = await readText("README_de.md");
+
+    expect(readmeEn).toContain("```mermaid\ngraph TD");
+    expect(readmeEn).toContain("```mermaid\nsequenceDiagram");
+    expect(readmeEn).toContain("Code Intelligence & Safe Structural Edit Lifecycle");
+
+    expect(readmeDe).toContain("```mermaid\ngraph TD");
+    expect(readmeDe).toContain("```mermaid\nsequenceDiagram");
+    expect(readmeDe).toContain("Code-Intelligenz- und sicherer struktureller Edit-Lebenszyklus");
+  });
+
+  it("verifies sibling tools matrix across ellmos-ai, dev-bricks, doc-bricks, and open-bricks", async () => {
+    for (const fileName of ["README.md", "README_de.md"]) {
+      const content = await readText(fileName);
+      expect(content).toContain("DevCenter");
+      expect(content).toContain("CodeBox");
+      expect(content).toContain("MethodenAnalyser");
+      expect(content).toContain("PDFtoPDFocr");
+      expect(content).toContain("DokuReader");
+      expect(content).toContain("ProFiler");
+      expect(content).toContain("sqlite-transit-sync");
+      expect(content).toContain("policy-registry");
+    }
   });
 });
-

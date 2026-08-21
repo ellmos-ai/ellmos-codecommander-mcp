@@ -6,12 +6,15 @@ Core capabilities: Python AST-based class/method extraction with complexity metr
 
 Node.js >= 20, MIT. Published as `ellmos-codecommander-mcp` 1.3.23 on npm. Visible on Glama at `https://glama.ai/mcp/servers/b9kjs4uaav`. Registry metadata is provided in `server.json` (MCP Registry namespace `io.github.ellmos-ai/ellmos-codecommander-mcp`), `glama.json`, and `smithery.yaml`.
 
-Test gates: `npm test` runs 176 Vitest tests; `npm run test:integration` runs 35 real MCP stdio assertions after `npm run build`; `npm run test:i18n` runs 43 translation assertions. GitHub Actions executes all three gates on Node.js 20, 22, and 24.
+Security invariants: 100% offline stdio JSON-RPC transport (Zero-Egress), preview-safe mutation modes (`mode: "preview"`), automatic `.bak` backups before modifying files, and standard unprivileged user-mode execution.
+
+Test gates: `npm test` runs 183 Vitest tests; `npm run test:integration` runs 35 real MCP stdio assertions after `npm run build`; `npm run test:i18n` runs 43 translation assertions (261 automated assertions total). GitHub Actions executes all three gates on Node.js 20, 22, and 24.
 
 ## Docs
 
 - [README (English)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/README.md): Tools, installation, configuration for Claude Desktop / Claude Code / Cursor
 - [README (Deutsch)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/README_de.md): German version
+- [SECURITY (Security Policy)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/SECURITY.md): Bilingual security architecture & reporting guidelines
 - [LICENSE](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/LICENSE): MIT license text
 - [npm package](https://www.npmjs.com/package/ellmos-codecommander-mcp): Published artifact
 
@@ -28,9 +31,15 @@ Test gates: `npm test` runs 176 Vitest tests; `npm run test:integration` runs 35
 
 - [open-bricks](https://github.com/open-bricks): Umbrella organization for open-source AI desktop tools and utilities
 - [BACH](https://github.com/ellmos-ai/bach): Full text-based OS for LLMs -- primary consumer of the MCP servers
-- [Rinnsal](https://github.com/ellmos-ai/rinnsal): Lightweight LLM agent infrastructure
-- [USMC](https://github.com/ellmos-ai/usmc): Shared memory primitive
-- [MarbleRun](https://github.com/ellmos-ai/MarbleRun): Autonomous agent chain framework for Claude Code
+- [sqlite-transit-sync](https://github.com/ellmos-ai/sqlite-transit-sync): Offline SQLite change distribution with HMAC verification
+- [policy-registry](https://github.com/ellmos-ai/policy-registry): Cryptographically signed delegation policies for AI agents
+- [DevCenter](https://github.com/dev-bricks/DevCenter): PySide6 Developer Desktop Suite & offline secret vault
+- [CodeBox](https://github.com/dev-bricks/CodeBox): Fast desktop code snippet manager & local AST indexing
+- [automation-master](https://github.com/dev-bricks/automation-master): Event-sourced automation orchestration & 30-day receipts
+- [MethodenAnalyser](https://github.com/dev-bricks/MethodenAnalyser): Method flow & complexity diagnostic engine
+- [PDFtoPDFocr](https://github.com/doc-bricks/PDFtoPDFocr): Desktop OCR pipeline for searchable PDFs with Tesseract
+- [DokuReader](https://github.com/doc-bricks/DokuReader): Multi-format document workspace & offline PDF export
+- [ProFiler](https://github.com/file-bricks/ProFiler): Multi-pane file management & bulk batch operations
 
 ## Optional
 
@@ -56,4 +65,4 @@ BACH Python runtime import diagnose structural edit indentation checker code gen
 regex tester format conversion markdown PDF MCP
 ```
 
-## Last-checked: 2026-08-16 (254 tests passed: 176 Vitest, 35 MCP stdio integration, 43 i18n assertions)
+## Last-checked: 2026-08-21 (261 tests passed: 183 Vitest, 35 MCP stdio integration, 43 i18n assertions)

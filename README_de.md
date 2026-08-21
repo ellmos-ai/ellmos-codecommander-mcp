@@ -1,4 +1,3 @@
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/ellmos-ai/.github/master/profile/logo-ellmos-codecommander.jpg" alt="ellmos CodeCommander MCP Emblem" width="400">
 </p>
@@ -12,8 +11,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CodeCommander tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Vitest](https://img.shields.io/badge/Vitest-176%20passed-brightgreen.svg)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-183%20passed-brightgreen.svg)](https://vitest.dev/)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
+[![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
+[![Security](https://img.shields.io/badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg)](SECURITY.md)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -83,6 +85,36 @@ graph TD
     Server --> Export
 ```
 
+### Code-Intelligenz- und sicherer struktureller Edit-Lebenszyklus
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Developer as Entwickler / LLM-Client
+    participant Stdio as CodeCommander Server (stdio)
+    participant Core as AST- & Code-Intelligenz-Kern
+    participant Disk as Lokales Dateisystem
+
+    Developer->>Stdio: cc_python_structural_edit (mode: "preview" / "apply")
+    Stdio->>Core: Python-AST parsen & Syntax validieren
+    alt Validierung fehlgeschlagen
+        Core-->>Stdio: Syntax- & Parsing-Diagnosen
+        Stdio-->>Developer: Fehlerdiagnose & Zeilenreferenzen
+    else Validierung erfolgreich
+        Core->>Disk: Originaldatei lesen
+        Core->>Core: Strukturelles Unified Diff berechnen
+        alt Mode == "preview"
+            Core-->>Stdio: Diff-Vorschau zurückgeben (Keine Dateiänderung)
+            Stdio-->>Developer: Vorschau des strukturellen Diffs
+        else Mode == "apply"
+            Core->>Disk: .bak-Sicherungsdatei anlegen
+            Core->>Disk: Modifizierten AST-Code dateinativ schreiben
+            Core-->>Stdio: Bestätigung mit angewendetem Diff & Backup-Pfad
+            Stdio-->>Developer: Erfolgs-Payload
+        end
+    end
+```
+
 ---
 
 ## Warum CodeCommander?
@@ -130,12 +162,12 @@ npm run build
 
 ### Claude Desktop
 
-Zur `claude_desktop_config.json` hinzufügen:
+Fügen Sie Folgendes zu Ihrer `claude_desktop_config.json` hinzu:
 
 **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
 
-#### Bei globaler Installation über NPM:
+#### Bei globaler NPM-Installation:
 
 ```json
 {
@@ -160,9 +192,9 @@ Zur `claude_desktop_config.json` hinzufügen:
 }
 ```
 
-### Beide Server zusammen nutzen
+### Beide Server zusammen verwenden
 
-FileCommander und CodeCommander sind für den parallelen Einsatz konzipiert:
+FileCommander und CodeCommander sind dafür ausgelegt, Seite an Seite zu arbeiten:
 
 ```json
 {
@@ -179,97 +211,97 @@ FileCommander und CodeCommander sind für den parallelen Einsatz konzipiert:
 
 ---
 
-## Tool-Übersicht
+## Werkzeug-Übersicht
 
 ### Code-Analyse (3 Tools)
 
 | Tool | Beschreibung |
-|------|-------------|
+|------|--------------|
 | `cc_analyze_code` | Vollständige Code-Analyse: Klassen, Funktionen, Imports, LOC, Komplexität |
-| `cc_analyze_methods` | Detaillierte Methodenanalyse: Parameter, Decorators, Sichtbarkeit, Datenfluss, BACH-Prüfungen |
-| `cc_extract_classes` | Python-Klassen/-Funktionen als separate Textblöcke extrahieren, optional mit pycutter-artigem Inline-Inhalt |
+| `cc_analyze_methods` | Detaillierte Methoden-Analyse: Parameter, Dekoratoren, Sichtbarkeit, Datenfluss, BACH-Guardrails |
+| `cc_extract_classes` | Python-Klassen/Funktionen als separate Textblöcke extrahieren, optional mit PyCutter-Inline-Inhalt |
 
 ### Import-Verwaltung (3 Tools)
 
 | Tool | Beschreibung |
-|------|-------------|
+|------|--------------|
 | `cc_organize_imports` | Python-Imports sortieren & deduplizieren gemäß PEP 8 |
-| `cc_diagnose_imports` | Ungenutzte Imports, Duplikate und zirkuläre Import-Risiken erkennen |
-| `cc_runtime_import_diagnose` | Python-Runtime-Imports isoliert mit Timeouts, __init__.py-Analyse und Zirkularitäts-Hinweisen prüfen |
+| `cc_diagnose_imports` | Unbenutzte Imports, Duplikate und zirkuläre Import-Risiken erkennen |
+| `cc_runtime_import_diagnose` | Isolierte Python-Runtime-Imports mit Timeout, `__init__.py`-Analyse und Hinweisen zu zirkulären Imports ausführen |
 
-### JSON-Tools (2 Tools)
+### JSON-Werkzeuge (2 Tools)
 
 | Tool | Beschreibung |
-|------|-------------|
+|------|--------------|
 | `cc_fix_json` | Fehlerhaftes JSON reparieren (BOM, Trailing Commas, Kommentare, einfache Anführungszeichen) |
 | `cc_validate_json` | JSON validieren mit detaillierter Fehlerposition und Kontext |
 
 ### Encoding & Text (3 Tools)
 
 | Tool | Beschreibung |
-|------|-------------|
+|------|--------------|
 | `cc_fix_encoding` | Mojibake / doppelt kodiertes UTF-8 reparieren (27+ Muster) |
 | `cc_cleanup_file` | BOM, NUL-Bytes, nachgestellte Leerzeichen entfernen, Zeilenenden normalisieren |
-| `cc_fix_umlauts` | Defekte deutsche Umlaute reparieren (70+ Muster, HTML-Entities, Escape-Sequenzen) |
+| `cc_fix_umlauts` | Defekte deutsche Umlaute reparieren (70+ Muster, HTML-Entities, Escapes) |
 
 ### Scanning (1 Tool)
 
 | Tool | Beschreibung |
-|------|-------------|
+|------|--------------|
 | `cc_scan_emoji` | Dateien nach Emojis mit Codepoint-Informationen durchsuchen |
 
 ### Format & Dokumentation (2 Tools)
 
 | Tool | Beschreibung |
-|------|-------------|
-| `cc_convert_format` | Konvertierung zwischen JSON, CSV, INI, YAML, TOML, XML und TOON |
+|------|--------------|
+| `cc_convert_format` | Zwischen JSON-, CSV-, INI-, YAML-, TOML-, XML- und TOON-Formaten konvertieren |
 | `cc_generate_licenses` | Drittanbieter-Lizenzdatei generieren (npm/pip) |
 
-### Entwickler-Werkzeuge (2 Tools)
+### Entwickler-Hilfswerkzeuge (2 Tools)
 
 | Tool | Beschreibung |
-|------|-------------|
+|------|--------------|
 | `cc_diff_files` | Zwei Dateien vergleichen mit Unified-Diff-Ausgabe (konfigurierbare Kontextzeilen) |
 | `cc_regex_test` | Regex-Muster gegen Text/Dateien testen mit Match-Details, Gruppen und Ersetzungsvorschau |
 
-### Python-Assistenz (3 Tools)
+### Python-Assistenten (3 Tools)
 
 | Tool | Beschreibung |
-|------|-------------|
-| `cc_check_indentation` | Fehlende Doppelpunkte, unindentierte return/yield-Zeilen und gemischte Tab-/Leerzeichen-Einrückung erkennen |
-| `cc_generate_python_code` | Python-Funktionen, Klassen, Dataclasses, CLI-Stubs, Tests, Exceptions und Module aus Templates erzeugen |
-| `cc_python_structural_edit` | Strukturelle Python-Edits mit Vorschau, Testdatei, Syntaxprüfung und Backup-Modus prüfen und anwenden |
+|------|--------------|
+| `cc_check_indentation` | Fehlende Doppelpunkte, nicht eingerückte return/yield-Statements und gemischte Tab/Space-Einrückung erkennen |
+| `cc_generate_python_code` | Python-Funktionen, Klassen, Dataclasses, CLI-Stubs, Tests, Exceptions und Module aus Templates generieren |
+| `cc_python_structural_edit` | Strukturelle Python-Edits mit Vorschau-, Testdatei-, Syntaxcheck- und Backup-Modus prüfen und anwenden |
 
 ### Export (2 Tools)
 
 | Tool | Beschreibung |
-|------|-------------|
-| `cc_md_to_html` | Markdown zu eigenständigem HTML mit CSS-Styling (Überschriften, Code-Blöcke, Tabellen, verschachtelte Listen, Zitate, Bilder, Checkboxen) |
-| `cc_md_to_pdf` | Markdown zu PDF über Headless-Browser (Edge/Chrome). Fallback auf HTML wenn kein Browser verfügbar |
+|------|--------------|
+| `cc_md_to_html` | Markdown zu eigenständigem HTML mit CSS-Styling (Header, Code-Blöcke, Tabellen, verschachtelte Listen, Zitate, Bilder, Checkboxen) |
+| `cc_md_to_pdf` | Markdown zu PDF via Headless-Browser (Edge/Chrome). Fallback auf HTML, falls kein Browser verfügbar ist |
 
-**Gesamt: 22 Entwickler-Tools** (`cc_set_language` ist zusätzlich für Sprachumschaltung verfügbar)
+**Gesamt: 22 Entwickler-Tools** (`cc_set_language` ist zusätzlich für den Sprachwechsel zur Laufzeit verfügbar)
 
 ---
 
-## Gemeinsame Tools
+## Geteilte Werkzeuge
 
-7 Tools existieren sowohl in FileCommander als auch in CodeCommander zur einfacheren Nutzung:
+7 Tools existieren sowohl in FileCommander als auch in CodeCommander:
 
 | FileCommander | CodeCommander | Funktion |
 |---------------|---------------|----------|
 | `fc_fix_json` | `cc_fix_json` | JSON-Reparatur |
 | `fc_validate_json` | `cc_validate_json` | JSON-Validierung |
 | `fc_fix_encoding` | `cc_fix_encoding` | Encoding-Reparatur |
-| `fc_cleanup_file` | `cc_cleanup_file` | Datei-Bereinigung |
+| `fc_cleanup_file` | `cc_cleanup_file` | Dateibereinigung |
 | `fc_convert_format` | `cc_convert_format` | Formatkonvertierung (JSON/CSV/INI/YAML/TOML/XML/TOON) |
-| `fc_md_to_html` | `cc_md_to_html` | Markdown zu HTML Export |
-| `fc_md_to_pdf` | `cc_md_to_pdf` | Markdown zu PDF Export |
+| `fc_md_to_html` | `cc_md_to_html` | Markdown-zu-HTML-Export |
+| `fc_md_to_pdf` | `cc_md_to_pdf` | Markdown-zu-PDF-Export |
 
 ---
 
 ## Tool-Präfix
 
-Alle Tools verwenden das Präfix `cc_` (CodeCommander), um Konflikte mit dem `fc_`-Präfix von FileCommander und anderen MCP-Servern zu vermeiden.
+Alle Werkzeuge verwenden das Präfix `cc_` (CodeCommander), um Konflikte mit dem `fc_`-Präfix von FileCommander und anderen MCP-Servern zu vermeiden.
 
 ---
 
@@ -277,11 +309,11 @@ Alle Tools verwenden das Präfix `cc_` (CodeCommander), um Konflikte mit dem `fc
 
 Siehe [SECURITY.md](SECURITY.md) für detaillierte Sicherheitsinformationen.
 
-Wichtige Punkte:
-- Dateiverändernde Tools unterstützen Vorschau-/Dry-run-Modi, wo anwendbar
-- Backup-Erstellung ist standardmäßig bei destruktiven Operationen aktiviert
-- Kein integriertes Sandboxing – die Sicherheit wird an den MCP-Client delegiert
-- Konzipiert für die lokale Entwicklungsnutzung über stdio-Transport
+Kernpunkte:
+- Datei-modifizierende Tools unterstützen Preview-/Dry-Run-Modi
+- Automatische `.bak`-Backups bei destruktiven Operationen standardmäßig aktiv
+- Reiner Stdio JSON-RPC-Transport mit Zero-Egress-Garantien
+- Entwickelt für die lokale Ausführung mit regulären Benutzerrechten
 
 ---
 
@@ -299,10 +331,10 @@ npm run test:i18n         # 43 Übersetzungs-Assertions
 
 ### Tests
 
-Die unterstützten Gates sind bewusst getrennt: `npm test` führt die 176 Vitest-Tests aus, `npm run test:integration` 35 echte MCP-stdio-Assertions gegen `dist/index.js` und `npm run test:i18n` 43 Übersetzungs-Assertions (254 automatisierte Test-Assertions insgesamt).
+Die unterstützten Gates sind bewusst getrennt: `npm test` führt die 183 Vitest-Tests aus, `npm run test:integration` 35 echte MCP-stdio-Assertions gegen `dist/index.js` und `npm run test:i18n` 43 Übersetzungs-Assertions (261 automatisierte Test-Assertions insgesamt).
 
 ```bash
-npm test              # Vitest Unit-Tests ausführen (176 Tests)
+npm test                  # Vitest Unit-Tests ausführen (183 Tests)
 npm run test:integration  # Echter MCP-stdio-Test (35 Assertions, zuerst builden)
 npm run test:i18n         # i18n-Assertions (43 Assertions)
 npm run test:all          # Gesamte Testsuite (Build + Vitest + Integration + i18n)
@@ -310,7 +342,7 @@ npm run test:all          # Gesamte Testsuite (Build + Vitest + Integration + i1
 
 Tests sind auf **Windows**, **macOS** und **Linux** verifiziert.
 
-GitHub Actions führt Build, alle drei Test-Gates (176 Vitest-, 35 MCP-stdio- und 43 i18n-Assertions — 254 Assertions insgesamt) sowie die npm-Paketprüfung auf Node.js 20, 22 und 24 aus.
+GitHub Actions führt Build, alle drei Test-Gates (183 Vitest-, 35 MCP-stdio- und 43 i18n-Assertions — 261 Assertions insgesamt) sowie die npm-Paketprüfung auf Node.js 20, 22 und 24 aus.
 
 ---
 
@@ -356,6 +388,23 @@ Dieser MCP-Server ist Teil des **[ellmos-ai](https://github.com/ellmos-ai)**-Ök
 | [ServerCommander](https://github.com/ellmos-ai/ellmos-servercommander-mcp) | 8 | Server-Operationen: Health-Checks, Log-Analyse, Deploy-Dry-Runs, Mail-Diagnose | [`ellmos-servercommander-mcp`](https://www.npmjs.com/package/ellmos-servercommander-mcp) (alpha) |
 | [Blender Use](https://github.com/ellmos-ai/ellmos-blender-use-mcp) | 3 | Headless Blender-Asset-QA und FBX-Reimport-Verifikation | [`ellmos-blender-use-mcp`](https://www.npmjs.com/package/ellmos-blender-use-mcp) (alpha) |
 | [Open Compute](https://github.com/ellmos-ai/open-compute-mcp) | 10 | Modell-agnostischer Computer-Use: Capture, safety-gated Aktionen, Windows-UIA | [`open-compute-mcp`](https://www.npmjs.com/package/open-compute-mcp) (alpha) |
+
+### Geschwisterwerkzeuge: Entwickler-, Datei- & Dokumenten-Tools
+
+| Ökosystem | Werkzeug / Projekt | Fokus & Fähigkeiten |
+|---|---|---|
+| **ellmos-ai** | [sqlite-transit-sync](https://github.com/ellmos-ai/sqlite-transit-sync) | Offline SQLite-Änderungsverteilung mit HMAC-Verifikation |
+| **ellmos-ai** | [policy-registry](https://github.com/ellmos-ai/policy-registry) | Kryptografisch signierte Delegationsrichtlinien für KI-Agenten |
+| **ellmos-ai** | [clutch](https://github.com/ellmos-ai/clutch) | Provider-neutrale LLM-Orchestrierung mit Auto-Routing und Budget-Tracking |
+| **ellmos-ai** | [BACH](https://github.com/ellmos-ai/bach) | Local-first textbasiertes OS für LLM-Agenten — 113+ Handler, 550+ Tools |
+| **dev-bricks** | [DevCenter](https://github.com/dev-bricks/DevCenter) | PySide6 Entwickler-Desktop-Suite & Offline-Secret-Vault |
+| **dev-bricks** | [CodeBox](https://github.com/dev-bricks/CodeBox) | Schneller Desktop-Snippet-Manager & lokale AST-Indexierung |
+| **dev-bricks** | [automation-master](https://github.com/dev-bricks/automation-master) | Event-gesourcte Automatisierungs-Orchestrierung & 30-Tage-Belege |
+| **dev-bricks** | [MethodenAnalyser](https://github.com/dev-bricks/MethodenAnalyser) | Methodenfluss- & Komplexitäts-Diagnose-Engine |
+| **doc-bricks** | [PDFtoPDFocr](https://github.com/doc-bricks/PDFtoPDFocr) | Desktop-OCR-Pipeline für durchsuchbare PDFs mit Tesseract |
+| **doc-bricks** | [DokuReader](https://github.com/doc-bricks/DokuReader) | Multi-Format-Dokumenten-Workspace & Offline-PDF-Export |
+| **file-bricks** | [ProFiler](https://github.com/file-bricks/ProFiler) | Multi-Pane Dateiverwaltung & Bulk-Batch-Operationen |
+| **open-bricks** | [open-bricks](https://github.com/open-bricks) | Dachorganisation für KI-native Open-Source-Desktop-Software |
 
 ### KI-Infrastruktur
 

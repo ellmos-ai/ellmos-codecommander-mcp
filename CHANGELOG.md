@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.23] - 2026-08-21
+
+### Discoverability & Documentation Architecture
+- Added second bilingual Mermaid sequence diagram (`Code Intelligence & Safe Structural Edit Lifecycle` / `Code-Intelligenz- und sicherer struktureller Edit-Lebenszyklus`) demonstrating client stdio JSON-RPC request flow, AST parsing, syntax validation, preview mode, and `.bak` backup creation.
+- Expanded Sibling Developer, File & Document Tools matrix across English and German READMEs (`README.md`, `README_de.md`) covering `DevCenter`, `CodeBox`, `MethodenAnalyser`, `PDFtoPDFocr`, `DokuReader`, `ProFiler`, `sqlite-transit-sync`, and `policy-registry`.
+- Synchronized Shields.io test badge to `183 passed` Vitest tests and total 261 verified test assertions (183 Vitest unit tests, 35 MCP stdio integration tests, 43 i18n translation assertions). Added Platform, Privacy, and Security badges.
+- Updated `llms.txt` discovery index with `Last-checked: 2026-08-21`, 261 verified test assertions, security invariants (Zero-Egress, Subprocess Isolation, Preview-Safe), and expanded sibling ecosystem references.
+
+### Security Policy Härtung (SECURITY.md)
+- Complete overhaul of `SECURITY.md` into a hardened bilingual (English / Deutsch) security policy document.
+- Formalized five core security invariants: Local-First Stdio Transport & Zero-Egress, Preview-First Structural Mutations (`mode: "preview"`, `.bak` backups), Non-Elevation User-Mode Execution, Input Boundary & Sanitization, and Subprocess Isolation for runtime import diagnostics (`cc_runtime_import_diagnose`).
+- Declared dedicated direct security contact channels (`security@ellmos.ai` and `support@lukasgeiger.com`) with 48h triage SLA alongside GitHub Security Advisories.
+
+### Automated Metadata & Contract Test Suite
+- Expanded `test/metadata.test.ts` to 12 contract tests (12/12 passed) validating CI matrix (`[20, 22, 24]`), bilingual security policy, authorized contact addresses, Mermaid diagrams in both READMEs, sibling tool references, and badge assertion parity across a full 183-test Vitest suite.
+
 ## [1.3.23] - 2026-08-16
 
 ### Security

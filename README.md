@@ -1,4 +1,3 @@
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/ellmos-ai/.github/master/profile/logo-ellmos-codecommander.jpg" alt="ellmos CodeCommander MCP emblem" width="400">
 </p>
@@ -11,8 +10,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CodeCommander tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Vitest](https://img.shields.io/badge/Vitest-176%20passed-brightgreen.svg)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-183%20passed-brightgreen.svg)](https://vitest.dev/)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
+[![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
+[![Security](https://img.shields.io/badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg)](SECURITY.md)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -80,6 +82,36 @@ graph TD
     Server --> Repair
     Server --> Utility
     Server --> Export
+```
+
+### Code Intelligence & Safe Structural Edit Lifecycle
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Developer as Developer / LLM Client
+    participant Stdio as CodeCommander Server (stdio)
+    participant Core as AST & Code Intelligence Core
+    participant Disk as Local Filesystem
+
+    Developer->>Stdio: cc_python_structural_edit (mode: "preview" / "apply")
+    Stdio->>Core: Parse Python AST & Validate Syntax
+    alt Validation Failed
+        Core-->>Stdio: Syntax / Parsing Diagnostics
+        Stdio-->>Developer: Error Diagnostics & Line References
+    else Validation Passed
+        Core->>Disk: Read Original File
+        Core->>Core: Compute Unified Structural Diff
+        alt Mode == "preview"
+            Core-->>Stdio: Return Diff Preview (Zero File Mutations)
+            Stdio-->>Developer: Structural Diff Preview
+        else Mode == "apply"
+            Core->>Disk: Create .bak Backup File
+            Core->>Disk: Write Modified AST Code In-Place
+            Core-->>Stdio: Confirmation with Applied Diff & Backup Path
+            Stdio-->>Developer: Success Payload
+        end
+    end
 ```
 
 ---
@@ -279,8 +311,8 @@ See [SECURITY.md](SECURITY.md) for detailed security information.
 Key points:
 - File-modifying tools support preview/dry-run modes where applicable
 - Backup creation is enabled by default for destructive operations
-- No built-in sandboxing - security is delegated to the MCP client
-- Designed for local development use via stdio transport
+- Pure stdio JSON-RPC transport with Zero-Egress guarantees
+- Designed for local development use with standard unprivileged user permissions
 
 ---
 
@@ -298,10 +330,10 @@ npm run test:i18n         # 43 translation assertions
 
 ### Testing
 
-The supported gates are deliberately separated: `npm test` runs the 176-test Vitest suite, `npm run test:integration` runs 35 real MCP stdio assertions against `dist/index.js`, and `npm run test:i18n` runs 43 translation assertions (254 automated test assertions total).
+The supported gates are deliberately separated: `npm test` runs the 183-test Vitest suite, `npm run test:integration` runs 35 real MCP stdio assertions against `dist/index.js`, and `npm run test:i18n` runs 43 translation assertions (261 automated test assertions total).
 
 ```bash
-npm test              # Run Vitest unit tests (176 tests)
+npm test                  # Run Vitest unit tests (183 tests)
 npm run test:integration  # Real MCP stdio test (35 assertions, build first)
 npm run test:i18n         # i18n assertions (43 assertions)
 npm run test:all          # Run full test suite (build + vitest + integration + i18n)
@@ -309,7 +341,7 @@ npm run test:all          # Run full test suite (build + vitest + integration + 
 
 Tests are verified on **Windows**, **macOS**, and **Linux**.
 
-GitHub Actions runs the build, all three test gates (176 Vitest, 35 MCP stdio, 43 i18n assertions — 254 assertions total), and npm package check on Node.js 20, 22, and 24.
+GitHub Actions runs the build, all three test gates (183 Vitest, 35 MCP stdio, 43 i18n assertions — 261 assertions total), and npm package check on Node.js 20, 22, and 24.
 
 ---
 
@@ -355,6 +387,23 @@ This MCP server is part of the **[ellmos-ai](https://github.com/ellmos-ai)** eco
 | [ServerCommander](https://github.com/ellmos-ai/ellmos-servercommander-mcp) | 8 | Server operations: health checks, log analysis, deploy dry-runs, mail diagnostics | [`ellmos-servercommander-mcp`](https://www.npmjs.com/package/ellmos-servercommander-mcp) (alpha) |
 | [Blender Use](https://github.com/ellmos-ai/ellmos-blender-use-mcp) | 3 | Headless Blender asset QA and FBX reimport verification | [`ellmos-blender-use-mcp`](https://www.npmjs.com/package/ellmos-blender-use-mcp) (alpha) |
 | [Open Compute](https://github.com/ellmos-ai/open-compute-mcp) | 10 | Model-agnostic computer use: capture, safety-gated actions, Windows UIA | [`open-compute-mcp`](https://www.npmjs.com/package/open-compute-mcp) (alpha) |
+
+### Sibling Developer, File & Document Tools
+
+| Ecosystem | Tool / Project | Focus & Capabilities |
+|---|---|---|
+| **ellmos-ai** | [sqlite-transit-sync](https://github.com/ellmos-ai/sqlite-transit-sync) | Offline SQLite change distribution with HMAC verification |
+| **ellmos-ai** | [policy-registry](https://github.com/ellmos-ai/policy-registry) | Cryptographically signed delegation policies for AI agents |
+| **ellmos-ai** | [clutch](https://github.com/ellmos-ai/clutch) | Provider-neutral LLM orchestration with auto-routing and budget tracking |
+| **ellmos-ai** | [BACH](https://github.com/ellmos-ai/bach) | Local-first text-based OS for LLM agents — 113+ handlers, 550+ tools |
+| **dev-bricks** | [DevCenter](https://github.com/dev-bricks/DevCenter) | PySide6 Developer Desktop Suite & offline secret vault |
+| **dev-bricks** | [CodeBox](https://github.com/dev-bricks/CodeBox) | Fast desktop code snippet manager & local AST indexing |
+| **dev-bricks** | [automation-master](https://github.com/dev-bricks/automation-master) | Event-sourced automation orchestration & 30-day receipts |
+| **dev-bricks** | [MethodenAnalyser](https://github.com/dev-bricks/MethodenAnalyser) | Method flow & complexity diagnostic engine |
+| **doc-bricks** | [PDFtoPDFocr](https://github.com/doc-bricks/PDFtoPDFocr) | Desktop OCR pipeline for searchable PDFs with Tesseract |
+| **doc-bricks** | [DokuReader](https://github.com/doc-bricks/DokuReader) | Multi-format document workspace & offline PDF export |
+| **file-bricks** | [ProFiler](https://github.com/file-bricks/ProFiler) | Multi-pane file management & bulk batch operations |
+| **open-bricks** | [open-bricks](https://github.com/open-bricks) | Umbrella organization for AI-native desktop applications |
 
 ### AI Infrastructure
 
