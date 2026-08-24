@@ -9,7 +9,22 @@ type PackageMetadata = {
   name: string;
   version: string;
   mcpName: string;
+  author?: string;
+  license?: string;
+  type?: string;
   files?: string[];
+  repository?: { type: string; url: string };
+  bugs?: { url: string };
+  homepage?: string;
+};
+
+type TsConfigMetadata = {
+  compilerOptions?: {
+    target?: string;
+    module?: string;
+    moduleResolution?: string;
+    strict?: boolean;
+  };
 };
 
 type ServerMetadata = {
@@ -108,7 +123,7 @@ describe("project metadata", () => {
       expect(content).toContain("badge/LLM--Ready-llms.txt-blue.svg");
       expect(content).toContain("https://github.com/ellmos-ai");
       expect(content).toContain("https://github.com/open-bricks");
-      expect(content).toContain("badge/Vitest-183%20passed-brightgreen.svg");
+      expect(content).toContain("badge/Vitest-186%20passed-brightgreen.svg");
       expect(content).toContain("badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg");
       expect(content).toContain("badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg");
     }
@@ -122,8 +137,8 @@ describe("project metadata", () => {
     expect(llms).toContain("22 tools");
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
-    expect(llms).toContain("Last-checked: 2026-08-21");
-    expect(llms).toContain("261 tests passed");
+    expect(llms).toContain("Last-checked: 2026-08-24");
+    expect(llms).toContain("264 tests passed");
     expect(llms).toContain("Zero-Egress");
   });
 
@@ -137,12 +152,51 @@ describe("project metadata", () => {
     expect(sec).toContain("Subprocess Isolation");
   });
 
-  it("verifies GitHub Actions CI workflow matrices include Node 20, 22, and 24", async () => {
+  it("verifies GitHub Actions CI workflow matrices include Node 20, 22, and 24 across multi-OS with concurrency", async () => {
     const ci = await readText(".github/workflows/tests.yml");
     expect(ci).toContain("[20, 22, 24]");
+    expect(ci).toContain("[ubuntu-latest, windows-latest, macos-latest]");
+    expect(ci).toContain("actions/checkout@v4");
+    expect(ci).toContain("actions/setup-node@v4");
+    expect(ci).toContain("cancel-in-progress: true");
     expect(ci).toContain("npm test");
     expect(ci).toContain("npm run test:integration");
     expect(ci).toContain("npm run test:i18n");
+  });
+
+  it("verifies package.json repository URLs, bugs tracker, author, and homepage integrity", async () => {
+    const pkg = await readJson<PackageMetadata>("package.json");
+    expect(pkg.repository?.url).toBe("git+https://github.com/ellmos-ai/ellmos-codecommander-mcp.git");
+    expect(pkg.bugs?.url).toBe("https://github.com/ellmos-ai/ellmos-codecommander-mcp/issues");
+    expect(pkg.homepage).toBe("https://github.com/ellmos-ai/ellmos-codecommander-mcp#readme");
+    expect(pkg.license).toBe("MIT");
+    expect(pkg.type).toBe("module");
+  });
+
+  it("verifies TypeScript compiler configuration enforces strict mode and ES2022 target", async () => {
+    const tsconfig = await readJson<TsConfigMetadata>("tsconfig.json");
+    expect(tsconfig.compilerOptions?.strict).toBe(true);
+    expect(tsconfig.compilerOptions?.target).toBe("ES2022");
+    expect(tsconfig.compilerOptions?.moduleResolution).toBe("Node16");
+  });
+
+  it("verifies package payload includes all essential documentation, schemas, and entrypoints", async () => {
+    const pkg = await readJson<PackageMetadata>("package.json");
+    const essentialFiles = [
+      "dist/",
+      "LICENSE",
+      "README.md",
+      "README_de.md",
+      "CHANGELOG.md",
+      "SECURITY.md",
+      "server.json",
+      "glama.json",
+      "smithery.yaml",
+      "llms.txt",
+    ];
+    for (const f of essentialFiles) {
+      expect(pkg.files).toContain(f);
+    }
   });
 
   it("verifies Mermaid diagrams in both English and German READMEs", async () => {

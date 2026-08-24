@@ -8,7 +8,7 @@ Node.js >= 20, MIT. Published as `ellmos-codecommander-mcp` 1.3.23 on npm. Visib
 
 Security invariants: 100% offline stdio JSON-RPC transport (Zero-Egress), preview-safe mutation modes (`mode: "preview"`), automatic `.bak` backups before modifying files, and standard unprivileged user-mode execution.
 
-Test gates: `npm test` runs 183 Vitest tests; `npm run test:integration` runs 35 real MCP stdio assertions after `npm run build`; `npm run test:i18n` runs 43 translation assertions (261 automated assertions total). GitHub Actions executes all three gates on Node.js 20, 22, and 24.
+Test gates: `npm test` runs 186 Vitest tests; `npm run test:integration` runs 35 real MCP stdio assertions after `npm run build`; `npm run test:i18n` runs 43 translation assertions (264 automated assertions total). GitHub Actions executes all three gates across Ubuntu, Windows, and macOS on Node.js 20, 22, and 24 with concurrency control.
 
 ## Docs
 
@@ -65,4 +65,4 @@ BACH Python runtime import diagnose structural edit indentation checker code gen
 regex tester format conversion markdown PDF MCP
 ```
 
-## Last-checked: 2026-08-21 (261 tests passed: 183 Vitest, 35 MCP stdio integration, 43 i18n assertions)
+## Last-checked: 2026-08-24 (264 tests passed: 186 Vitest, 35 MCP stdio integration, 43 i18n assertions)

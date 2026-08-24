@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.23] - 2026-08-24
+
+### CI/CD Workflow Härtung & Multi-OS Matrix
+- Hardened GitHub Actions test workflow (`.github/workflows/tests.yml`) with a full multi-OS matrix (`ubuntu-latest`, `windows-latest`, `macos-latest`) across Node.js 20, 22, and 24.
+- Standardized action versions to `actions/checkout@v4` and `actions/setup-node@v4`.
+- Added workflow-level concurrency control (`group: ${{ github.workflow }}-${{ github.ref }}` with `cancel-in-progress: true`) to automatically cancel superseded workflow runs.
+
+### Automated Metadata & Contract Test Suite
+- Expanded contract test suite in `test/metadata.test.ts` to 15 tests (15/15 passed) covering multi-OS CI matrix declarations, concurrency configuration, package.json URLs and metadata integrity (`repository`, `bugs`, `homepage`, `type: module`), TypeScript strict compiler configuration (`tsconfig.json`), and package payload export lists.
+- Synchronized Shields.io test badge to `186 passed` Vitest tests and total 264 verified test assertions (186 Vitest unit tests, 35 MCP stdio integration tests, 43 i18n translation assertions).
+- Updated `llms.txt` discovery index with `Last-checked: 2026-08-24`, 264 verified test assertions, and multi-OS CI matrix documentation.
+
 ## [1.3.23] - 2026-08-21
 
 ### Discoverability & Documentation Architecture
