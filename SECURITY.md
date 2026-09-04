@@ -16,6 +16,7 @@
 1. **Local-First & Zero-Egress Guarantee**:
    - Standard operation runs 100% locally via stdio JSON-RPC without external network calls or telemetry.
    - Markdown-to-PDF conversion (`cc_md_to_pdf`) utilizes locally installed headless browsers (Edge/Chrome) strictly for on-device PDF rendering, without transmitting document content externally.
+   - Markdown exports HTML-escape document content, reject active URL schemes, block remote image loads, and emit a deny-by-default Content Security Policy.
 2. **Non-Elevation (User-Mode Execution)**:
    - CodeCommander executes strictly with standard user privileges. It requires no administrative/root elevation or special kernel capabilities.
 3. **Subprocess Isolation (`cc_runtime_import_diagnose`)**:
@@ -36,7 +37,7 @@
 | `cc_cleanup_file` | Medium | Whitespace/BOM/NUL normalization with backup support |
 | `cc_fix_umlauts` | Medium | Deterministic mapping; dry-run preview mode |
 | `cc_convert_format` | Medium | Pure data serialization/deserialization into target output files |
-| `cc_md_to_html` / `cc_md_to_pdf` | Medium | Local rendering; headless browser process timeout |
+| `cc_md_to_html` / `cc_md_to_pdf` | Medium | HTML escaping; remote-image blocking; deny-by-default CSP; headless browser process timeout |
 | `cc_runtime_import_diagnose` | Caution | Isolated subprocess execution; strict timeouts; inspects untrusted target code |
 | All Read-Only Tools (13 tools) | Low | Pure in-memory analysis; zero filesystem writes |
 
@@ -62,6 +63,7 @@ If you discover a security vulnerability in `ellmos-codecommander-mcp`:
 1. **Local-First- & Zero-Egress-Garantie**:
    - Der reguläre Betrieb erfolgt zu 100 % lokal über stdio JSON-RPC ohne externe Netzwerkaufrufe oder Telemetrie.
    - Markdown-zu-PDF-Konvertierung (`cc_md_to_pdf`) nutzt lokal installierte Headless-Browser (Edge/Chrome) ausschließlich zur geräteinternen PDF-Erzeugung ohne Datenübertragung an Dritte.
+   - Markdown-Exporte maskieren HTML-Inhalte, lehnen aktive URL-Schemata ab, blockieren entfernte Bildabrufe und setzen eine standardmäßig restriktive Content Security Policy.
 2. **Non-Elevation (User-Mode-Betrieb)**:
    - CodeCommander läuft strikt mit normalen Benutzerberechtigungen und erfordert zu keinem Zeitpunkt administrative Rechte (keine Elevation/Root).
 3. **Subprozess-Isolation (`cc_runtime_import_diagnose`)**:
@@ -82,7 +84,7 @@ If you discover a security vulnerability in `ellmos-codecommander-mcp`:
 | `cc_cleanup_file` | Mittel | Normalisierung von Whitespace/BOM/NUL mit Backup-Unterstützung |
 | `cc_fix_umlauts` | Mittel | Deterministisches Mapping; Dry-Run-Vorschau |
 | `cc_convert_format` | Mittel | Reine Daten-Serialisierung in Zieldateien |
-| `cc_md_to_html` / `cc_md_to_pdf` | Mittel | Lokales Rendering; Timeout für Browser-Subprozesse |
+| `cc_md_to_html` / `cc_md_to_pdf` | Mittel | HTML-Maskierung; Blockierung entfernter Bilder; restriktive CSP; Timeout für Browser-Subprozesse |
 | `cc_runtime_import_diagnose` | Erhöht | Isolierter Subprozess; strikte Timeouts; Analyse von Fremdcode |
 | Alle lesenden Werkzeuge (13 Tools) | Niedrig | Reine In-Memory-Analyse; keine Dateisystemschreibzugriffe |
 

@@ -123,7 +123,7 @@ describe("project metadata", () => {
       expect(content).toContain("badge/LLM--Ready-llms.txt-blue.svg");
       expect(content).toContain("https://github.com/ellmos-ai");
       expect(content).toContain("https://github.com/open-bricks");
-      expect(content).toContain("badge/Vitest-186%20passed-brightgreen.svg");
+      expect(content).toContain("badge/Vitest-190%20passed-brightgreen.svg");
       expect(content).toContain("badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg");
       expect(content).toContain("badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg");
     }
@@ -137,8 +137,8 @@ describe("project metadata", () => {
     expect(llms).toContain("22 tools");
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
-    expect(llms).toContain("Last-checked: 2026-08-24");
-    expect(llms).toContain("264 tests passed");
+    expect(llms).toContain("Last-checked: 2026-09-04");
+    expect(llms).toContain("268 tests passed");
     expect(llms).toContain("Zero-Egress");
   });
 

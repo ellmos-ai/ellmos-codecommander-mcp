@@ -51,6 +51,71 @@ function normalizePath(inputPath: string): string {
   return path.normalize(inputPath);
 }
 
+export const MARKDOWN_CONTENT_SECURITY_POLICY = "default-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; object-src 'none'; script-src 'none'; connect-src 'none'; media-src 'none'; style-src 'unsafe-inline'; img-src data:";
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function safeMarkdownLinkDestination(value: string): string | null {
+  const destination = value.trim();
+  // Browsers strip ASCII control characters while parsing schemes (for example
+  // `java\tscript:` becomes `javascript:`), so reject them before allowlisting.
+  if (/[\u0000-\u001f\u007f-\u009f]/.test(destination)) return null;
+  // `value` is captured from the already escaped Markdown source. Returning it
+  // directly avoids turning an ordinary query `&amp;` into `&amp;amp;`.
+  if (/^(?:https?:|mailto:)/i.test(destination)) return destination;
+  if (!/^[a-z][a-z0-9+.-]*:/i.test(destination) && !destination.startsWith('//') && !destination.startsWith('\\\\')) {
+    return destination;
+  }
+  return null;
+}
+
+function safeMarkdownImageSource(value: string): string | null {
+  const source = value.trim();
+  if (/^data:image\/(?:png|gif|jpeg|webp);base64,[a-z0-9+/=\s]+$/i.test(source)) {
+    return escapeHtml(source);
+  }
+  return null;
+}
+
+export function formatMarkdownInline(value: string): string {
+  let text = escapeHtml(value);
+  text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+  text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+  text = text.replace(/\[!\[([^\]]*)\]\(([^)]+)\)\]\(([^)]+)\)/g, (_match, alt: string, image: string, link: string) => {
+    const safeImage = safeMarkdownImageSource(image);
+    const safeLink = safeMarkdownLinkDestination(link);
+    if (!safeImage) return `<span class="blocked-resource">[blocked image: ${alt}]</span>`;
+    const renderedImage = `<img src="${safeImage}" alt="${alt}" referrerpolicy="no-referrer">`;
+    return safeLink ? `<a href="${safeLink}" rel="noopener noreferrer">${renderedImage}</a>` : renderedImage;
+  });
+  text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt: string, image: string) => {
+    const safeImage = safeMarkdownImageSource(image);
+    return safeImage
+      ? `<img src="${safeImage}" alt="${alt}" referrerpolicy="no-referrer">`
+      : `<span class="blocked-resource">[blocked image: ${alt}]</span>`;
+  });
+  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, label: string, link: string) => {
+    const safeLink = safeMarkdownLinkDestination(link);
+    return safeLink ? `<a href="${safeLink}" rel="noopener noreferrer">${label}</a>` : label;
+  });
+  text = text.replace(/\[x\]/gi, '&#9745;');
+  text = text.replace(/\[ \]/g, '&#9744;');
+  return text;
+}
+
+function safeMarkdownCodeLanguage(value: string): string {
+  return /^[a-z0-9_-]{1,32}$/i.test(value) ? value : 'text';
+}
+
 async function pathExists(targetPath: string): Promise<boolean> {
   try { await fs.access(targetPath); return true; } catch { return false; }
 }
@@ -3229,18 +3294,7 @@ Produces standalone HTML with CSS styling, printable as PDF via browser.`,
       const title = params.title || path.basename(inputPath, '.md');
 
       // --- Inline formatting ---
-      const inlineFmt = (text: string): string => {
-        text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
-        text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
-        text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-        text = text.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
-        text = text.replace(/\[!\[([^\]]*)\]\(([^)]+)\)\]\(([^)]+)\)/g, '<a href="$3"><img src="$2" alt="$1"></a>');
-        text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
-        text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-        text = text.replace(/\[x\]/gi, '&#9745;');
-        text = text.replace(/\[ \]/g, '&#9744;');
-        return text;
-      };
+      const inlineFmt = formatMarkdownInline;
 
       // --- Table parser ---
       const parseTable = (tableLines: string[]): string => {
@@ -3292,7 +3346,7 @@ Produces standalone HTML with CSS styling, printable as PDF via browser.`,
 
         // Fenced code block
         if (line.trimStart().startsWith('```')) {
-          const lang = line.trim().slice(3).trim();
+          const lang = safeMarkdownCodeLanguage(line.trim().slice(3).trim());
           const codeLines: string[] = [];
           i++;
           while (i < n && !lines[i].trimEnd().trimStart().startsWith('```')) {
@@ -3360,7 +3414,8 @@ Produces standalone HTML with CSS styling, printable as PDF via browser.`,
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>${title}</title>
+  <meta http-equiv="Content-Security-Policy" content="${MARKDOWN_CONTENT_SECURITY_POLICY}">
+  <title>${escapeHtml(title)}</title>
   <style>
     body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.7; color: #2c3e50; font-size: 11pt; }
     h1 { color: #1a252f; border-bottom: 3px solid #3498db; padding-bottom: 12px; font-size: 22pt; }
@@ -3439,18 +3494,7 @@ Falls back to HTML if no browser is found.`,
       const title = params.title || path.basename(inputPath, '.md');
 
       // --- Inline formatting ---
-      const inlineFmt = (text: string): string => {
-        text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
-        text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
-        text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-        text = text.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
-        text = text.replace(/\[!\[([^\]]*)\]\(([^)]+)\)\]\(([^)]+)\)/g, '<a href="$3"><img src="$2" alt="$1"></a>');
-        text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
-        text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-        text = text.replace(/\[x\]/gi, '&#9745;');
-        text = text.replace(/\[ \]/g, '&#9744;');
-        return text;
-      };
+      const inlineFmt = formatMarkdownInline;
 
       // --- Table parser ---
       const parseTable = (tableLines: string[]): string => {
@@ -3501,7 +3545,7 @@ Falls back to HTML if no browser is found.`,
         const line = lines[i].trimEnd();
 
         if (line.trimStart().startsWith('```')) {
-          const lang = line.trim().slice(3).trim();
+          const lang = safeMarkdownCodeLanguage(line.trim().slice(3).trim());
           const codeLines: string[] = [];
           i++;
           while (i < n && !lines[i].trimEnd().trimStart().startsWith('```')) {
@@ -3561,7 +3605,8 @@ Falls back to HTML if no browser is found.`,
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>${title}</title>
+  <meta http-equiv="Content-Security-Policy" content="${MARKDOWN_CONTENT_SECURITY_POLICY}">
+  <title>${escapeHtml(title)}</title>
   <style>
     body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.7; color: #2c3e50; font-size: 11pt; }
     h1 { color: #1a252f; border-bottom: 3px solid #3498db; padding-bottom: 12px; font-size: 22pt; }

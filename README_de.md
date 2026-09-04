@@ -11,7 +11,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CodeCommander tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Vitest](https://img.shields.io/badge/Vitest-186%20passed-brightgreen.svg)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-190%20passed-brightgreen.svg)](https://vitest.dev/)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
@@ -331,10 +331,10 @@ npm run test:i18n         # 43 Übersetzungs-Assertions
 
 ### Tests
 
-Die unterstützten Gates sind bewusst getrennt: `npm test` führt die 183 Vitest-Tests aus, `npm run test:integration` 35 echte MCP-stdio-Assertions gegen `dist/index.js` und `npm run test:i18n` 43 Übersetzungs-Assertions (261 automatisierte Test-Assertions insgesamt).
+Die unterstützten Gates sind bewusst getrennt: `npm test` führt die 190 Vitest-Tests aus, `npm run test:integration` 35 echte MCP-stdio-Assertions gegen `dist/index.js` und `npm run test:i18n` 43 Übersetzungs-Assertions (268 automatisierte Test-Assertions insgesamt).
 
 ```bash
-npm test                  # Vitest Unit-Tests ausführen (183 Tests)
+npm test                  # Vitest Unit-Tests ausführen (190 Tests)
 npm run test:integration  # Echter MCP-stdio-Test (35 Assertions, zuerst builden)
 npm run test:i18n         # i18n-Assertions (43 Assertions)
 npm run test:all          # Gesamte Testsuite (Build + Vitest + Integration + i18n)
@@ -342,7 +342,7 @@ npm run test:all          # Gesamte Testsuite (Build + Vitest + Integration + i1
 
 Tests sind auf **Windows**, **macOS** und **Linux** verifiziert.
 
-GitHub Actions führt Build, alle drei Test-Gates (183 Vitest-, 35 MCP-stdio- und 43 i18n-Assertions — 261 Assertions insgesamt) sowie die npm-Paketprüfung auf Node.js 20, 22 und 24 aus.
+GitHub Actions führt Build, alle drei Test-Gates (190 Vitest-, 35 MCP-stdio- und 43 i18n-Assertions — 268 Assertions insgesamt) sowie die npm-Paketprüfung auf Node.js 20, 22 und 24 aus.
 
 ---
 

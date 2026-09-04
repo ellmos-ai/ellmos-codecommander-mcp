@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Security
+- Harden Markdown-to-HTML/PDF rendering with shared HTML escaping, URL-scheme checks, remote-image blocking, conservative code-fence language handling, and a deny-by-default Content Security Policy.
+- Add regression tests for raw markup, attribute injection, active link schemes, remote image loads, and the export CSP.
+
 ## [1.3.23] - 2026-08-24
 
 ### CI/CD Workflow Härtung & Multi-OS Matrix

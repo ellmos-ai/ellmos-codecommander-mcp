@@ -18,7 +18,11 @@ import * as yaml from "js-yaml";
 import * as toml from "smol-toml";
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
 import { encode as toonEncode, decode as toonDecode } from "@toon-format/toon";
-import { convertSingleQuotedDelimiters } from "../src/index.js";
+import {
+  convertSingleQuotedDelimiters,
+  formatMarkdownInline,
+  MARKDOWN_CONTENT_SECURITY_POLICY,
+} from "../src/index.js";
 
 const execFileAsync = promisify(execFile);
 
@@ -2452,6 +2456,38 @@ describe("Tool 13: cc_generate_licenses", () => {
 // ============================================================================
 
 describe("Tool 14: cc_md_to_html", () => {
+  it("should render Markdown text and attributes as inert HTML", () => {
+    const rendered = formatMarkdownInline('<script>alert(1)</script> ![x" onerror="alert(2)](https://example.com/x.png)');
+
+    expect(rendered).toContain('&lt;script&gt;alert(1)&lt;/script&gt;');
+    expect(rendered).not.toContain('<script>');
+    expect(rendered).not.toContain('<img');
+    expect(rendered).not.toContain('onerror="');
+  });
+
+  it("should reject active link schemes and remote image loads", () => {
+    expect(formatMarkdownInline('[click](javascript:alert)')).toBe('click');
+    expect(formatMarkdownInline('[click](java\tscript:alert)')).toBe('click');
+    expect(formatMarkdownInline('[click](da\tta:text/html,hello)')).toBe('click');
+    expect(formatMarkdownInline('[click](fi\tle:///etc/passwd)')).toBe('click');
+    expect(formatMarkdownInline('![pixel](https://example.com/pixel.png)')).toContain('blocked image');
+    expect(formatMarkdownInline('[safe](https://example.com)')).toContain('rel="noopener noreferrer"');
+  });
+
+  it("should preserve query parameters while escaping link attributes", () => {
+    expect(formatMarkdownInline('[query](https://example.com/?a=1&b=2)'))
+      .toContain('href="https://example.com/?a=1&amp;b=2"');
+    expect(formatMarkdownInline('[quote](https://example.com/&quot; onclick=&quot;alert)'))
+      .not.toContain('onclick="');
+  });
+
+  it("should define a deny-by-default export CSP", () => {
+    expect(MARKDOWN_CONTENT_SECURITY_POLICY).toContain("default-src 'none'");
+    expect(MARKDOWN_CONTENT_SECURITY_POLICY).toContain("script-src 'none'");
+    expect(MARKDOWN_CONTENT_SECURITY_POLICY).toContain("connect-src 'none'");
+    expect(MARKDOWN_CONTENT_SECURITY_POLICY).toContain('img-src data:');
+  });
+
   it("should convert headers", () => {
     expect(inlineFmt("plain")).toBe("plain");
     const line = "## Hello World";
