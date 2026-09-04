@@ -17,7 +17,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const serverPath = path.join(__dirname, '..', 'dist', 'index.js');
 const fixturesDir = path.join(__dirname, 'fixtures');
 const generatedFixtureNames = [
-  'test_out.yaml', 'test_out.toml', 'test_out.xml', 'test_out.toon', 'test_roundtrip.json'
+  'test_out.yaml', 'test_out.toml', 'test_out.xml', 'test_out.toon', 'test_roundtrip.json',
+  'analysis_sample.js', 'analysis_sample.jsx', 'analysis_sample.ts', 'analysis_sample.tsx',
+  'analysis_sample.lua', 'analysis_sample.luau'
 ];
 let activeServer = null;
 let shuttingDown = false;
@@ -214,6 +216,73 @@ async function runTests() {
     // Send initialized notification (no response expected)
     server.stdin.write(createNotification('notifications/initialized'));
     await new Promise(r => setTimeout(r, 500)); // give server a moment
+
+    // ========================================================================
+    // Stage 1 language dispatch and Python-only path gates
+    // ========================================================================
+    console.log('--- Stage 1: JavaScript/TypeScript analysis dispatch ---');
+    const languageFixtures = {
+      'analysis_sample.js': `import { readFile } from 'node:fs/promises';\nexport class Greeter {\n  async greet(name) {\n    return name && await readFile(name);\n  }\n}\nexport const run = async () => new Greeter();\n`,
+      'analysis_sample.jsx': `import React from 'react';\nexport class Panel extends React.Component {\n  render() {\n    return <section>{this.props.title}</section>;\n  }\n}\n`,
+      'analysis_sample.ts': `import { join, resolve } from 'node:path';\nexport function makePath(value: string): string {\n  return join('', value);\n}\n`,
+      'analysis_sample.tsx': `import React from 'react';\ntype Props = { name: string };\nexport const View = ({ name }: Props) => <strong>{name}</strong>;\n`,
+      'analysis_sample.lua': `local function greet(name)\n  return 'hello ' .. name\nend\n`,
+      'analysis_sample.luau': `local function typed(name: string): string\n  return name\nend\n`
+    };
+    for (const [name, content] of Object.entries(languageFixtures)) {
+      fs.writeFileSync(path.join(fixturesDir, name), content, 'utf-8');
+    }
+
+    const jsAnalyze = await callTool('cc_analyze_code', { path: path.join(fixturesDir, 'analysis_sample.js') });
+    const jsAnalyzeText = jsAnalyze.result?.content?.[0]?.text || '';
+    assert('JS dispatch: cc_analyze_code succeeds', !jsAnalyze.result?.isError, jsAnalyzeText);
+    assert('JS dispatch: class and function are reported', jsAnalyzeText.includes('Greeter') && jsAnalyzeText.includes('run'), jsAnalyzeText);
+
+    const jsxMethods = await callTool('cc_analyze_methods', { path: path.join(fixturesDir, 'analysis_sample.jsx') });
+    const jsxMethodsText = jsxMethods.result?.content?.[0]?.text || '';
+    assert('JSX dispatch: cc_analyze_methods succeeds', !jsxMethods.result?.isError, jsxMethodsText);
+    assert('JSX dispatch: class method is reported', jsxMethodsText.includes('Panel') && jsxMethodsText.includes('render()'), jsxMethodsText);
+
+    const tsImports = await callTool('cc_diagnose_imports', { path: path.join(fixturesDir, 'analysis_sample.ts') });
+    const tsImportsText = tsImports.result?.content?.[0]?.text || '';
+    assert('TS dispatch: cc_diagnose_imports succeeds', !tsImports.result?.isError, tsImportsText);
+    assert('TS dispatch: unused named import is diagnosed', tsImportsText.includes('resolve'), tsImportsText);
+
+    const tsxAnalyze = await callTool('cc_analyze_code', { path: path.join(fixturesDir, 'analysis_sample.tsx') });
+    const tsxAnalyzeText = tsxAnalyze.result?.content?.[0]?.text || '';
+    assert('TSX dispatch: cc_analyze_code succeeds', !tsxAnalyze.result?.isError, tsxAnalyzeText);
+    assert('TSX dispatch: typed arrow function is reported', tsxAnalyzeText.includes('View'), tsxAnalyzeText);
+
+    for (const extension of ['lua', 'luau']) {
+      const unsupported = await callTool('cc_analyze_code', { path: path.join(fixturesDir, `analysis_sample.${extension}`) });
+      const unsupportedText = unsupported.result?.content?.[0]?.text || '';
+      assert(`${extension}: generic analyzer returns an explicit language error`,
+        unsupported.result?.isError && unsupportedText.includes('Unsupported source language') && unsupportedText.includes(`.${extension}`), unsupportedText);
+    }
+
+    const luaMethods = await callTool('cc_analyze_methods', { path: path.join(fixturesDir, 'analysis_sample.lua') });
+    const luaMethodsText = luaMethods.result?.content?.[0]?.text || '';
+    assert('Lua: method analyzer returns an explicit language error',
+      luaMethods.result?.isError && luaMethodsText.includes('Unsupported source language'), luaMethodsText);
+
+    const luauImports = await callTool('cc_diagnose_imports', { path: path.join(fixturesDir, 'analysis_sample.luau') });
+    const luauImportsText = luauImports.result?.content?.[0]?.text || '';
+    assert('Luau: import analyzer returns an explicit language error',
+      luauImports.result?.isError && luauImportsText.includes('Unsupported source language'), luauImportsText);
+
+    const pythonOnlyCases = [
+      ['cc_extract_classes', 'analysis_sample.js', {}],
+      ['cc_organize_imports', 'analysis_sample.ts', { dry_run: true }],
+      ['cc_check_indentation', 'analysis_sample.js', { recursive: false }],
+      ['cc_runtime_import_diagnose', 'analysis_sample.ts', {}],
+      ['cc_python_structural_edit', 'analysis_sample.js', { operation: 'inspect', mode: 'preview' }]
+    ];
+    for (const [tool, fixture, extraArgs] of pythonOnlyCases) {
+      const response = await callTool(tool, { path: path.join(fixturesDir, fixture), ...extraArgs });
+      const responseText = response.result?.content?.[0]?.text || '';
+      assert(`${tool}: rejects JS/TS before Python processing`,
+        response.result?.isError && responseText.includes('Python-only tool requires a .py file'), responseText);
+    }
 
     // ========================================================================
     // Test 1: JSON -> YAML conversion

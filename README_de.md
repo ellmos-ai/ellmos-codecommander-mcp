@@ -121,8 +121,9 @@ sequenceDiagram
 
 Während FileCommander Dateisystem-Operationen übernimmt, konzentriert sich CodeCommander auf **Code-Intelligenz**:
 
-- **Python Code-Analyse** – AST-basierte Klassen-/Methodenextraktion, Komplexitätsmetriken, Import-Analyse
+- **Python-, JavaScript- & TypeScript-Analyse** – endungsbasierter Dispatch für Klassen, Methoden, Funktionen, Komplexitätsmetriken und Imports; JS/TS bleibt regexbasiert und read-only
 - **BACH-abgeleitete Python-Helfer** – Runtime-Importdiagnose, strukturelle Edits, Einrückungsprüfung und Template-basierte Codegenerierung
+- **Explizite Sprach-Gates** – Python-only-Pfadtools lehnen Nicht-`.py`-Dateien ab, statt Python-geprägte Fehlbefunde zu erzeugen
 - **JSON-Reparatur** – Automatische Korrektur von fehlerhaftem JSON (Trailing Commas, einfache Anführungszeichen, BOM, Kommentare)
 - **Import-Organisation** – Python-Imports sortieren und deduplizieren gemäß PEP 8
 - **Encoding-Korrektur** – Reparatur von Mojibake und doppelt kodiertem UTF-8 (27+ Muster)
@@ -217,8 +218,8 @@ FileCommander und CodeCommander sind dafür ausgelegt, Seite an Seite zu arbeite
 
 | Tool | Beschreibung |
 |------|--------------|
-| `cc_analyze_code` | Vollständige Code-Analyse: Klassen, Funktionen, Imports, LOC, Komplexität |
-| `cc_analyze_methods` | Detaillierte Methoden-Analyse: Parameter, Dekoratoren, Sichtbarkeit, Datenfluss, BACH-Guardrails |
+| `cc_analyze_code` | Read-only-Analyse für Python oder regexbasiert für JavaScript/TypeScript: Klassen, Funktionen, Imports, LOC, Komplexität |
+| `cc_analyze_methods` | Read-only-Methodenanalyse für Python oder regexbasiert für JavaScript/TypeScript; Python behält seine BACH-Guardrails |
 | `cc_extract_classes` | Python-Klassen/Funktionen als separate Textblöcke extrahieren, optional mit PyCutter-Inline-Inhalt |
 
 ### Import-Verwaltung (3 Tools)
@@ -226,7 +227,7 @@ FileCommander und CodeCommander sind dafür ausgelegt, Seite an Seite zu arbeite
 | Tool | Beschreibung |
 |------|--------------|
 | `cc_organize_imports` | Python-Imports sortieren & deduplizieren gemäß PEP 8 |
-| `cc_diagnose_imports` | Unbenutzte Imports, Duplikate und zirkuläre Import-Risiken erkennen |
+| `cc_diagnose_imports` | Read-only-Importdiagnose für Python oder regexbasiert für JavaScript/TypeScript |
 | `cc_runtime_import_diagnose` | Isolierte Python-Runtime-Imports mit Timeout, `__init__.py`-Analyse und Hinweisen zu zirkulären Imports ausführen |
 
 ### JSON-Werkzeuge (2 Tools)

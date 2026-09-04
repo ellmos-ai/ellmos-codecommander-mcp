@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Dispatch the read-only `cc_analyze_code`, `cc_analyze_methods`, and `cc_diagnose_imports` tools by file extension to the existing Python analyzer or a dependency-free regex analyzer for JavaScript and TypeScript, including JSX/TSX and ESM/CommonJS extension variants.
+- Reject non-`.py` files explicitly in every Python-only path tool before Python analysis or mutation can run.
+
 ### Security
 - Harden Markdown-to-HTML/PDF rendering with shared HTML escaping, URL-scheme checks, remote-image blocking, conservative code-fence language handling, and a deny-by-default Content Security Policy.
 - Add regression tests for raw markup, attribute injection, active link schemes, remote image loads, and the export CSP.

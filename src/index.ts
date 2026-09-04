@@ -195,6 +195,211 @@ interface CodeAnalysis {
   complexity: number;
 }
 
+type AnalysisLanguage = 'python' | 'javascript' | 'typescript';
+
+interface ScriptMethod {
+  name: string;
+  line: number;
+  params: string;
+  isAsync: boolean;
+  isStatic: boolean;
+  visibility: 'public' | 'protected' | 'private';
+}
+
+const JAVASCRIPT_EXTENSIONS = new Set(['.js', '.jsx', '.mjs', '.cjs']);
+const TYPESCRIPT_EXTENSIONS = new Set(['.ts', '.tsx', '.mts', '.cts']);
+const SUPPORTED_ANALYSIS_EXTENSIONS = ['.py', ...JAVASCRIPT_EXTENSIONS, ...TYPESCRIPT_EXTENSIONS];
+
+function detectAnalysisLanguage(filePath: string): AnalysisLanguage {
+  const extension = path.extname(filePath).toLowerCase();
+  if (extension === '.py') return 'python';
+  if (JAVASCRIPT_EXTENSIONS.has(extension)) return 'javascript';
+  if (TYPESCRIPT_EXTENSIONS.has(extension)) return 'typescript';
+  throw new Error(
+    `Unsupported source language for extension "${extension || '<none>'}". ` +
+    `Supported extensions: ${SUPPORTED_ANALYSIS_EXTENSIONS.join(', ')}.`
+  );
+}
+
+function analysisLanguageLabel(language: AnalysisLanguage): string {
+  if (language === 'python') return 'Python';
+  if (language === 'typescript') return 'TypeScript';
+  return 'JavaScript';
+}
+
+function assertPythonFileExtension(filePath: string): void {
+  const extension = path.extname(filePath).toLowerCase();
+  if (extension !== '.py') {
+    throw new Error(
+      `Python-only tool requires a .py file; received extension "${extension || '<none>'}". ` +
+      'JavaScript, TypeScript, Lua, Luau, and other languages are not supported by this tool.'
+    );
+  }
+}
+
+async function assertPythonOnlyPath(targetPath: string): Promise<void> {
+  const stat = await fs.stat(targetPath);
+  if (stat.isFile()) assertPythonFileExtension(targetPath);
+}
+
+const NODE_STDLIB_MODULES = new Set([
+  'assert', 'buffer', 'child_process', 'cluster', 'console', 'crypto', 'dns',
+  'events', 'fs', 'http', 'https', 'module', 'net', 'os', 'path', 'perf_hooks',
+  'process', 'querystring', 'readline', 'stream', 'string_decoder', 'timers',
+  'tls', 'tty', 'url', 'util', 'v8', 'vm', 'worker_threads', 'zlib'
+]);
+
+function classifyScriptImport(module: string): 'stdlib' | 'third_party' | 'local' {
+  if (module.startsWith('.') || module.startsWith('/') || module.startsWith('\\')) return 'local';
+  const normalized = module.startsWith('node:') ? module.slice(5) : module;
+  return NODE_STDLIB_MODULES.has(normalized.split('/')[0]) ? 'stdlib' : 'third_party';
+}
+
+function findBraceBlockEnd(lines: string[], startIndex: number): number {
+  let depth = 0;
+  let started = false;
+  for (let i = startIndex; i < lines.length; i++) {
+    const scrubbed = lines[i]
+      .replace(/\\./g, '')
+      .replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`/g, '');
+    for (const character of scrubbed) {
+      if (character === '{') { depth++; started = true; }
+      if (character === '}') depth--;
+    }
+    if (started && depth <= 0) return i + 1;
+  }
+  return lines.length;
+}
+
+function parseScriptMethod(line: string, lineNumber: number): ScriptMethod | null {
+  const match = line.match(/^\s*((?:(?:public|protected|private|static|async|abstract|readonly|override|declare|get|set)\s+)*)([A-Za-z_$][\w$]*)\s*(?:<[^>]*>)?\s*\(([^)]*)\)\s*(?::\s*[^={]+)?\s*\{/);
+  if (!match) return null;
+  const modifiers = match[1].trim().split(/\s+/).filter(Boolean);
+  const name = match[2];
+  if (['if', 'for', 'while', 'switch', 'catch'].includes(name)) return null;
+  const visibility = modifiers.includes('private') ? 'private'
+    : modifiers.includes('protected') ? 'protected' : 'public';
+  return {
+    name,
+    line: lineNumber,
+    params: match[3],
+    isAsync: modifiers.includes('async'),
+    isStatic: modifiers.includes('static'),
+    visibility
+  };
+}
+
+function extractScriptMethods(cls: PythonClass, lines: string[]): ScriptMethod[] {
+  const methods: ScriptMethod[] = [];
+  for (let i = cls.startLine; i < cls.endLine && i < lines.length; i++) {
+    const method = parseScriptMethod(lines[i], i + 1);
+    if (method) methods.push(method);
+  }
+  return methods;
+}
+
+function analyzeScriptCode(content: string): CodeAnalysis {
+  const lines = content.split('\n');
+  let codeLines = 0;
+  let commentLines = 0;
+  let blankLines = 0;
+  let complexity = 0;
+  let inBlockComment = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) { blankLines++; continue; }
+    if (inBlockComment || trimmed.startsWith('/*')) {
+      commentLines++;
+      if (trimmed.includes('*/')) inBlockComment = false;
+      else inBlockComment = true;
+      continue;
+    }
+    if (trimmed.startsWith('//')) { commentLines++; continue; }
+    codeLines++;
+    complexity += (line.match(/\b(?:if|for|while|catch|case)\b/g) || []).length;
+    complexity += (line.match(/&&|\|\|/g) || []).length;
+  }
+
+  const imports: PythonImport[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    const fromImport = trimmed.match(/^import\s+(?:type\s+)?(.+?)\s+from\s+['"]([^'"]+)['"]/);
+    const sideEffectImport = trimmed.match(/^import\s+['"]([^'"]+)['"]/);
+    const requireImport = trimmed.match(/^(?:const|let|var)\s+.+?=\s*require\(\s*['"]([^'"]+)['"]\s*\)/);
+    const module = fromImport?.[2] || sideEffectImport?.[1] || requireImport?.[1];
+    if (module) {
+      imports.push({ line: i + 1, text: trimmed, type: classifyScriptImport(module), module });
+    }
+  }
+
+  const classes: PythonClass[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    const match = lines[i].match(/^\s*(?:export\s+)?(?:default\s+)?(?:abstract\s+)?class\s+([A-Za-z_$][\w$]*)(?:\s+extends\s+([^\s{]+))?[^\{]*\{/);
+    if (!match) continue;
+    const endLine = findBraceBlockEnd(lines, i);
+    const shell: PythonClass = {
+      name: match[1], startLine: i + 1, endLine, methods: [],
+      bases: match[2] ? [match[2]] : [], decorators: [], docstring: ''
+    };
+    shell.methods = extractScriptMethods(shell, lines).map(method => method.name);
+    classes.push(shell);
+  }
+
+  const functions: PythonFunction[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (classes.some(cls => i + 1 > cls.startLine && i + 1 < cls.endLine)) continue;
+    const declaration = lines[i].match(/^\s*(?:export\s+)?(?:default\s+)?(async\s+)?function\s+([A-Za-z_$][\w$]*)\s*(?:<[^>]*>)?\s*\(([^)]*)\)/);
+    const arrow = lines[i].match(/^\s*(?:export\s+)?(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*(?::[^=]+)?=\s*(async\s+)?(?:\(([^)]*)\)|([A-Za-z_$][\w$]*))\s*(?::[^=]+)?=>/);
+    if (!declaration && !arrow) continue;
+    const name = declaration?.[2] || arrow?.[1] || '';
+    const params = declaration?.[3] || arrow?.[3] || arrow?.[4] || '';
+    const isAsync = !!(declaration?.[1] || arrow?.[2]);
+    functions.push({
+      name, startLine: i + 1, endLine: findBraceBlockEnd(lines, i), params,
+      decorators: [], docstring: '', isAsync
+    });
+  }
+
+  return {
+    classes, functions, imports, totalLines: lines.length, codeLines,
+    commentLines, blankLines, complexity
+  };
+}
+
+function analyzeSourceCode(content: string, language: AnalysisLanguage): CodeAnalysis {
+  return language === 'python' ? analyzePythonCode(content) : analyzeScriptCode(content);
+}
+
+function importedScriptNames(importText: string): string[] {
+  const fromImport = importText.match(/^import\s+(?:type\s+)?(.+?)\s+from\s+['"]/);
+  if (fromImport) {
+    const clause = fromImport[1].trim();
+    const names: string[] = [];
+    const defaultName = clause.match(/^([A-Za-z_$][\w$]*)(?:\s*,|$)/)?.[1];
+    if (defaultName) names.push(defaultName);
+    const namespaceName = clause.match(/\*\s+as\s+([A-Za-z_$][\w$]*)/)?.[1];
+    if (namespaceName) names.push(namespaceName);
+    const namedClause = clause.match(/\{([^}]*)\}/)?.[1];
+    if (namedClause) {
+      for (const item of namedClause.split(',')) {
+        const importedName = item.trim().replace(/^type\s+/, '').split(/\s+as\s+/).pop()?.trim();
+        if (importedName) names.push(importedName);
+      }
+    }
+    return names;
+  }
+
+  const requireBinding = importText.match(/^(?:const|let|var)\s+(.+?)\s*=\s*require\(/)?.[1]?.trim();
+  if (!requireBinding) return [];
+  if (requireBinding.startsWith('{')) {
+    return requireBinding.slice(1, requireBinding.lastIndexOf('}')).split(',')
+      .map(item => item.trim().split(/\s*:\s*/).pop()?.trim() || '')
+      .filter(Boolean);
+  }
+  return /^[A-Za-z_$][\w$]*$/.test(requireBinding) ? [requireBinding] : [];
+}
+
 // Known Python stdlib modules
 const STDLIB_MODULES = new Set([
   'abc', 'aifc', 'argparse', 'array', 'ast', 'asyncio', 'atexit', 'base64',
@@ -555,6 +760,7 @@ async function collectPythonFiles(targetPath: string, recursive: boolean): Promi
 }
 
 async function checkPythonIndentationPath(targetPath: string, recursive: boolean): Promise<IndentationReport> {
+  await assertPythonOnlyPath(targetPath);
   const files = await collectPythonFiles(targetPath, recursive);
   const report: IndentationReport = {
     path: targetPath,
@@ -1118,6 +1324,7 @@ async function diagnoseRuntimeImports(params: {
   python_path?: string;
 }): Promise<RuntimeImportReport> {
   const inputPath = normalizePath(params.path);
+  await assertPythonOnlyPath(inputPath);
   const stat = await fs.stat(inputPath);
   const projectPath = stat.isDirectory() ? inputPath : path.dirname(inputPath);
   const maxModules = Math.max(1, Math.min(params.max_modules ?? 20, 100));
@@ -1458,6 +1665,7 @@ async function runPythonStructuralEdit(params: {
   python_path?: string;
 }): Promise<PythonStructuralEditResult> {
   const filePath = normalizePath(params.path);
+  assertPythonFileExtension(filePath);
   const mode = params.mode ?? 'preview';
   const originalContent = await fs.readFile(filePath, 'utf-8');
   const parsed = splitPythonContent(originalContent);
@@ -1713,15 +1921,15 @@ server.registerTool(
   "cc_analyze_code",
   {
     title: "Analyze Code",
-    description: `Analyzes a Python file: classes, functions, imports, metrics.
+    description: `Analyzes a Python, JavaScript, or TypeScript file: classes, functions, imports, metrics.
 
 Args:
-  - path (string): Path to the Python file
+  - path (string): Path to a .py, .js/.jsx/.mjs/.cjs, or .ts/.tsx/.mts/.cts file
 
 Returns:
   - Classes with methods, functions, import analysis, LOC, complexity`,
     inputSchema: {
-      path: z.string().min(1).describe("Path to the Python file")
+      path: z.string().min(1).describe("Path to a supported Python, JavaScript, or TypeScript file")
     },
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   },
@@ -1732,13 +1940,15 @@ Returns:
         return { isError: true, content: [{ type: "text", text: t().common.fileNotFound(filePath) }] };
       }
 
+      const language = detectAnalysisLanguage(filePath);
       const content = await fs.readFile(filePath, "utf-8");
-      const analysis = analyzePythonCode(content);
+      const analysis = analyzeSourceCode(content, language);
       const stats = await fs.stat(filePath);
 
       const output = [
         t().cc_analyze_code.header(path.basename(filePath)), '',
         `| Metric | Value |`, `|---|---|`,
+        `| Language | ${analysisLanguageLabel(language)} |`,
         `| ${t().cc_analyze_code.metricTotalLines} | ${analysis.totalLines} |`,
         `| ${t().cc_analyze_code.metricCodeLines} | ${analysis.codeLines} |`,
         `| ${t().cc_analyze_code.metricCommentLines} | ${analysis.commentLines} |`,
@@ -1794,16 +2004,16 @@ server.registerTool(
   "cc_analyze_methods",
   {
     title: "Analyze Methods",
-    description: `Detailed method analysis of a Python file.
+    description: `Detailed method analysis of a Python, JavaScript, or TypeScript file.
 
 Args:
-  - path (string): Path to the Python file
+  - path (string): Path to a .py, .js/.jsx/.mjs/.cjs, or .ts/.tsx/.mts/.cts file
   - class_name (string, optional): Only methods of this class
 
 Returns:
-  - Methods with parameters, decorators, complexity, data flow`,
+  - Methods with parameters and visibility; Python analysis also includes decorators, complexity, data flow, and BACH guardrails`,
     inputSchema: {
-      path: z.string().min(1).describe("Path to the Python file"),
+      path: z.string().min(1).describe("Path to a supported Python, JavaScript, or TypeScript file"),
       class_name: z.string().optional().describe("Only analyze this class")
     },
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
@@ -1815,11 +2025,17 @@ Returns:
         return { isError: true, content: [{ type: "text", text: t().common.fileNotFound(filePath) }] };
       }
 
+      const language = detectAnalysisLanguage(filePath);
       const content = await fs.readFile(filePath, "utf-8");
       const lines = content.split('\n');
-      const analysis = analyzePythonCode(content);
+      const analysis = analyzeSourceCode(content, language);
 
-      const output = [t().cc_analyze_methods.header(path.basename(filePath)), ''];
+      const output = [
+        t().cc_analyze_methods.header(path.basename(filePath)),
+        '',
+        `Language: ${analysisLanguageLabel(language)}`,
+        ''
+      ];
 
       const targetClasses = params.class_name
         ? analysis.classes.filter(c => c.name === params.class_name)
@@ -1827,6 +2043,30 @@ Returns:
 
       if (targetClasses.length === 0 && params.class_name) {
         return { isError: true, content: [{ type: "text", text: t().cc_analyze_methods.classNotFound(params.class_name, analysis.classes.map(c => c.name).join(', ')) }] };
+      }
+
+      if (language !== 'python') {
+        for (const cls of targetClasses) {
+          output.push(`## ${cls.name}`);
+          if (cls.bases.length > 0) output.push(t().cc_analyze_methods.inheritsFrom(cls.bases.join(', ')));
+          output.push('');
+          for (const method of extractScriptMethods(cls, lines)) {
+            const modifiers = [method.visibility, method.isStatic ? 'static' : '', method.isAsync ? 'async' : '']
+              .filter(Boolean).join(', ');
+            output.push(`### ${method.name}(${method.params})`);
+            output.push(`  Line: ${method.line} | ${modifiers}`);
+            output.push('');
+          }
+        }
+        if (!params.class_name && analysis.functions.length > 0) {
+          output.push(t().cc_analyze_methods.topLevelFunctions, '');
+          for (const func of analysis.functions) {
+            output.push(`### ${func.isAsync ? 'async ' : ''}${func.name}(${func.params})`);
+            output.push(`  Line: ${func.startLine}`);
+            output.push('');
+          }
+        }
+        return { content: [{ type: "text", text: output.join('\n') }] };
       }
 
       for (const cls of targetClasses) {
@@ -1964,6 +2204,7 @@ Useful for code review and documentation.`,
         return { isError: true, content: [{ type: "text", text: t().common.fileNotFound(filePath) }] };
       }
 
+      assertPythonFileExtension(filePath);
       const content = await fs.readFile(filePath, "utf-8");
       const lines = content.split('\n');
       const analysis = analyzePythonCode(content);
@@ -2039,6 +2280,7 @@ Groups: 1) __future__ 2) stdlib 3) third-party 4) local`,
         return { isError: true, content: [{ type: "text", text: t().common.fileNotFound(filePath) }] };
       }
 
+      assertPythonFileExtension(filePath);
       const content = await fs.readFile(filePath, "utf-8");
       const lines = content.split('\n');
 
@@ -2135,14 +2377,14 @@ server.registerTool(
   "cc_diagnose_imports",
   {
     title: "Diagnose Imports",
-    description: `Diagnoses import issues: missing modules, circular imports, unused imports.
+    description: `Diagnoses import issues in Python, JavaScript, or TypeScript files.
 
 Args:
-  - path (string): Path to the Python file
+  - path (string): Path to a .py, .js/.jsx/.mjs/.cjs, or .ts/.tsx/.mts/.cts file
 
-Detects: Missing modules, suspected circular imports, import issues`,
+Detects: Unused bindings, duplicates, relative-import risks, and import-order issues`,
     inputSchema: {
-      path: z.string().min(1).describe("Path to the Python file")
+      path: z.string().min(1).describe("Path to a supported Python, JavaScript, or TypeScript file")
     },
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   },
@@ -2153,9 +2395,10 @@ Detects: Missing modules, suspected circular imports, import issues`,
         return { isError: true, content: [{ type: "text", text: t().common.fileNotFound(filePath) }] };
       }
 
+      const language = detectAnalysisLanguage(filePath);
       const content = await fs.readFile(filePath, "utf-8");
       const lines = content.split('\n');
-      const analysis = analyzePythonCode(content);
+      const analysis = analyzeSourceCode(content, language);
 
       const issues: string[] = [];
       const warnings: string[] = [];
@@ -2163,16 +2406,20 @@ Detects: Missing modules, suspected circular imports, import issues`,
       // Check for potentially unused imports
       for (const imp of analysis.imports) {
         const importedNames: string[] = [];
-        const fromMatch = imp.text.match(/from\s+\S+\s+import\s+(.+)/);
-        const simpleMatch = imp.text.match(/^import\s+(\S+)(?:\s+as\s+(\w+))?/);
+        if (language === 'python') {
+          const fromMatch = imp.text.match(/from\s+\S+\s+import\s+(.+)/);
+          const simpleMatch = imp.text.match(/^import\s+(\S+)(?:\s+as\s+(\w+))?/);
 
-        if (fromMatch) {
-          fromMatch[1].split(',').forEach(n => {
-            const name = n.trim().split(' as ').pop()?.trim();
-            if (name && name !== '*') importedNames.push(name);
-          });
-        } else if (simpleMatch) {
-          importedNames.push(simpleMatch[2] || simpleMatch[1].split('.').pop() || '');
+          if (fromMatch) {
+            fromMatch[1].split(',').forEach(n => {
+              const name = n.trim().split(' as ').pop()?.trim();
+              if (name && name !== '*') importedNames.push(name);
+            });
+          } else if (simpleMatch) {
+            importedNames.push(simpleMatch[2] || simpleMatch[1].split('.').pop() || '');
+          }
+        } else {
+          importedNames.push(...importedScriptNames(imp.text));
         }
 
         for (const name of importedNames) {
@@ -2233,7 +2480,9 @@ Detects: Missing modules, suspected circular imports, import issues`,
         output.push('', t().cc_diagnose_imports.noIssues);
       }
 
-      output.push('', t().cc_diagnose_imports.hintOrganize);
+      output.push('', language === 'python'
+        ? t().cc_diagnose_imports.hintOrganize
+        : 'JavaScript/TypeScript diagnostics are read-only; cc_organize_imports remains Python-only.');
 
       return { content: [{ type: "text", text: output.join('\n') }] };
     } catch (error) {

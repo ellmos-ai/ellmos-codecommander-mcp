@@ -120,8 +120,9 @@ sequenceDiagram
 
 While FileCommander handles filesystem operations, CodeCommander focuses on **code intelligence**:
 
-- **Python Code Analysis** - AST-based class/method extraction, complexity metrics, import analysis
+- **Python, JavaScript & TypeScript Analysis** - extension-dispatched classes, methods, functions, complexity metrics, and import analysis; JS/TS analysis is regex-based and read-only
 - **BACH-derived Python Helpers** - runtime import diagnostics, structural edits, indentation checks, and template-based code generation
+- **Explicit Language Gates** - Python-only path tools reject non-`.py` files instead of producing Python-shaped false findings
 - **JSON Repair** - Fix broken JSON automatically (trailing commas, single quotes, BOM, comments)
 - **Import Organization** - Sort and deduplicate Python imports per PEP 8
 - **Encoding Fix** - Repair Mojibake and double-encoded UTF-8 (27+ patterns)
@@ -216,8 +217,8 @@ FileCommander and CodeCommander are designed to work side by side:
 
 | Tool | Description |
 |------|-------------|
-| `cc_analyze_code` | Full code analysis: classes, functions, imports, LOC, complexity |
-| `cc_analyze_methods` | Detailed method analysis: params, decorators, visibility, data flow, BACH guardrails |
+| `cc_analyze_code` | Read-only Python or regex-based JavaScript/TypeScript analysis: classes, functions, imports, LOC, complexity |
+| `cc_analyze_methods` | Read-only Python or regex-based JavaScript/TypeScript method analysis; Python retains its BACH guardrails |
 | `cc_extract_classes` | Extract Python classes/functions as separate text blocks, optionally including pycutter-style inline content |
 
 ### Import Management (3 tools)
@@ -225,7 +226,7 @@ FileCommander and CodeCommander are designed to work side by side:
 | Tool | Description |
 |------|-------------|
 | `cc_organize_imports` | Sort & deduplicate Python imports per PEP 8 |
-| `cc_diagnose_imports` | Detect unused imports, duplicates, circular import risks |
+| `cc_diagnose_imports` | Read-only Python or regex-based JavaScript/TypeScript import diagnostics |
 | `cc_runtime_import_diagnose` | Run isolated Python runtime imports with timeouts, __init__.py analysis, and circular-import hints |
 
 ### JSON Tools (2 tools)
