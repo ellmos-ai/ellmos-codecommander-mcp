@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 const RUNTIME_VERSION_PATTERN = /^\s*version:\s*"([^"]+)"/m;
 
-const EXPECTED_TOOL_COUNT = 22;
+const EXPECTED_TOOL_COUNT = 23;
 
 type PackageMetadata = {
   name: string;
@@ -37,7 +37,8 @@ type ServerMetadata = {
 };
 
 async function readText(relativePath: string): Promise<string> {
-  return readFile(new URL(`../${relativePath}`, import.meta.url), "utf-8");
+  const content = await readFile(new URL(`../${relativePath}`, import.meta.url), "utf-8");
+  return content.replace(/\r\n/g, "\n");
 }
 
 async function readJson<T>(relativePath: string): Promise<T> {
@@ -123,7 +124,7 @@ describe("project metadata", () => {
       expect(content).toContain("badge/LLM--Ready-llms.txt-blue.svg");
       expect(content).toContain("https://github.com/ellmos-ai");
       expect(content).toContain("https://github.com/open-bricks");
-      expect(content).toContain("badge/Vitest-186%20passed-brightgreen.svg");
+      expect(content).toContain("badge/Vitest-187%20passed-brightgreen.svg");
       expect(content).toContain("badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg");
       expect(content).toContain("badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg");
     }
@@ -134,12 +135,12 @@ describe("project metadata", () => {
     const llms = await readText("llms.txt");
 
     expect(llms).toContain(pkg.version);
-    expect(llms).toContain("22 tools");
+    expect(llms).toContain(`${EXPECTED_TOOL_COUNT} tools`);
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
-    expect(llms).toContain("Last-checked: 2026-08-24");
-    expect(llms).toContain("264 tests passed");
+    expect(llms).toContain("Last-checked: 2026-09-06");
     expect(llms).toContain("Zero-Egress");
+    expect(llms).not.toContain("automation-master");
   });
 
   it("verifies security policy is bilingual and declares authorized contact addresses", async () => {
@@ -223,6 +224,7 @@ describe("project metadata", () => {
       expect(content).toContain("ProFiler");
       expect(content).toContain("sqlite-transit-sync");
       expect(content).toContain("policy-registry");
+      expect(content).not.toContain("automation-master");
     }
   });
 });

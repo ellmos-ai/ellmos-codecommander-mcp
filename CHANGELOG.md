@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.24] - 2026-09-06
+
+### Features & i18n Tool Surface
+- Added `cc_get_language` tool, expanding the CodeCommander tool surface to 23 tools. Enables AI clients to query the current active language and inspect supported language codes (`en`, `de`, `es`, `zh`, `ja`, `ru`), achieving full i18n parity with `fc_get_language` in FileCommander and ControlCenter.
+- Added comprehensive unit tests in `test/i18n.test.ts` verifying localized responses across all 6 supported languages.
+
+### Sibling Ecosystem & Ecosystem Metadata Parity
+- Updated sibling server tool counts in `README.md`, `README_de.md`, and `llms.txt` (FileCommander: 50, ControlCenter: 34, Homebase: 51, Blender Use: 4, Open Compute: 16, Clatcher: 12, n8n Manager: 19, ServerCommander: 8).
+- Removed private repository link `dev-bricks/automation-master` from documentation and discovery indexes to prevent 404 dead links for external users.
+- Updated automated contract test suite in `test/metadata.test.ts` to assert 23 tools and verify exclusion of private repository links.
+
 ## [1.3.23] - 2026-08-24
 
 ### CI/CD Workflow Härtung & Multi-OS Matrix

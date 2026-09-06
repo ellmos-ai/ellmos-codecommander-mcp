@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CodeCommander tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Vitest](https://img.shields.io/badge/Vitest-186%20passed-brightgreen.svg)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-187%20passed-brightgreen.svg)](https://vitest.dev/)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
@@ -20,11 +20,11 @@
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
 
 > [!NOTE]
-> **For AI Assistants & LLMs:** Machine-readable indexing documentation for this repository is available at [`llms.txt`](llms.txt). The server exposes 22 specialized tools under the `cc_` prefix.
+> **For AI Assistants & LLMs:** Machine-readable indexing documentation for this repository is available at [`llms.txt`](llms.txt). The server exposes 23 specialized tools under the `cc_` prefix.
 
 A developer-focused **Model Context Protocol (MCP) server** that gives AI assistants code analysis, structural Python editing, JSON repair, encoding fix, import organization, format conversion, file diff, and regex testing capabilities.
 
-**22 tools** optimized for developers - the coding companion to [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
+**23 tools** optimized for developers - the coding companion to [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp).
 
 **Discoverability:** Published on [npm](https://www.npmjs.com/package/ellmos-codecommander-mcp) as `ellmos-codecommander-mcp`, visible on [Glama](https://glama.ai/mcp/servers/b9kjs4uaav), and prepared for the official MCP Registry with [`server.json`](server.json) under `io.github.ellmos-ai/ellmos-codecommander-mcp`. Registry and directory manifests [`server.json`](server.json), [`glama.json`](glama.json), [`smithery.yaml`](smithery.yaml), and [`llms.txt`](llms.txt) are maintained in full parity.
 
@@ -37,7 +37,7 @@ graph TD
     Client["MCP Clients<br/>(Claude Desktop / Claude Code / Cursor / Windsurf)"]
     Server["ellmos CodeCommander MCP Server<br/>(stdio transport • Node.js)"]
 
-    subgraph Tools["Developer Tool Suites (22 Tools)"]
+    subgraph Tools["Developer Tool Suites (23 Tools)"]
         subgraph CodeIntel["Code & Python Intelligence"]
             C1["cc_analyze_code"]
             C2["cc_analyze_methods"]
@@ -73,6 +73,7 @@ graph TD
             E1["cc_md_to_html"]
             E2["cc_md_to_pdf"]
             E3["cc_set_language"]
+            E4["cc_get_language"]
         end
     end
 
@@ -278,7 +279,7 @@ FileCommander and CodeCommander are designed to work side by side:
 | `cc_md_to_html` | Markdown to standalone HTML with CSS styling (headers, code blocks, tables, nested lists, blockquotes, images, checkboxes) |
 | `cc_md_to_pdf` | Markdown to PDF via headless browser (Edge/Chrome). Falls back to HTML if no browser is available |
 
-**Total: 22 developer tools** (`cc_set_language` is also available for runtime language switching)
+**Total: 23 developer tools** (including `cc_set_language` and `cc_get_language` for runtime language management)
 
 ---
 
@@ -330,10 +331,10 @@ npm run test:i18n         # 43 translation assertions
 
 ### Testing
 
-The supported gates are deliberately separated: `npm test` runs the 183-test Vitest suite, `npm run test:integration` runs 35 real MCP stdio assertions against `dist/index.js`, and `npm run test:i18n` runs 43 translation assertions (261 automated test assertions total).
+The supported gates are deliberately separated: `npm test` runs the 187-test Vitest suite, `npm run test:integration` runs 35 real MCP stdio assertions against `dist/index.js`, and `npm run test:i18n` runs 43 translation assertions (265 automated test assertions total).
 
 ```bash
-npm test                  # Run Vitest unit tests (183 tests)
+npm test                  # Run Vitest unit tests (187 tests)
 npm run test:integration  # Real MCP stdio test (35 assertions, build first)
 npm run test:i18n         # i18n assertions (43 assertions)
 npm run test:all          # Run full test suite (build + vitest + integration + i18n)
@@ -341,7 +342,7 @@ npm run test:all          # Run full test suite (build + vitest + integration + 
 
 Tests are verified on **Windows**, **macOS**, and **Linux**.
 
-GitHub Actions runs the build, all three test gates (183 Vitest, 35 MCP stdio, 43 i18n assertions — 261 assertions total), and npm package check on Node.js 20, 22, and 24.
+GitHub Actions runs the build, all three test gates (187 Vitest, 35 MCP stdio, 43 i18n assertions — 265 assertions total), and npm package check on Node.js 20, 22, and 24.
 
 ---
 
@@ -378,15 +379,15 @@ This MCP server is part of the **[ellmos-ai](https://github.com/ellmos-ai)** eco
 
 | Server | Tools | Focus | npm |
 |--------|-------|-------|-----|
-| [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp) | 46 | Filesystem, process management, interactive sessions, cloud-lock-safe operations | [`ellmos-filecommander-mcp`](https://www.npmjs.com/package/ellmos-filecommander-mcp) |
-| **[CodeCommander](https://github.com/ellmos-ai/ellmos-codecommander-mcp)** | **22** | **Code analysis, JSON repair, imports, diffs, regex** | **[`ellmos-codecommander-mcp`](https://www.npmjs.com/package/ellmos-codecommander-mcp)** |
+| [FileCommander](https://github.com/ellmos-ai/ellmos-filecommander-mcp) | 50 | Filesystem, process management, interactive sessions, cloud-lock-safe operations | [`ellmos-filecommander-mcp`](https://www.npmjs.com/package/ellmos-filecommander-mcp) |
+| **[CodeCommander](https://github.com/ellmos-ai/ellmos-codecommander-mcp)** | **23** | **Code analysis, JSON repair, imports, diffs, regex** | **[`ellmos-codecommander-mcp`](https://www.npmjs.com/package/ellmos-codecommander-mcp)** |
 | [Clatcher](https://github.com/ellmos-ai/ellmos-clatcher-mcp) | 12 | File repair, format conversion, batch operations | [`ellmos-clatcher-mcp`](https://www.npmjs.com/package/ellmos-clatcher-mcp) |
-| [n8n Manager](https://github.com/ellmos-ai/n8n-manager-mcp) | 18 | n8n workflow management via AI assistants | [`n8n-manager-mcp`](https://www.npmjs.com/package/n8n-manager-mcp) |
-| [ControlCenter](https://github.com/ellmos-ai/ellmos-controlcenter-mcp) | 20 | MCP stack discovery, profile management, control plane | [`ellmos-controlcenter-mcp`](https://www.npmjs.com/package/ellmos-controlcenter-mcp) |
-| [Homebase](https://github.com/ellmos-ai/ellmos-homebase-mcp) | 45 | Local-first LLM memory, knowledge, state, routing, swarm orchestration | [`ellmos-homebase-mcp`](https://www.npmjs.com/package/ellmos-homebase-mcp) (alpha) |
+| [n8n Manager](https://github.com/ellmos-ai/n8n-manager-mcp) | 19 | n8n workflow management via AI assistants | [`n8n-manager-mcp`](https://www.npmjs.com/package/n8n-manager-mcp) |
+| [ControlCenter](https://github.com/ellmos-ai/ellmos-controlcenter-mcp) | 34 | MCP stack discovery, profile management, control plane | [`ellmos-controlcenter-mcp`](https://www.npmjs.com/package/ellmos-controlcenter-mcp) |
+| [Homebase](https://github.com/ellmos-ai/ellmos-homebase-mcp) | 51 | Local-first LLM memory, knowledge, state, routing, swarm orchestration | [`ellmos-homebase-mcp`](https://www.npmjs.com/package/ellmos-homebase-mcp) (alpha) |
 | [ServerCommander](https://github.com/ellmos-ai/ellmos-servercommander-mcp) | 8 | Server operations: health checks, log analysis, deploy dry-runs, mail diagnostics | [`ellmos-servercommander-mcp`](https://www.npmjs.com/package/ellmos-servercommander-mcp) (alpha) |
-| [Blender Use](https://github.com/ellmos-ai/ellmos-blender-use-mcp) | 3 | Headless Blender asset QA and FBX reimport verification | [`ellmos-blender-use-mcp`](https://www.npmjs.com/package/ellmos-blender-use-mcp) (alpha) |
-| [Open Compute](https://github.com/ellmos-ai/open-compute-mcp) | 10 | Model-agnostic computer use: capture, safety-gated actions, Windows UIA | [`open-compute-mcp`](https://www.npmjs.com/package/open-compute-mcp) (alpha) |
+| [Blender Use](https://github.com/ellmos-ai/ellmos-blender-use-mcp) | 4 | Headless Blender asset QA and FBX reimport verification | [`ellmos-blender-use-mcp`](https://www.npmjs.com/package/ellmos-blender-use-mcp) (alpha) |
+| [Open Compute](https://github.com/ellmos-ai/open-compute-mcp) | 16 | Model-agnostic computer use: capture, safety-gated actions, Windows UIA | [`open-compute-mcp`](https://www.npmjs.com/package/open-compute-mcp) (alpha) |
 
 ### Sibling Developer, File & Document Tools
 
@@ -398,7 +399,6 @@ This MCP server is part of the **[ellmos-ai](https://github.com/ellmos-ai)** eco
 | **ellmos-ai** | [BACH](https://github.com/ellmos-ai/bach) | Local-first text-based OS for LLM agents — 113+ handlers, 550+ tools |
 | **dev-bricks** | [DevCenter](https://github.com/dev-bricks/DevCenter) | PySide6 Developer Desktop Suite & offline secret vault |
 | **dev-bricks** | [CodeBox](https://github.com/dev-bricks/CodeBox) | Fast desktop code snippet manager & local AST indexing |
-| **dev-bricks** | [automation-master](https://github.com/dev-bricks/automation-master) | Event-sourced automation orchestration & 30-day receipts |
 | **dev-bricks** | [MethodenAnalyser](https://github.com/dev-bricks/MethodenAnalyser) | Method flow & complexity diagnostic engine |
 | **doc-bricks** | [PDFtoPDFocr](https://github.com/doc-bricks/PDFtoPDFocr) | Desktop OCR pipeline for searchable PDFs with Tesseract |
 | **doc-bricks** | [DokuReader](https://github.com/doc-bricks/DokuReader) | Multi-format document workspace & offline PDF export |
