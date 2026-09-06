@@ -1,14 +1,14 @@
 # ellmos-codecommander-mcp - MCP Server for Code Intelligence
 
-> CodeCommander is a developer-focused MCP (Model Context Protocol) server that gives AI assistants code analysis, pycutter-style Python context extraction, JSON repair, encoding fix, import organization, Python runtime import diagnostics, structural Python editing, indentation checks, code generation, format conversion, file diff, and regex testing capabilities. 22 tools optimized for developers -- the coding companion to FileCommander in the ellmos MCP family.
+> CodeCommander is a developer-focused MCP (Model Context Protocol) server that gives AI assistants code analysis, pycutter-style Python context extraction, JSON repair, encoding fix, import organization, Python runtime import diagnostics, structural Python editing, indentation checks, code generation, format conversion, file diff, and regex testing capabilities. 23 tools optimized for developers -- the coding companion to FileCommander in the ellmos MCP family.
 
 Core capabilities: Python AST-based class/method extraction with complexity metrics, BACH-derived method guardrails, import analysis, runtime import diagnostics in isolated Python subprocesses, structural Python edits with preview/test/apply modes, optional inline class/helper blocks for LLM context packaging, BACH-derived indentation diagnostics and Python code generation templates, JSON repair (trailing commas, single quotes, BOM, comments), PEP 8 import sorting and deduplication, Mojibake/double-encoded UTF-8 repair (27+ patterns), German umlaut repair (70+ patterns), format conversion across JSON / CSV / INI / YAML / TOML / XML / TOON, unified diff output (LCS algorithm), regex tester with match details and replace preview, Markdown-to-HTML/PDF export with code blocks, tables, nested lists, and blockquotes. Cross-platform: Windows, macOS, Linux.
 
-Node.js >= 20, MIT. Published as `ellmos-codecommander-mcp` 1.3.23 on npm. Visible on Glama at `https://glama.ai/mcp/servers/b9kjs4uaav`. Registry metadata is provided in `server.json` (MCP Registry namespace `io.github.ellmos-ai/ellmos-codecommander-mcp`), `glama.json`, and `smithery.yaml`.
+Node.js >= 20, MIT. Published as `ellmos-codecommander-mcp` 1.3.24 on npm. Visible on Glama at `https://glama.ai/mcp/servers/b9kjs4uaav`. Registry metadata is provided in `server.json` (MCP Registry namespace `io.github.ellmos-ai/ellmos-codecommander-mcp`), `glama.json`, and `smithery.yaml`.
 
 Security invariants: 100% offline stdio JSON-RPC transport (Zero-Egress), preview-safe mutation modes (`mode: "preview"`), automatic `.bak` backups before modifying files, and standard unprivileged user-mode execution.
 
-Test gates: `npm test` runs 186 Vitest tests; `npm run test:integration` runs 35 real MCP stdio assertions after `npm run build`; `npm run test:i18n` runs 43 translation assertions (264 automated assertions total). GitHub Actions executes all three gates across Ubuntu, Windows, and macOS on Node.js 20, 22, and 24 with concurrency control.
+Test gates: `npm test` runs 187 Vitest tests; `npm run test:integration` runs 35 real MCP stdio assertions after `npm run build`; `npm run test:i18n` runs 43 translation assertions (265 automated assertions total). GitHub Actions executes all three gates across Ubuntu, Windows, and macOS on Node.js 20, 22, and 24 with concurrency control.
 
 ## Docs
 
@@ -20,12 +20,14 @@ Test gates: `npm test` runs 186 Vitest tests; `npm run test:integration` runs 35
 
 ## ellmos MCP family (sibling servers)
 
-- [ellmos-filecommander-mcp](https://github.com/ellmos-ai/ellmos-filecommander-mcp): Filesystem operations, process management, interactive sessions (46 tools)
+- [ellmos-filecommander-mcp](https://github.com/ellmos-ai/ellmos-filecommander-mcp): Filesystem operations, process management, interactive sessions (50 tools)
 - [ellmos-clatcher-mcp](https://github.com/ellmos-ai/ellmos-clatcher-mcp): Utility tools -- repair, convert, detect, batch ops (12 tools)
-- [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp): n8n workflow management via MCP (18 tools)
-- [ellmos-controlcenter-mcp](https://github.com/ellmos-ai/ellmos-controlcenter-mcp): MCP stack discovery, profile management, and local control plane (20 tools)
-- [ellmos-homebase-mcp](https://github.com/ellmos-ai/ellmos-homebase-mcp): Local-first LLM memory, knowledge, state, routing, swarm orchestration (45 tools)
+- [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp): n8n workflow management via MCP (19 tools)
+- [ellmos-controlcenter-mcp](https://github.com/ellmos-ai/ellmos-controlcenter-mcp): MCP stack discovery, profile management, and local control plane (34 tools)
+- [ellmos-homebase-mcp](https://github.com/ellmos-ai/ellmos-homebase-mcp): Local-first LLM memory, knowledge, state, routing, swarm orchestration (51 tools)
 - [ellmos-servercommander-mcp](https://github.com/ellmos-ai/ellmos-servercommander-mcp): Server operations, health checks, log analysis, mail diagnostics (8 tools)
+- [ellmos-blender-use-mcp](https://github.com/ellmos-ai/ellmos-blender-use-mcp): Headless Blender asset QA and FBX reimport verification (4 tools)
+- [open-compute-mcp](https://github.com/ellmos-ai/open-compute-mcp): Model-agnostic computer use (16 tools)
 
 ## Broader ellmos & open-bricks ecosystem
 
@@ -35,10 +37,9 @@ Test gates: `npm test` runs 186 Vitest tests; `npm run test:integration` runs 35
 - [policy-registry](https://github.com/ellmos-ai/policy-registry): Cryptographically signed delegation policies for AI agents
 - [DevCenter](https://github.com/dev-bricks/DevCenter): PySide6 Developer Desktop Suite & offline secret vault
 - [CodeBox](https://github.com/dev-bricks/CodeBox): Fast desktop code snippet manager & local AST indexing
-- [automation-master](https://github.com/dev-bricks/automation-master): Event-sourced automation orchestration & 30-day receipts
 - [MethodenAnalyser](https://github.com/dev-bricks/MethodenAnalyser): Method flow & complexity diagnostic engine
 - [PDFtoPDFocr](https://github.com/doc-bricks/PDFtoPDFocr): Desktop OCR pipeline for searchable PDFs with Tesseract
-- [DokuReader](https://github.com/doc-bricks/DokuReader): Multi-format document workspace & offline PDF export
+- [DokuReader](https://github.com/doc-bricks/DokuReader) | Multi-format document workspace & offline PDF export
 - [ProFiler](https://github.com/file-bricks/ProFiler): Multi-pane file management & bulk batch operations
 
 ## Optional
@@ -65,4 +66,5 @@ BACH Python runtime import diagnose structural edit indentation checker code gen
 regex tester format conversion markdown PDF MCP
 ```
 
-## Last-checked: 2026-08-24 (264 tests passed: 186 Vitest, 35 MCP stdio integration, 43 i18n assertions)
+## Last-checked: 2026-09-06 (265 tests passed: 187 Vitest, 35 MCP stdio integration, 43 i18n assertions)
+

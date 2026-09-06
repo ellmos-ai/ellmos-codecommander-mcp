@@ -9,7 +9,7 @@
  * See LICENSE file for details.
  *
  * @author Lukas Geiger
- * @version 1.3.23
+ * @version 1.3.24
  * @license MIT
  */
 
@@ -25,7 +25,7 @@ import * as fsSync from "fs";
 import { exec, execFile, execFileSync, execSync } from "child_process";
 import { promisify } from "util";
 import { pathToFileURL, fileURLToPath } from "url";
-import { t, setLanguage } from './i18n/index.js';
+import { t, setLanguage, getLanguage, getSupportedLanguages } from './i18n/index.js';
 import * as yaml from 'js-yaml';
 import * as toml from 'smol-toml';
 import { XMLParser, XMLBuilder } from 'fast-xml-parser';
@@ -40,7 +40,7 @@ const execFileAsync = promisify(execFile);
 
 const server = new McpServer({
   name: "ellmos-codecommander-mcp",
-  version: "1.3.23"
+  version: "1.3.24"
 });
 
 // ============================================================================
@@ -3795,6 +3795,17 @@ server.tool(
   async ({ language }) => {
     setLanguage(language);
     return { content: [{ type: "text", text: t().cc_set_language.languageSet(language) }] };
+  }
+);
+
+server.tool(
+  "cc_get_language",
+  "Get the currently configured output language and supported languages for CodeCommander tools",
+  {},
+  async () => {
+    const current = getLanguage();
+    const supported = getSupportedLanguages();
+    return { content: [{ type: "text", text: t().cc_set_language.languageGet(current, supported) }] };
   }
 );
 

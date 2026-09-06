@@ -1,8 +1,8 @@
 {
   "name": "ellmos-codecommander-mcp",
-  "version": "1.3.23",
+  "version": "1.3.24",
   "mcpName": "io.github.ellmos-ai/ellmos-codecommander-mcp",
-  "description": "A developer-focused MCP server providing 22 tools for code analysis, JSON repair, encoding fix, import organization, Python runtime import diagnostics, structural Python editing, indentation checks, code generation, format conversion, diff, and regex testing",
+  "description": "A developer-focused MCP server providing 23 tools for code analysis, JSON repair, encoding fix, import organization, Python runtime import diagnostics, structural Python editing, indentation checks, code generation, format conversion, diff, and regex testing",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

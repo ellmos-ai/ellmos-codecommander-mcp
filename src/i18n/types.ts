@@ -273,9 +273,10 @@ export interface Translations {
     syntaxFailed: (output: string) => string;
   };
 
-  // === Tool 16: cc_set_language ===
+  // === Tool 16: cc_set_language / cc_get_language ===
   cc_set_language: {
     languageSet: (lang: string) => string;
+    languageGet: (lang: string, supported: string[]) => string;
   };
 
   // === Tool 17: cc_diff_files ===
