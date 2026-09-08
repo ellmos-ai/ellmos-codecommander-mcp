@@ -18,4 +18,10 @@ Thumbs.db
 # Interne Multi-Agenten-Koordination (LOCK-System)
 LOCK*.txt
 
+# Interne Analyse-, Entscheidungs- und Pflegeunterlagen (nicht fuer Leser des Repos)
+docs/MEHRSPRACHIGKEIT-ANALYSE_*.md
+_after-care/
+AUFGABEN.txt
+BEFUNDE.md
+
 mobile_icons/
