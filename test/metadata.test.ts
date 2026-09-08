@@ -3,7 +3,21 @@ import { describe, expect, it } from "vitest";
 
 const RUNTIME_VERSION_PATTERN = /^\s*version:\s*"([^"]+)"/m;
 
-const EXPECTED_TOOL_COUNT = 23;
+/**
+ * The tool count is counted in src/index.ts instead of being hand-maintained here.
+ * A constant would have to be edited by the same change it is supposed to guard,
+ * which turns the test into a rubber stamp.
+ */
+async function countRegisteredTools(): Promise<number> {
+  const source = await readText("src/index.ts");
+  const names = new Set(source.match(/"cc_[a-z0-9_]+"/g) ?? []);
+  return names.size;
+}
+
+/**
+ * Documentation surfaces that must agree with each other on every number.
+ */
+const DOC_SURFACES = ["README.md", "README_de.md", "llms.txt"] as const;
 
 type PackageMetadata = {
   name: string;
@@ -83,11 +97,12 @@ describe("project metadata", () => {
   });
 
   it("keeps README family tool counts aligned with the current tool surface", async () => {
+    const toolCount = await countRegisteredTools();
+
     for (const fileName of ["README.md", "README_de.md"]) {
       const row = codeCommanderFamilyRow(await readText(fileName));
 
-      expect(row).toContain(`**${EXPECTED_TOOL_COUNT}**`);
-      expect(row).not.toContain("**17**");
+      expect(row).toContain(`**${toolCount}**`);
     }
   });
 
@@ -124,21 +139,52 @@ describe("project metadata", () => {
       expect(content).toContain("badge/LLM--Ready-llms.txt-blue.svg");
       expect(content).toContain("https://github.com/ellmos-ai");
       expect(content).toContain("https://github.com/open-bricks");
-      expect(content).toContain("badge/Vitest-187%20passed-brightgreen.svg");
+      expect(content).toMatch(/badge\/Vitest-\d+%20passed-brightgreen\.svg/);
       expect(content).toContain("badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg");
       expect(content).toContain("badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg");
+    }
+  });
+
+  it("states the same Vitest test count on every documentation surface", async () => {
+    const counts = new Map<string, string>();
+
+    for (const fileName of ["README.md", "README_de.md"]) {
+      const badge = (await readText(fileName)).match(/badge\/Vitest-(\d+)%20passed-brightgreen\.svg/);
+      expect(badge, `Vitest badge in ${fileName}`).not.toBeNull();
+      counts.set(fileName, badge?.[1] ?? "");
+    }
+
+    const llmsCount = (await readText("llms.txt")).match(/runs (\d+) Vitest tests/);
+    expect(llmsCount, "Vitest count in llms.txt").not.toBeNull();
+    counts.set("llms.txt", llmsCount?.[1] ?? "");
+
+    expect(new Set(counts.values()).size, `diverging Vitest counts: ${JSON.stringify([...counts])}`).toBe(1);
+  });
+
+  it("does not advertise AST-based analysis, which the scanner does not do", async () => {
+    // The static analysis in src/index.ts is line and pattern based -- the source
+    // itself calls it an "AST-like parser". A real ast.parse only runs as a
+    // subprocess syntax gate. Claiming AST-based extraction misleads users about
+    // how the tool behaves on nested and multi-line constructs.
+    for (const fileName of DOC_SURFACES) {
+      const content = await readText(fileName);
+      expect(content).not.toMatch(/AST[- ]based/i);
+      expect(content).not.toMatch(/AST-basiert/i);
     }
   });
 
   it("verifies llms.txt contains version, tool count, security invariants and test parity", async () => {
     const pkg = await readJson<PackageMetadata>("package.json");
     const llms = await readText("llms.txt");
+    const toolCount = await countRegisteredTools();
 
     expect(llms).toContain(pkg.version);
-    expect(llms).toContain(`${EXPECTED_TOOL_COUNT} tools`);
+    expect(llms).toContain(`${toolCount} tools`);
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
-    expect(llms).toContain("Last-checked: 2026-09-06");
+    // Format, not a fixed date: pinning the literal made every refresh of the
+    // freshness stamp fail the very test that asks for the stamp.
+    expect(llms).toMatch(/Last-checked: \d{4}-\d{2}-\d{2}/);
     expect(llms).toContain("Zero-Egress");
     expect(llms).not.toContain("automation-master");
   });
@@ -157,8 +203,10 @@ describe("project metadata", () => {
     const ci = await readText(".github/workflows/tests.yml");
     expect(ci).toContain("[20, 22, 24]");
     expect(ci).toContain("[ubuntu-latest, windows-latest, macos-latest]");
-    expect(ci).toContain("actions/checkout@v4");
-    expect(ci).toContain("actions/setup-node@v4");
+    // Accept a version tag or a 40-character commit SHA. Pinning the literal
+    // "@v4" made this test block the SHA pinning it exists to encourage.
+    expect(ci).toMatch(/actions\/checkout@(v\d+(\.\d+)*|[0-9a-f]{40})/);
+    expect(ci).toMatch(/actions\/setup-node@(v\d+(\.\d+)*|[0-9a-f]{40})/);
     expect(ci).toContain("cancel-in-progress: true");
     expect(ci).toContain("npm test");
     expect(ci).toContain("npm run test:integration");

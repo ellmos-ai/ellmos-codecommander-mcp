@@ -62,7 +62,7 @@
   "homepage": "https://github.com/ellmos-ai/ellmos-codecommander-mcp#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "@toon-format/toon": "^2.1.0",
+    "@toon-format/toon": "^2.3.1",
     "fast-xml-parser": "^5.8.0",
     "js-yaml": "^4.3.1",
     "smol-toml": "^1.6.0",
@@ -73,11 +73,11 @@
     "hono": "^4.13.0",
     "express-rate-limit": "^8.6.2",
     "nanoid": "^3.3.17",
-    "fast-uri": "^3.1.5",
+    "fast-uri": "^3.1.7",
     "@hono/node-server": "^2.0.5",
     "ip-address": "^10.4.0",
     "fast-xml-builder": "^1.1.7",
-    "qs": "^6.15.2",
+    "qs": "^6.16.0",
     "vitest": "^3.2.6",
     "postcss": "^8.5.18"
   },

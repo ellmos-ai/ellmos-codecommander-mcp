@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.25] - unreleased
+
+### Security
+- `@toon-format/toon` raised to `^2.3.1`, closing GHSA-p95v-992w-h6c3 (high: prototype pollution when decoding untrusted TOON input). TOON is an advertised input format of `cc_convert_format`, so this is on a path that takes untrusted input by design. Deliberately kept on the 2.x line — 2.3.1 closes the advisory, while the current `latest` (4.1.1) would mean two major jumps.
+- `qs` override raised to `^6.16.0` (GHSA-x5fp-wj9c-mxmx, GHSA-4mjr-xmp4-gh2g).
+- `fast-uri` override raised to `^3.1.7`, superseding Dependabot PR #10.
+- `npm audit` now reports 0 vulnerabilities (previously 1 high, 1 moderate).
+- CI actions pinned to commit SHAs (`actions/checkout` v7.0.1, `actions/setup-node` v7.0.0) instead of floating major tags.
+
+### Documentation accuracy
+- Removed the claim of **AST-based** class and method extraction from `README.md`, `README_de.md` and `llms.txt`. The static analysis is a line and pattern scanner — the source itself calls it an "AST-like parser" and the package carries no parsing dependency. A real `ast.parse` runs only as a Python subprocess gate before every `cc_python_structural_edit` apply, and inside `cc_runtime_import_diagnose`.
+- New section **Scope and limits** / **Geltungsbereich und Grenzen** in both READMEs, plus a scope note in `llms.txt`: which 9 of the 23 tools assume Python, that they do not currently validate the file extension (so non-Python input yields a plausible but wrong result instead of an error), and which two tools require a local `python` interpreter.
+- Fixed a broken list item in `llms.txt` (DokuReader used `|` instead of `:`).
+
+### Tests
+- Reversed three assertions in `test/metadata.test.ts` that pinned the current state instead of the property, and would each have blocked the very change they existed to encourage: the literal Vitest count `187` in the badge URL, the literal `Last-checked` date, and the literal `actions/*@v4` tags. They now check format, cross-surface consistency, and "tag or 40-character SHA".
+- `EXPECTED_TOOL_COUNT` is now counted from `src/index.ts` instead of being a hand-maintained constant.
+- Added a guard against the `AST-based` claim reappearing in the documentation surfaces.
+- Suite: 189 Vitest tests (was 187), 35 MCP stdio assertions, 43 i18n assertions — 267 total.
+
+### Repository hygiene
+- Added `.gitattributes` pinning text files to LF. Without it, a checkout on Linux or macOS reported all 40 tracked text files as fully changed.
+- Untracked `docs/MEHRSPRACHIGKEIT-ANALYSE_2026-08-25.md`: an internal decision paper, not user documentation, that exposed an internal ticket ID, a hostname, an absolute local path and the maintainer's local plugin setup.
+- Consolidated the three separate `[1.3.23]` headings below — see the note there.
+
 ## [1.3.24] - 2026-09-06
 
 ### Features & i18n Tool Surface
@@ -13,51 +38,55 @@ All notable changes to this project will be documented in this file.
 - Removed private repository link `dev-bricks/automation-master` from documentation and discovery indexes to prevent 404 dead links for external users.
 - Updated automated contract test suite in `test/metadata.test.ts` to assert 23 tools and verify exclusion of private repository links.
 
-## [1.3.23] - 2026-08-24
+## [1.3.23] - 2026-08-25
 
-### CI/CD Workflow Härtung & Multi-OS Matrix
+> This heading previously appeared three times, dated 2026-08-24, 2026-08-21 and
+> 2026-08-16, which read as three releases of one version number. npm records a
+> single `1.3.23`, published 2026-08-25 — all three change sets shipped together in
+> that one release. The dates are kept below as work dates.
+>
+> Versions `1.3.19`, `1.3.20` and `1.3.21` exist on npm (all published 2026-07-31)
+> but have no entry in this file.
+
+### 2026-08-24 — CI/CD Workflow Härtung & Multi-OS Matrix
 - Hardened GitHub Actions test workflow (`.github/workflows/tests.yml`) with a full multi-OS matrix (`ubuntu-latest`, `windows-latest`, `macos-latest`) across Node.js 20, 22, and 24.
 - Standardized action versions to `actions/checkout@v4` and `actions/setup-node@v4`.
 - Added workflow-level concurrency control (`group: ${{ github.workflow }}-${{ github.ref }}` with `cancel-in-progress: true`) to automatically cancel superseded workflow runs.
 
-### Automated Metadata & Contract Test Suite
+#### Automated Metadata & Contract Test Suite
 - Expanded contract test suite in `test/metadata.test.ts` to 15 tests (15/15 passed) covering multi-OS CI matrix declarations, concurrency configuration, package.json URLs and metadata integrity (`repository`, `bugs`, `homepage`, `type: module`), TypeScript strict compiler configuration (`tsconfig.json`), and package payload export lists.
 - Synchronized Shields.io test badge to `186 passed` Vitest tests and total 264 verified test assertions (186 Vitest unit tests, 35 MCP stdio integration tests, 43 i18n translation assertions).
 - Updated `llms.txt` discovery index with `Last-checked: 2026-08-24`, 264 verified test assertions, and multi-OS CI matrix documentation.
 
-## [1.3.23] - 2026-08-21
-
-### Discoverability & Documentation Architecture
+### 2026-08-21 — Discoverability & Documentation Architecture
 - Added second bilingual Mermaid sequence diagram (`Code Intelligence & Safe Structural Edit Lifecycle` / `Code-Intelligenz- und sicherer struktureller Edit-Lebenszyklus`) demonstrating client stdio JSON-RPC request flow, AST parsing, syntax validation, preview mode, and `.bak` backup creation.
 - Expanded Sibling Developer, File & Document Tools matrix across English and German READMEs (`README.md`, `README_de.md`) covering `DevCenter`, `CodeBox`, `MethodenAnalyser`, `PDFtoPDFocr`, `DokuReader`, `ProFiler`, `sqlite-transit-sync`, and `policy-registry`.
 - Synchronized Shields.io test badge to `183 passed` Vitest tests and total 261 verified test assertions (183 Vitest unit tests, 35 MCP stdio integration tests, 43 i18n translation assertions). Added Platform, Privacy, and Security badges.
 - Updated `llms.txt` discovery index with `Last-checked: 2026-08-21`, 261 verified test assertions, security invariants (Zero-Egress, Subprocess Isolation, Preview-Safe), and expanded sibling ecosystem references.
 
-### Security Policy Härtung (SECURITY.md)
+#### Security Policy Härtung (SECURITY.md)
 - Complete overhaul of `SECURITY.md` into a hardened bilingual (English / Deutsch) security policy document.
 - Formalized five core security invariants: Local-First Stdio Transport & Zero-Egress, Preview-First Structural Mutations (`mode: "preview"`, `.bak` backups), Non-Elevation User-Mode Execution, Input Boundary & Sanitization, and Subprocess Isolation for runtime import diagnostics (`cc_runtime_import_diagnose`).
 - Declared dedicated direct security contact channels (`security@ellmos.ai` and `support@lukasgeiger.com`) with 48h triage SLA alongside GitHub Security Advisories.
 
-### Automated Metadata & Contract Test Suite
+#### Automated Metadata & Contract Test Suite
 - Expanded `test/metadata.test.ts` to 12 contract tests (12/12 passed) validating CI matrix (`[20, 22, 24]`), bilingual security policy, authorized contact addresses, Mermaid diagrams in both READMEs, sibling tool references, and badge assertion parity across a full 183-test Vitest suite.
 
-## [1.3.23] - 2026-08-16
-
-### Security
+### 2026-08-16 — Security
 - Close the `js-yaml` advisory (quadratic CPU consumption in `!!omap` resolution, affecting 4.0.0-4.3.0) by raising the direct dependency to `^4.3.1`.
 - Close all open Dependabot advisories in lockfile (`ip-address`, `hono`, `fast-uri`, `nanoid`) — `npm audit` 100% clean.
 
-### Maintenance & Packaging
+#### Maintenance & Packaging
 - Realigned `glama.json`, `package.json`, `server.json`, `src/index.ts` to `1.3.23`.
 - Included `glama.json` and `smithery.yaml` in package files and registry triad.
 - Raised declared Node.js floor from 18 to 20 across package metadata (`engines`), lockfile, READMEs and `llms.txt` (`@hono/node-server` 2.x requirement).
 
-### Discoverability & Metadata Parity
+#### Discoverability & Metadata Parity
 - Synchronized Shields.io test badges across `README.md` and `README_de.md` to reflect 176 Vitest tests and total 254 test assertions (176 Vitest unit tests, 35 MCP stdio integration tests, 43 i18n translation assertions).
 - Expanded automated metadata test suite in `test/metadata.test.ts` (8/8 tests passed) validating manifest parity (`package.json`, `server.json`, `glama.json`, `src/index.ts`, `llms.txt`), presence of core documentation (`README.md`, `README_de.md`, `SECURITY.md`, `CHANGELOG.md`, `LICENSE`, `server.json`, `glama.json`, `llms.txt`), ecosystem & umbrella badges/links, and tool count assertions.
 - Updated `llms.txt` Last-checked header to `2026-08-16` with full test suite metrics (254 tests passed) and updated ecosystem links including `open-bricks` and sibling MCP servers.
 
-### Test Gates
+#### Test Gates
 - Added `npm run test:integration` for the 35 real MCP stdio assertions and `npm run test:i18n` for the 43 translation assertions; GitHub Actions now runs both alongside the Vitest gate on Node.js 20, 22 and 24.
 - Hardened the stdio harness so generated fixtures are removed on success, failures and termination, and the child process is terminated before the result is returned.
 

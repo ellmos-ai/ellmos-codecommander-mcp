@@ -2,13 +2,15 @@
 
 > CodeCommander is a developer-focused MCP (Model Context Protocol) server that gives AI assistants code analysis, pycutter-style Python context extraction, JSON repair, encoding fix, import organization, Python runtime import diagnostics, structural Python editing, indentation checks, code generation, format conversion, file diff, and regex testing capabilities. 23 tools optimized for developers -- the coding companion to FileCommander in the ellmos MCP family.
 
-Core capabilities: Python AST-based class/method extraction with complexity metrics, BACH-derived method guardrails, import analysis, runtime import diagnostics in isolated Python subprocesses, structural Python edits with preview/test/apply modes, optional inline class/helper blocks for LLM context packaging, BACH-derived indentation diagnostics and Python code generation templates, JSON repair (trailing commas, single quotes, BOM, comments), PEP 8 import sorting and deduplication, Mojibake/double-encoded UTF-8 repair (27+ patterns), German umlaut repair (70+ patterns), format conversion across JSON / CSV / INI / YAML / TOML / XML / TOON, unified diff output (LCS algorithm), regex tester with match details and replace preview, Markdown-to-HTML/PDF export with code blocks, tables, nested lists, and blockquotes. Cross-platform: Windows, macOS, Linux.
+Core capabilities: Python class/method extraction with complexity metrics via a dependency-free line and pattern scanner (no Python syntax tree is built -- see the scope note below), BACH-derived method guardrails, import analysis, runtime import diagnostics in isolated Python subprocesses, structural Python edits with preview/test/apply modes, optional inline class/helper blocks for LLM context packaging, BACH-derived indentation diagnostics and Python code generation templates, JSON repair (trailing commas, single quotes, BOM, comments), PEP 8 import sorting and deduplication, Mojibake/double-encoded UTF-8 repair (27+ patterns), German umlaut repair (70+ patterns), format conversion across JSON / CSV / INI / YAML / TOML / XML / TOON, unified diff output (LCS algorithm), regex tester with match details and replace preview, Markdown-to-HTML/PDF export with code blocks, tables, nested lists, and blockquotes. Cross-platform: Windows, macOS, Linux.
 
 Node.js >= 20, MIT. Published as `ellmos-codecommander-mcp` 1.3.24 on npm. Visible on Glama at `https://glama.ai/mcp/servers/b9kjs4uaav`. Registry metadata is provided in `server.json` (MCP Registry namespace `io.github.ellmos-ai/ellmos-codecommander-mcp`), `glama.json`, and `smithery.yaml`.
 
 Security invariants: 100% offline stdio JSON-RPC transport (Zero-Egress), preview-safe mutation modes (`mode: "preview"`), automatic `.bak` backups before modifying files, and standard unprivileged user-mode execution.
 
-Test gates: `npm test` runs 187 Vitest tests; `npm run test:integration` runs 35 real MCP stdio assertions after `npm run build`; `npm run test:i18n` runs 43 translation assertions (265 automated assertions total). GitHub Actions executes all three gates across Ubuntu, Windows, and macOS on Node.js 20, 22, and 24 with concurrency control.
+Scope note: 9 of the 23 tools (`cc_analyze_code`, `cc_analyze_methods`, `cc_extract_classes`, `cc_organize_imports`, `cc_diagnose_imports`, `cc_check_indentation`, `cc_generate_python_code`, `cc_runtime_import_diagnose`, `cc_python_structural_edit`) assume Python syntax and do not currently validate the file extension, so non-Python input yields a plausible but wrong result instead of an error. The other 14 tools are language-agnostic. Static analysis works on lines and patterns, not on a parsed syntax tree; a real `python -c "ast.parse(...)"` check runs as a hard gate before every `cc_python_structural_edit` apply, and `cc_runtime_import_diagnose` uses an isolated Python subprocess -- these two require a local `python` interpreter, the rest do not.
+
+Test gates: `npm test` runs 189 Vitest tests; `npm run test:integration` runs 35 real MCP stdio assertions after `npm run build`; `npm run test:i18n` runs 43 translation assertions (267 automated assertions total). GitHub Actions executes all three gates across Ubuntu, Windows, and macOS on Node.js 20, 22, and 24 with concurrency control.
 
 ## Docs
 
@@ -39,7 +41,7 @@ Test gates: `npm test` runs 187 Vitest tests; `npm run test:integration` runs 35
 - [CodeBox](https://github.com/dev-bricks/CodeBox): Fast desktop code snippet manager & local AST indexing
 - [MethodenAnalyser](https://github.com/dev-bricks/MethodenAnalyser): Method flow & complexity diagnostic engine
 - [PDFtoPDFocr](https://github.com/doc-bricks/PDFtoPDFocr): Desktop OCR pipeline for searchable PDFs with Tesseract
-- [DokuReader](https://github.com/doc-bricks/DokuReader) | Multi-format document workspace & offline PDF export
+- [DokuReader](https://github.com/doc-bricks/DokuReader): Multi-format document workspace & offline PDF export
 - [ProFiler](https://github.com/file-bricks/ProFiler): Multi-pane file management & bulk batch operations
 
 ## Optional
@@ -58,7 +60,7 @@ Test gates: `npm test` runs 187 Vitest tests; `npm run test:integration` runs 35
 ```
 ellmos CodeCommander MCP server code analysis
 AI assistant code intelligence MCP tools
-Python AST class method extraction MCP
+Python class method extraction complexity metrics MCP
 JSON repair encoding fix MCP server
 ellmos-ai MCP developer tools
 Claude Code MCP code analysis import organization
@@ -66,5 +68,5 @@ BACH Python runtime import diagnose structural edit indentation checker code gen
 regex tester format conversion markdown PDF MCP
 ```
 
-## Last-checked: 2026-09-06 (265 tests passed: 187 Vitest, 35 MCP stdio integration, 43 i18n assertions)
+## Last-checked: 2026-09-08 (267 tests passed: 189 Vitest, 35 MCP stdio integration, 43 i18n assertions)
 

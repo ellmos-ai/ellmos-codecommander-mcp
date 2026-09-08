@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CodeCommander tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Vitest](https://img.shields.io/badge/Vitest-187%20passed-brightgreen.svg)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-189%20passed-brightgreen.svg)](https://vitest.dev/)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
@@ -92,11 +92,11 @@ sequenceDiagram
     autonumber
     actor Developer as Developer / LLM Client
     participant Stdio as CodeCommander Server (stdio)
-    participant Core as AST & Code Intelligence Core
+    participant Core as Code Intelligence Core
     participant Disk as Local Filesystem
 
     Developer->>Stdio: cc_python_structural_edit (mode: "preview" / "apply")
-    Stdio->>Core: Parse Python AST & Validate Syntax
+    Stdio->>Core: Validate syntax via python -c "ast.parse(...)"
     alt Validation Failed
         Core-->>Stdio: Syntax / Parsing Diagnostics
         Stdio-->>Developer: Error Diagnostics & Line References
@@ -108,7 +108,7 @@ sequenceDiagram
             Stdio-->>Developer: Structural Diff Preview
         else Mode == "apply"
             Core->>Disk: Create .bak Backup File
-            Core->>Disk: Write Modified AST Code In-Place
+            Core->>Disk: Write Modified Source In-Place
             Core-->>Stdio: Confirmation with Applied Diff & Backup Path
             Stdio-->>Developer: Success Payload
         end
@@ -121,7 +121,7 @@ sequenceDiagram
 
 While FileCommander handles filesystem operations, CodeCommander focuses on **code intelligence**:
 
-- **Python Code Analysis** - AST-based class/method extraction, complexity metrics, import analysis
+- **Python Code Analysis** - class/method extraction, complexity metrics and import analysis, implemented as a dependency-free line and pattern scanner (see [Scope and limits](#scope-and-limits))
 - **BACH-derived Python Helpers** - runtime import diagnostics, structural edits, indentation checks, and template-based code generation
 - **JSON Repair** - Fix broken JSON automatically (trailing commas, single quotes, BOM, comments)
 - **Import Organization** - Sort and deduplicate Python imports per PEP 8
@@ -132,6 +132,33 @@ While FileCommander handles filesystem operations, CodeCommander focuses on **co
 - **Regex Tester** - Test regular expressions with match details, groups, and replace preview
 - **Markdown Export** - Convert Markdown to professional HTML/PDF with code blocks, tables, nested lists, blockquotes
 - **Cross-platform** - Works on Windows, macOS, and Linux
+
+---
+
+## Scope and limits
+
+Being precise about this is more useful than a longer feature list:
+
+**The code-intelligence tools target Python.** Nine of the 23 tools — `cc_analyze_code`,
+`cc_analyze_methods`, `cc_extract_classes`, `cc_organize_imports`, `cc_diagnose_imports`,
+`cc_check_indentation`, `cc_generate_python_code`, `cc_runtime_import_diagnose` and
+`cc_python_structural_edit` — assume Python syntax. They currently do **not** check the file
+extension, so passing a `.ts` or `.js` file returns a plausible-looking but wrong result
+(typically zero classes and a misread import list) rather than an error. Until that guard
+exists, point them at Python files only. The other 14 tools (JSON, encoding, format
+conversion, diff, regex, Markdown export, language settings) are language-agnostic.
+
+**The analysis is a line and pattern scanner, not a Python AST parser.** It ships with no
+parsing dependency, which is why installation stays a single `npm install` with no native
+build step — but it also means deeply nested or multi-line constructs can be misread. Where a
+real parse matters it is used: `cc_python_structural_edit` runs
+`python -c "ast.parse(...)"` in a subprocess as a hard gate before any `apply`, and
+`cc_runtime_import_diagnose` executes imports in an isolated Python subprocess. Both therefore
+require a local `python` interpreter; the remaining tools do not.
+
+For semantic questions (type resolution, find-references, data flow) a language server such as
+Pyright is the right tool. CodeCommander deliberately stays on the structural and batch layer,
+reachable over MCP from any client without a project setup or a running server.
 
 ---
 
@@ -331,10 +358,10 @@ npm run test:i18n         # 43 translation assertions
 
 ### Testing
 
-The supported gates are deliberately separated: `npm test` runs the 187-test Vitest suite, `npm run test:integration` runs 35 real MCP stdio assertions against `dist/index.js`, and `npm run test:i18n` runs 43 translation assertions (265 automated test assertions total).
+The supported gates are deliberately separated: `npm test` runs the 189-test Vitest suite, `npm run test:integration` runs 35 real MCP stdio assertions against `dist/index.js`, and `npm run test:i18n` runs 43 translation assertions (267 automated test assertions total).
 
 ```bash
-npm test                  # Run Vitest unit tests (187 tests)
+npm test                  # Run Vitest unit tests (189 tests)
 npm run test:integration  # Real MCP stdio test (35 assertions, build first)
 npm run test:i18n         # i18n assertions (43 assertions)
 npm run test:all          # Run full test suite (build + vitest + integration + i18n)
@@ -342,7 +369,7 @@ npm run test:all          # Run full test suite (build + vitest + integration + 
 
 Tests are verified on **Windows**, **macOS**, and **Linux**.
 
-GitHub Actions runs the build, all three test gates (187 Vitest, 35 MCP stdio, 43 i18n assertions — 265 assertions total), and npm package check on Node.js 20, 22, and 24.
+GitHub Actions runs the build, all three test gates (189 Vitest, 35 MCP stdio, 43 i18n assertions — 267 assertions total), and npm package check on Node.js 20, 22, and 24.
 
 ---
 
