@@ -262,6 +262,7 @@ export const ja: Translations = {
 
   cc_set_language: {
     languageSet: (lang) => `言語を設定しました: ${lang}`,
+    languageGet: (lang, supported) => `現在の言語: ${lang} (対応言語: ${supported.join(', ')})`,
   },
 
   cc_diff_files: {

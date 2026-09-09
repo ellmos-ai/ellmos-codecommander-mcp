@@ -262,6 +262,7 @@ export const zh: Translations = {
 
   cc_set_language: {
     languageSet: (lang) => `语言已设置为：${lang}`,
+    languageGet: (lang, supported) => `当前语言: ${lang} (支持: ${supported.join(', ')})`,
   },
 
   cc_diff_files: {

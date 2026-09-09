@@ -281,6 +281,7 @@ export const en: Translations = {
   // === Tool 16: cc_set_language ===
   cc_set_language: {
     languageSet: (lang) => `Language set to: ${lang}`,
+    languageGet: (lang, supported) => `Current language: ${lang} (Supported: ${supported.join(', ')})`,
   },
 
   // === Tool 17: cc_diff_files ===

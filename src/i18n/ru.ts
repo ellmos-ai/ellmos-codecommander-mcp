@@ -262,6 +262,7 @@ export const ru: Translations = {
 
   cc_set_language: {
     languageSet: (lang) => `Язык установлен: ${lang}`,
+    languageGet: (lang, supported) => `Текущий язык: ${lang} (Поддерживаемые: ${supported.join(', ')})`,
   },
 
   cc_diff_files: {

@@ -262,6 +262,7 @@ export const es: Translations = {
 
   cc_set_language: {
     languageSet: (lang) => `Idioma establecido en: ${lang}`,
+    languageGet: (lang, supported) => `Idioma actual: ${lang} (Soportados: ${supported.join(', ')})`,
   },
 
   cc_diff_files: {

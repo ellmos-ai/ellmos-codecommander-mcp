@@ -62,4 +62,20 @@ describe("i18n language packs", () => {
     setLanguage("es");
     expect(t().cc_fix_json.stillInvalid("coma")).toContain("coma");
   });
+
+  it("formats languageGet output correctly across languages", () => {
+    const supported = getSupportedLanguages();
+    setLanguage("de");
+    expect(t().cc_set_language.languageGet("de", supported)).toContain("Aktuelle Sprache: de");
+    setLanguage("en");
+    expect(t().cc_set_language.languageGet("en", supported)).toContain("Current language: en");
+    setLanguage("es");
+    expect(t().cc_set_language.languageGet("es", supported)).toContain("Idioma actual: es");
+    setLanguage("zh");
+    expect(t().cc_set_language.languageGet("zh", supported)).toContain("当前语言: zh");
+    setLanguage("ja");
+    expect(t().cc_set_language.languageGet("ja", supported)).toContain("現在の言語: ja");
+    setLanguage("ru");
+    expect(t().cc_set_language.languageGet("ru", supported)).toContain("Текущий язык: ru");
+  });
 });
