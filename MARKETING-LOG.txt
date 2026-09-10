@@ -1,0 +1,165 @@
+# ==============================================================================
+# ellmos-codecommander-mcp: MARKETING & DISCOVERABILITY LOG
+# ==============================================================================
+# Repository:   ellmos-ai/ellmos-codecommander-mcp
+# Organization: ellmos-ai (https://github.com/ellmos-ai)
+# Umbrella:     open-bricks (https://github.com/open-bricks)
+# Namespace:    io.github.ellmos-ai/ellmos-codecommander-mcp
+# NPM Package:  ellmos-codecommander-mcp
+# Registry:     Glama (https://glama.ai/mcp/servers/b9kjs4uaav), Smithery, MCP Registry
+# Author:       Lukas Geiger
+# License:      MIT
+# Last Updated: 2026-09-10
+# ==============================================================================
+
+1. PRODUCT POSITIONING & VALUE PROPOSITION
+------------------------------------------------------------------------------
+ellmos-codecommander-mcp is the developer-focused Model Context Protocol (MCP)
+server providing 23 specialized tools for code intelligence, AST extraction,
+Python structural refactoring, syntax and indentation validation, runtime import
+diagnostics, JSON repair, encoding recovery, format conversion, file diffing,
+and regex evaluation.
+
+Designed specifically for AI coding assistants (Claude Desktop, Claude Code,
+Cursor, Windsurf, Codex, Antigravity), CodeCommander acts as the precision
+code-intelligence counterpart to FileCommander in the ellmos MCP family.
+
+Key Differentiators:
+- 23 developer-tailored MCP tools operating over standard local stdio JSON-RPC.
+- 100% Local-First & Zero-Egress: Pure offline operation without network calls or telemetry.
+- Safe AST refactoring: Preview-first diff generation before disk mutations, with automatic .bak backups.
+- Python runtime import diagnostics executing in isolated, timeout-bounded subprocesses.
+- Encoding recovery repairing 27+ Mojibake patterns and 70+ German umlaut corruptions without data loss.
+- Universal format conversions across JSON, CSV, INI, YAML, TOML, XML, and TOON.
+- Dynamic multi-language support (i18n) across 6 languages (EN, DE, ES, ZH, JA, RU).
+
+2. TARGET AUDIENCE & STAKEHOLDER PERSONAS
+------------------------------------------------------------------------------
+[PERSONA-1] Autonomous AI Coding Agents & LLM Pair-Programmers
+- Profile: Agents like Claude Code, Antigravity, Codex, Cursor, and Windsurf performing code refactoring.
+- Pain Point: LLMs generating broken code chunks, losing indentation, causing syntax errors, or hallucinating imports.
+- Solution: AST class/method extraction (cc_extract_classes, cc_analyze_methods), structural edits with unified diffs (cc_python_structural_edit), and PEP 8 import organizing (cc_organize_imports).
+
+[PERSONA-2] Full-Stack & Python/TypeScript Software Engineers
+- Profile: Developers building complex applications requiring accurate AST analysis and fast format transitions.
+- Pain Point: Manual file conversions across JSON/YAML/TOML/TOON/XML and tedious import dependency tracking.
+- Solution: Deterministic multi-format converter (cc_convert_format), import diagnostics (cc_diagnose_imports, cc_runtime_import_diagnose), and regex testing (cc_regex_test).
+
+[PERSONA-3] Security, QA & Code Governance Engineers
+- Profile: Security auditors and compliance officers enforcing local-first, unprivileged tool execution.
+- Pain Point: Risk of accidental code corruption, secret leakage, or uncontrolled elevation by AI agent tools.
+- Solution: Zero-Egress architecture, unprivileged user mode (RunAsInvoker), mandatory .bak backups prior to write operations, and isolated subprocess execution.
+
+[PERSONA-4] Open-Source Ecosystem Architects & MCP Tool Developers
+- Profile: Maintainers building and cataloging MCP servers across Glama, Smithery, and GitHub.
+- Pain Point: Unsynchronized tool manifests, missing third-party license notices, and inconsistent metadata.
+- Solution: 100% parity across package.json, server.json, glama.json, smithery.yaml, llms.txt, and automated contract test validation.
+
+3. HIGH-INTENT SEARCH QUERIES
+------------------------------------------------------------------------------
+English Discovery Phrases:
+- "mcp code analysis server"
+- "model context protocol python ast tools"
+- "mcp server codecommander"
+- "python structural edit mcp"
+- "claude code developer mcp server"
+- "mcp json repair and encoding fix"
+- "local-first mcp tools for coding"
+- "mcp python runtime import diagnose"
+- "format converter mcp json yaml toml toon"
+- "offline code intelligence mcp server"
+
+German Discovery Phrases:
+- "mcp server code analyse entwickler tools"
+- "python ast refactoring mcp server"
+- "ki assistent codeintelligenz model context protocol"
+- "mcp server json reparatur encoding korrektur"
+- "offline mcp entwickler werkzeuge"
+- "claude desktop mcp python import diagnose"
+
+4. COMPETITIVE POSITIONING & COMPARISON MATRIX
+------------------------------------------------------------------------------
+Feature / Capability          | Generic File MCP | Raw Shell / Bash | CodeCommander MCP
+------------------------------+------------------+------------------+------------------
+AST Code Intelligence         | None             | Requires scripts | Built-in (cc_analyze_code)
+Method & Class Extraction     | None             | Manual parsing   | Built-in (cc_extract_classes)
+Safe Structural Edit Preview  | No (direct write)| Risky sed/awk    | Yes (unified diff preview)
+Mandatory .bak File Backups   | Rare             | None             | Guaranteed on apply
+Runtime Import Diagnostics    | None             | Unsafe execution | Isolated Subprocess + Timeout
+Encoding & Mojibake Repair    | None             | Iconv scripts    | 27+ Mojibake, 70+ Umlauts
+Multi-Format Conversion       | None             | Multiple tools   | JSON/YAML/TOML/XML/TOON/CSV/INI
+Universal Stdio MCP Protocol  | Yes              | No               | Yes (Standardized JSON-RPC)
+Zero-Egress & Offline Privacy | Varies           | Host-dependent   | 100% Zero-Egress Guarantee
+i18n Multi-Language Support   | English only     | None             | 6 Languages (cc_set_language)
+
+5. GOVERNANCE & RUNTIME INVARIANTS
+------------------------------------------------------------------------------
+- INV-LOCAL-01: 100% Local-First & Zero-Egress Stdio Protocol
+  All communications take place strictly over local standard I/O (stdio); no network
+  calls, no analytics, no external tracking.
+- INV-SEC-02: Unprivileged User-Space Execution
+  Executes as an unprivileged process (RunAsInvoker) without requesting or requiring
+  administrative elevation or root permissions.
+- INV-PREV-03: Preview-First & Dry-Run Safety
+  Structural code transformations default to non-mutating preview mode with unified diffs,
+  preventing unintended file changes.
+- INV-BAK-04: Mandatory Pre-Mutation Backups
+  File-modifying tools automatically create timestamped `.bak` backup copies before writing
+  any changes to disk.
+- INV-ISOL-05: Isolated Subprocess Execution
+  Runtime Python import diagnosis (cc_runtime_import_diagnose) executes in temporary,
+  isolated child processes with strict execution timeouts.
+- INV-GATE-06: Explicit Language-Gate Validation
+  Python-specific tools reject non-Python files explicitly; JS/TS analysis is read-only
+  and dependency-free.
+- INV-ENC-07: Non-Destructive Encoding & Umlaut Repair
+  Repairs 27+ Mojibake patterns, 70+ German umlaut patterns, and strips BOM/NUL bytes
+  without corrupting valid binary or text data.
+- INV-FMT-08: Deterministic Multi-Format Conversions
+  Lossless roundtrip conversion support for JSON, YAML, TOML, XML, CSV, INI, and TOON
+  with strict schema and type preservation.
+- INV-I18N-09: Runtime Multi-Language Support
+  Dynamic runtime language switching across English, German, Spanish, Chinese, Japanese,
+  and Russian via cc_set_language and cc_get_language.
+- INV-SLA-10: 48h Security Response SLA & Multi-OS CI
+  Multi-OS GitHub Actions CI (Ubuntu, Windows, macOS across Node 20, 22, 24) and public
+  48h response / 5-day triage commitment.
+
+6. SIBLING ECOSYSTEM PARTNER MATRIX (16 REPOSITORIES)
+------------------------------------------------------------------------------
+1. ellmos-ai/ellmos-filecommander-mcp: Core filesystem operations, process execution, and interactive terminals (50 tools)
+2. ellmos-ai/ellmos-codecommander-mcp: Code intelligence, AST refactoring, format conversion, and text repair (23 tools)
+3. ellmos-ai/ellmos-clatcher-mcp: Utility tools, format repair, duplicate detection, and batch operations (12 tools)
+4. ellmos-ai/n8n-manager-mcp: Workflow automation, execution monitoring, and safe snapshot rollback (19 tools)
+5. ellmos-ai/ellmos-controlcenter-mcp: MCP stack discovery, profile switching, and governance management (34 tools)
+6. ellmos-ai/ellmos-homebase-mcp: Local LLM memory, knowledge bases, state routing, and swarm coordination (51 tools)
+7. ellmos-ai/ellmos-servercommander-mcp: Server operations, service health, log analysis, and mail diagnostics (8 tools)
+8. ellmos-ai/open-compute: Cross-platform GUI and computer use desktop agent orchestration (16 tools)
+9. ellmos-ai/bach: Full text-based operating environment for LLMs and agent swarms
+10. ellmos-ai/policy-registry: Cryptographically signed governance policies and capability delegations
+11. dev-bricks/DevCenter: PySide6 developer desktop suite and offline credential management
+12. dev-bricks/CodeBox: Desktop snippet manager with local AST search and classification
+13. dev-bricks/MethodenAnalyser: Method flow complexity and cognitive load analyzer
+14. doc-bricks/PDFtoPDFocr: Offline OCR pipeline converting scanned documents to searchable PDFs
+15. file-bricks/ProFiler: Multi-pane file management and batch processing workbench
+16. open-bricks/open-bricks: Umbrella organization uniting open-source desktop and AI tooling
+
+7. THREE-PHASE DISCOVERABILITY ROADMAP
+------------------------------------------------------------------------------
+- Phase 1 (Registries & Manifest Parity):
+  Maintain exact version, description, and tool schema alignment across npm, Glama,
+  Smithery, and MCP Registry.
+- Phase 2 (Technical Architecture & Guides):
+  Deliver high-quality bilingual documentation (README.md, README_de.md) with
+  15-point Quick Navigation, Dual-Mermaid diagrams, Third-Party Licenses inventory,
+  and machine-readable llms.txt.
+- Phase 3 (Ecosystem Interoperability & Community):
+  Provide seamless plug-and-play interoperability with Claude Code, Cursor, Windsurf,
+  Antigravity, and Codex with continuous regression contract testing.
+
+8. VERIFICATION & AUDIT TRAIL
+------------------------------------------------------------------------------
+- All 23 tools verified via Vitest unit tests (248 tests), integration tests (52 assertions),
+  and i18n tests (43 assertions) totaling 343 automated assertions.
+- 100% clean npm audit (0 vulnerabilities across direct and transitive dependencies).
+- Strict ESM module compliance with TypeScript strict mode and ES2022 output.

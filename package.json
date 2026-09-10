@@ -18,7 +18,9 @@
     "server.json",
     "glama.json",
     "smithery.yaml",
-    "llms.txt"
+    "llms.txt",
+    "THIRD_PARTY_LICENSES.md",
+    "MARKETING-LOG.txt"
   ],
   "scripts": {
     "build": "node node_modules/typescript/bin/tsc",

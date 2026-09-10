@@ -2,26 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.3.24] - 2026-09-10
 
-### Added
-- Dispatch the read-only `cc_analyze_code`, `cc_analyze_methods`, and `cc_diagnose_imports` tools by file extension to the existing Python analyzer or a dependency-free regex analyzer for JavaScript and TypeScript, including JSX/TSX and ESM/CommonJS extension variants.
-- Reject non-`.py` files explicitly in every Python-only path tool before Python analysis or mutation can run.
+### Discoverability, Visual Architecture & Invariants Contract (Pfad B)
+- Formalized 10 core Governance & Runtime Invariants (`INV-LOCAL-01` through `INV-SLA-10`) covering Zero-Egress privacy, unprivileged user mode (`RunAsInvoker`), preview-safe mutations (`mode: "preview"`), mandatory `.bak` backups, isolated subprocess execution with timeouts, explicit language gates, non-destructive Mojibake/umlaut repair, format roundtrip parity, dynamic i18n switching, and 48h security response SLA.
+- Created comprehensive Third-Party License Inventory ([`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)) documenting all direct runtime, transitive override, and development dependencies with 100% permissive open-source licenses (MIT, BSD-2-Clause, BSD-3-Clause, Apache-2.0).
+- Created local Marketing & Discoverability Log ([`MARKETING-LOG.txt`](MARKETING-LOG.txt)) detailing 4 target personas (Autonomous AI Coding Agents, Full-Stack Engineers, Security & Governance Officers, Open-Source Architects), high-intent bilingual search queries, competitive comparison matrix, and 3-phase roadmap.
+- Overhauled bilingual documentation architecture ([`README.md`](README.md) and [`README_de.md`](README_de.md)) with standardized 15-point Quick Navigation, 100% reciprocal anchor parity, updated Shields.io badges (291 passed assertions, 48h Response SLA, Third-Party Audited, Marketing Log), and dedicated Third-Party Transparency section.
+- Added `THIRD_PARTY_LICENSES.md` and `MARKETING-LOG.txt` to the `package.json` `files` whitelist so published npm artifacts bundle full licensing and discoverability metadata.
+- Updated machine-readable discovery index ([`llms.txt`](llms.txt)) with `Last-checked: 2026-09-10`, 291 verified test assertions, 10 invariants, and transparency links.
+- Expanded automated contract test suite in `test/metadata.test.ts` to assert 15 navigation points, 10 invariants, license audit entries, marketing personas, and package files payload.
 
-### Security
-- Harden Markdown-to-HTML/PDF rendering with shared HTML escaping, URL-scheme checks, remote-image blocking, conservative code-fence language handling, and a deny-by-default Content Security Policy.
-- Add regression tests for raw markup, attribute injection, active link schemes, remote image loads, and the export CSP.
-
-## [1.3.24] - 2026-09-06
-
-### Features & i18n Tool Surface
+### Features & Multi-Language Analysis
 - Added `cc_get_language` tool, expanding the CodeCommander tool surface to 23 tools. Enables AI clients to query the current active language and inspect supported language codes (`en`, `de`, `es`, `zh`, `ja`, `ru`), achieving full i18n parity with `fc_get_language` in FileCommander and ControlCenter.
+- Dispatched read-only `cc_analyze_code`, `cc_analyze_methods`, and `cc_diagnose_imports` tools by file extension to the existing Python analyzer or a dependency-free regex analyzer for JavaScript and TypeScript (including `.js`, `.mjs`, `.cjs`, `.jsx`, `.ts`, `.mts`, `.cts`, `.tsx`).
+- Explicit language gates rejecting non-`.py` files in all Python-only path tools before analysis or mutations run.
 - Added comprehensive unit tests in `test/i18n.test.ts` verifying localized responses across all 6 supported languages.
 
-### Sibling Ecosystem & Ecosystem Metadata Parity
+### Security Hardening
+- Hardened Markdown-to-HTML/PDF rendering with shared HTML escaping, URL-scheme checks, remote-image blocking, conservative code-fence language handling, and a deny-by-default Content Security Policy.
+- Added regression tests for raw markup, attribute injection, active link schemes, remote image loads, and the export CSP.
+
+### Sibling Ecosystem Parity
 - Updated sibling server tool counts in `README.md`, `README_de.md`, and `llms.txt` (FileCommander: 50, ControlCenter: 34, Homebase: 51, Blender Use: 4, Open Compute: 16, Clatcher: 12, n8n Manager: 19, ServerCommander: 8).
-- Removed private repository link `dev-bricks/automation-master` from documentation and discovery indexes to prevent 404 dead links for external users.
-- Updated automated contract test suite in `test/metadata.test.ts` to assert 23 tools and verify exclusion of private repository links.
+- Maintained 16-repository partner matrix across `ellmos-ai`, `dev-bricks`, `file-bricks`, `doc-bricks`, and `open-bricks`.
 
 ## [1.3.23] - 2026-08-24
 

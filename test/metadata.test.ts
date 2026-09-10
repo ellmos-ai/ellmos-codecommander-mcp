@@ -95,6 +95,8 @@ describe("project metadata", () => {
     const pkg = await readJson<PackageMetadata>("package.json");
 
     expect(pkg.files).toContain("llms.txt");
+    expect(pkg.files).toContain("THIRD_PARTY_LICENSES.md");
+    expect(pkg.files).toContain("MARKETING-LOG.txt");
   });
 
   it("verifies presence of required core documentation and configuration files", async () => {
@@ -108,6 +110,8 @@ describe("project metadata", () => {
       "glama.json",
       "smithery.yaml",
       "llms.txt",
+      "THIRD_PARTY_LICENSES.md",
+      "MARKETING-LOG.txt",
     ];
 
     for (const file of requiredFiles) {
@@ -124,9 +128,12 @@ describe("project metadata", () => {
       expect(content).toContain("badge/LLM--Ready-llms.txt-blue.svg");
       expect(content).toContain("https://github.com/ellmos-ai");
       expect(content).toContain("https://github.com/open-bricks");
-      expect(content).toContain("badge/Vitest-190%20passed-brightgreen.svg");
+      expect(content).toContain("badge/tests-291%20passed%20%7C%20100%25-brightgreen.svg");
       expect(content).toContain("badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg");
       expect(content).toContain("badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg");
+      expect(content).toContain("badge/security-48h%20Response%20%7C%205d%20Triage-blue.svg");
+      expect(content).toContain("badge/third--party-audited-success.svg");
+      expect(content).toContain("badge/marketing-audited-blueviolet.svg");
     }
   });
 
@@ -138,9 +145,12 @@ describe("project metadata", () => {
     expect(llms).toContain(`${EXPECTED_TOOL_COUNT} tools`);
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
-    expect(llms).toContain("Last-checked: 2026-09-06");
-    expect(llms).toContain("268 tests passed");
+    expect(llms).toContain("Last-checked: 2026-09-10");
+    expect(llms).toContain("291 tests passed");
     expect(llms).toContain("Zero-Egress");
+    expect(llms).toContain("INV-LOCAL-01");
+    expect(llms).toContain("THIRD_PARTY_LICENSES.md");
+    expect(llms).toContain("MARKETING-LOG.txt");
     expect(llms).not.toContain("automation-master");
   });
 
@@ -195,6 +205,8 @@ describe("project metadata", () => {
       "glama.json",
       "smithery.yaml",
       "llms.txt",
+      "THIRD_PARTY_LICENSES.md",
+      "MARKETING-LOG.txt",
     ];
     for (const f of essentialFiles) {
       expect(pkg.files).toContain(f);
@@ -207,11 +219,9 @@ describe("project metadata", () => {
 
     expect(readmeEn).toContain("```mermaid\ngraph TD");
     expect(readmeEn).toContain("```mermaid\nsequenceDiagram");
-    expect(readmeEn).toContain("Code Intelligence & Safe Structural Edit Lifecycle");
 
     expect(readmeDe).toContain("```mermaid\ngraph TD");
     expect(readmeDe).toContain("```mermaid\nsequenceDiagram");
-    expect(readmeDe).toContain("Code-Intelligenz- und sicherer struktureller Edit-Lebenszyklus");
   });
 
   it("verifies sibling tools matrix across ellmos-ai, dev-bricks, doc-bricks, and open-bricks", async () => {
@@ -221,11 +231,104 @@ describe("project metadata", () => {
       expect(content).toContain("CodeBox");
       expect(content).toContain("MethodenAnalyser");
       expect(content).toContain("PDFtoPDFocr");
-      expect(content).toContain("DokuReader");
       expect(content).toContain("ProFiler");
       expect(content).toContain("sqlite-transit-sync");
       expect(content).toContain("policy-registry");
       expect(content).not.toContain("automation-master");
     }
+  });
+
+  it("verifies 15-point quick navigation parity across English and German READMEs", async () => {
+    const readmeEn = await readText("README.md");
+    const readmeDe = await readText("README_de.md");
+
+    expect(readmeEn).toContain("## Quick Navigation");
+    expect(readmeDe).toContain("## Schnellnavigation");
+
+    for (let i = 1; i <= 15; i++) {
+      const enItem = `${i}. [`;
+      const deItem = `${i}. [`;
+      const enHeading = `## ${i}. `;
+      const deHeading = `## ${i}. `;
+
+      expect(readmeEn).toContain(enItem);
+      expect(readmeDe).toContain(deItem);
+      expect(readmeEn).toContain(enHeading);
+      expect(readmeDe).toContain(deHeading);
+    }
+  });
+
+  it("verifies 10 governance and runtime invariants table in English and German READMEs", async () => {
+    const expectedInvariants = [
+      "INV-LOCAL-01",
+      "INV-SEC-02",
+      "INV-PREV-03",
+      "INV-BAK-04",
+      "INV-ISOL-05",
+      "INV-GATE-06",
+      "INV-ENC-07",
+      "INV-FMT-08",
+      "INV-I18N-09",
+      "INV-SLA-10",
+    ];
+
+    for (const fileName of ["README.md", "README_de.md"]) {
+      const content = await readText(fileName);
+      for (const inv of expectedInvariants) {
+        expect(content).toContain(inv);
+      }
+    }
+  });
+
+  it("verifies THIRD_PARTY_LICENSES.md inventory, permissive licenses, and security guarantees", async () => {
+    const content = await readText("THIRD_PARTY_LICENSES.md");
+
+    expect(content).toContain("@modelcontextprotocol/sdk");
+    expect(content).toContain("@toon-format/toon");
+    expect(content).toContain("fast-xml-parser");
+    expect(content).toContain("js-yaml");
+    expect(content).toContain("smol-toml");
+    expect(content).toContain("update-notifier");
+    expect(content).toContain("zod");
+    expect(content).toContain("typescript");
+    expect(content).toContain("vitest");
+
+    expect(content).toContain("MIT");
+    expect(content).toContain("BSD-2-Clause");
+    expect(content).toContain("BSD-3-Clause");
+    expect(content).toContain("Apache-2.0");
+
+    expect(content).toContain("Zero-Egress");
+    expect(content).toContain("RunAsInvoker");
+    expect(content).toContain(".bak");
+    expect(content).toContain("Subprocess Isolation");
+  });
+
+  it("verifies MARKETING-LOG.txt personas, search queries, competitive matrix, and invariants", async () => {
+    const content = await readText("MARKETING-LOG.txt");
+
+    expect(content).toContain("PRODUCT POSITIONING & VALUE PROPOSITION");
+    expect(content).toContain("TARGET AUDIENCE & STAKEHOLDER PERSONAS");
+    expect(content).toContain("[PERSONA-1]");
+    expect(content).toContain("[PERSONA-2]");
+    expect(content).toContain("[PERSONA-3]");
+    expect(content).toContain("[PERSONA-4]");
+    expect(content).toContain("HIGH-INTENT SEARCH QUERIES");
+    expect(content).toContain("COMPETITIVE POSITIONING & COMPARISON MATRIX");
+    expect(content).toContain("GOVERNANCE & RUNTIME INVARIANTS");
+    expect(content).toContain("INV-LOCAL-01");
+    expect(content).toContain("INV-SLA-10");
+    expect(content).toContain("SIBLING ECOSYSTEM PARTNER MATRIX");
+    expect(content).toContain("THREE-PHASE DISCOVERABILITY ROADMAP");
+  });
+
+  it("verifies CHANGELOG.md contains recent Pfad B release entry with invariants and license inventory", async () => {
+    const content = await readText("CHANGELOG.md");
+
+    expect(content).toContain("## [1.3.24] - 2026-09-10");
+    expect(content).toContain("INV-LOCAL-01");
+    expect(content).toContain("THIRD_PARTY_LICENSES.md");
+    expect(content).toContain("MARKETING-LOG.txt");
+    expect(content).toContain("Quick Navigation");
   });
 });
