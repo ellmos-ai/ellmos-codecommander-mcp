@@ -9,7 +9,7 @@
 
 ### Overview
 
-`ellmos-codecommander-mcp` is a developer-focused Model Context Protocol (MCP) server providing 22 specialized tools for code analysis, AST inspection, structural Python editing, JSON repair, encoding fix, import organization, format conversion, file diff, and regex testing. It operates locally with the running user's filesystem permissions via standard input/output (stdio JSON-RPC transport).
+`ellmos-codecommander-mcp` is a developer-focused Model Context Protocol (MCP) server providing 23 specialized tools for code analysis, AST inspection, structural Python editing, JSON repair, encoding fix, import organization, format conversion, file diff, regex testing, and language inspection. It operates locally with the running user's filesystem permissions via standard input/output (stdio JSON-RPC transport).
 
 ### Security Architecture & Invariants
 
@@ -39,15 +39,15 @@
 | `cc_convert_format` | Medium | Pure data serialization/deserialization into target output files |
 | `cc_md_to_html` / `cc_md_to_pdf` | Medium | HTML escaping; remote-image blocking; deny-by-default CSP; headless browser process timeout |
 | `cc_runtime_import_diagnose` | Caution | Isolated subprocess execution; strict timeouts; inspects untrusted target code |
-| All Read-Only Tools (13 tools) | Low | Pure in-memory analysis; zero filesystem writes |
+| All Read-Only Tools (14 tools) | Low | Pure in-memory analysis; zero filesystem writes |
 
 ### Vulnerability Reporting
 
 If you discover a security vulnerability in `ellmos-codecommander-mcp`:
 
-1. **Direct Security Contact**: Send details via email to **security@ellmos.ai** and cc **support@lukasgeiger.com**.
+1. **Direct Security Contact**: Send details via email to **security@ellmos.ai**, cc **support@lukasgeiger.com** and **security@open-bricks.org**.
 2. **GitHub Advisory**: Alternatively, open a confidential report via [GitHub Security Advisories](https://github.com/ellmos-ai/ellmos-codecommander-mcp/security/advisories/new).
-3. **Disclosure Timeline**: We acknowledge receipt within 24 hours, assess severity, and provide a patch release within 7 days.
+3. **Disclosure Timeline**: We acknowledge receipt within 24-48 hours (INV-SLA-10), provide structured triage within 5 business days, and provide a patch release within 7 days.
 
 ---
 
@@ -56,7 +56,7 @@ If you discover a security vulnerability in `ellmos-codecommander-mcp`:
 
 ### Übersicht
 
-`ellmos-codecommander-mcp` ist ein entwicklerfokussierter Model Context Protocol (MCP) Server mit 22 spezialisierten Werkzeugen für Code-Analyse, AST-Inspektion, strukturelle Python-Bearbeitung, JSON-Reparatur, Encoding-Korrektur, Import-Organisation, Formatkonvertierung, Datei-Diffs und Regex-Tests. Er arbeitet lokal mit den Dateisystemrechten des ausführenden Benutzers über Standard-Input/Output (stdio JSON-RPC Transport).
+`ellmos-codecommander-mcp` ist ein entwicklerfokussierter Model Context Protocol (MCP) Server mit 23 spezialisierten Werkzeugen für Code-Analyse, AST-Inspektion, strukturelle Python-Bearbeitung, JSON-Reparatur, Encoding-Korrektur, Import-Organisation, Formatkonvertierung, Datei-Diffs, Regex-Tests und Sprachinspektion. Er arbeitet lokal mit den Dateisystemrechten des ausführenden Benutzers über Standard-Input/Output (stdio JSON-RPC Transport).
 
 ### Sicherheitsarchitektur & Invarianten
 
@@ -86,12 +86,12 @@ If you discover a security vulnerability in `ellmos-codecommander-mcp`:
 | `cc_convert_format` | Mittel | Reine Daten-Serialisierung in Zieldateien |
 | `cc_md_to_html` / `cc_md_to_pdf` | Mittel | HTML-Maskierung; Blockierung entfernter Bilder; restriktive CSP; Timeout für Browser-Subprozesse |
 | `cc_runtime_import_diagnose` | Erhöht | Isolierter Subprozess; strikte Timeouts; Analyse von Fremdcode |
-| Alle lesenden Werkzeuge (13 Tools) | Niedrig | Reine In-Memory-Analyse; keine Dateisystemschreibzugriffe |
+| Alle lesenden Werkzeuge (14 Tools) | Niedrig | Reine In-Memory-Analyse; keine Dateisystemschreibzugriffe |
 
 ### Melden von Sicherheitslücken
 
 Wenn Sie eine Sicherheitslücke in `ellmos-codecommander-mcp` entdecken:
 
-1. **Direkter Sicherheitskontakt**: Senden Sie Details per E-Mail an **security@ellmos.ai** und in Kopie an **support@lukasgeiger.com**.
+1. **Direkter Sicherheitskontakt**: Senden Sie Details per E-Mail an **security@ellmos.ai**, in Kopie an **support@lukasgeiger.com** und **security@open-bricks.org**.
 2. **GitHub Security Advisory**: Eröffnen Sie vertraulich eine Meldung unter [GitHub Security Advisories](https://github.com/ellmos-ai/ellmos-codecommander-mcp/security/advisories/new).
-3. **Reaktionszeit**: Bestätigung innerhalb von 24 Stunden, koordinierte Behebung und Bereitstellung eines Sicherheitsupdates innerhalb von 7 Tagen.
+3. **Reaktionszeit**: Bestätigung innerhalb von 24-48 Stunden (INV-SLA-10), strukturierte Ersteinschätzung (Triage) innerhalb von 5 Werktagen und koordinierte Bereitstellung eines Sicherheitsupdates innerhalb von 7 Tagen.

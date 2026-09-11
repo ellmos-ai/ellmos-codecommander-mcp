@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.25] - 2026-09-11
+
+### Repository Hygiene, CI Hardening & Multi-Host Defense (Pfad A)
+- Added `timeout-minutes: 15` runaway execution guardrail to GitHub Actions test matrix workflow (`.github/workflows/tests.yml`).
+- Hardened `.gitignore` against multi-host cloud-synchronization conflict files (`*.sync-conflict-*`, `*.conflict`, `*-CONFLIT-*`, `*-conflict-*`, `*.sync-temp-*`, `*-WORKSTATION*`, `*-ASUS-GEI*`) and multi-agent lock contention (`LOCK.*`, `LOCK`, `*.lock` with `!package-lock.json` exception).
+- Added comprehensive ignore rules for test caches, coverage data, and temporary artifacts (`.coverage*`, `coverage/`, `.nyc_output/`, `.pytest_cache/`, `.mypy_cache/`, `.tox/`, `*.orig`, `*.tmp`, `*.bak`).
+- Synchronized `SECURITY.md` bilingual tool surface declaration (23 specialized tools, 14 read-only tools) and aligned direct vulnerability reporting channels (`security@ellmos.ai`, `support@lukasgeiger.com`, `security@open-bricks.org`) with binding `INV-SLA-10` 24-48h response and 5-day triage commitment.
+- Updated discovery index `llms.txt` with `Last-checked: 2026-09-11` and v1.3.25 npm publishing declaration.
+- Expanded automated contract test suite in `test/metadata.test.ts` to assert CI job timeouts, `.gitignore` multi-host sync conflict protection, lock fail-closed patterns, security contact parity, and release changelog hygiene.
+
 ## [1.3.24] - 2026-09-10
 
 ### Discoverability, Visual Architecture & Invariants Contract (Pfad B)

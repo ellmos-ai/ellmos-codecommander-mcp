@@ -128,7 +128,7 @@ describe("project metadata", () => {
       expect(content).toContain("badge/LLM--Ready-llms.txt-blue.svg");
       expect(content).toContain("https://github.com/ellmos-ai");
       expect(content).toContain("https://github.com/open-bricks");
-      expect(content).toContain("badge/tests-291%20passed%20%7C%20100%25-brightgreen.svg");
+      expect(content).toContain("badge/tests-292%20passed%20%7C%20100%25-brightgreen.svg");
       expect(content).toContain("badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg");
       expect(content).toContain("badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg");
       expect(content).toContain("badge/security-48h%20Response%20%7C%205d%20Triage-blue.svg");
@@ -145,8 +145,8 @@ describe("project metadata", () => {
     expect(llms).toContain(`${EXPECTED_TOOL_COUNT} tools`);
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
-    expect(llms).toContain("Last-checked: 2026-09-10");
-    expect(llms).toContain("291 tests passed");
+    expect(llms).toContain("Last-checked: 2026-09-11");
+    expect(llms).toContain("292 tests passed");
     expect(llms).toContain("Zero-Egress");
     expect(llms).toContain("INV-LOCAL-01");
     expect(llms).toContain("THIRD_PARTY_LICENSES.md");
@@ -160,6 +160,9 @@ describe("project metadata", () => {
     expect(sec).toContain("Sicherheitsrichtlinie");
     expect(sec).toContain("security@ellmos.ai");
     expect(sec).toContain("support@lukasgeiger.com");
+    expect(sec).toContain("security@open-bricks.org");
+    expect(sec).toContain("23 specialized tools");
+    expect(sec).toContain("23 spezialisierten Werkzeugen");
     expect(sec).toContain("Zero-Egress");
     expect(sec).toContain("Subprocess Isolation");
   });
@@ -168,6 +171,7 @@ describe("project metadata", () => {
     const ci = await readText(".github/workflows/tests.yml");
     expect(ci).toContain("[20, 22, 24]");
     expect(ci).toContain("[ubuntu-latest, windows-latest, macos-latest]");
+    expect(ci).toContain("timeout-minutes: 15");
     expect(ci).toContain("actions/checkout@v4");
     expect(ci).toContain("actions/setup-node@v4");
     expect(ci).toContain("cancel-in-progress: true");
@@ -322,9 +326,23 @@ describe("project metadata", () => {
     expect(content).toContain("THREE-PHASE DISCOVERABILITY ROADMAP");
   });
 
-  it("verifies CHANGELOG.md contains recent Pfad B release entry with invariants and license inventory", async () => {
+  it("verifies .gitignore hardens against multi-host cloud-sync conflicts and lock contention", async () => {
+    const gitignore = await readText(".gitignore");
+    expect(gitignore).toContain("*.sync-conflict-*");
+    expect(gitignore).toContain("*.conflict");
+    expect(gitignore).toContain("*-CONFLIT-*");
+    expect(gitignore).toContain("LOCK.*");
+    expect(gitignore).toContain("LOCK");
+    expect(gitignore).toContain("!package-lock.json");
+    expect(gitignore).toContain(".coverage*");
+    expect(gitignore).toContain(".pytest_cache/");
+  });
+
+  it("verifies CHANGELOG.md contains recent Pfad A and Pfad B release entries", async () => {
     const content = await readText("CHANGELOG.md");
 
+    expect(content).toContain("## [1.3.25] - 2026-09-11");
+    expect(content).toContain("Repository Hygiene, CI Hardening & Multi-Host Defense (Pfad A)");
     expect(content).toContain("## [1.3.24] - 2026-09-10");
     expect(content).toContain("INV-LOCAL-01");
     expect(content).toContain("THIRD_PARTY_LICENSES.md");

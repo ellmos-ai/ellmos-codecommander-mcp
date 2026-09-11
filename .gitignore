@@ -15,7 +15,33 @@ Thumbs.db
 # mcp-publisher login artifacts (credentials, never commit)
 .mcpregistry_*
 
-# Interne Multi-Agenten-Koordination (LOCK-System)
+# Interne Multi-Agenten-Koordination & Kanonisches Lock-System (Fail-Closed)
+LOCK.*
+LOCK
 LOCK*.txt
+*.lock
+!package-lock.json
+
+# Multi-Host Cloud-Sync-Konflikte & Temporärdateien
+*.sync-conflict-*
+*.conflict
+*-CONFLIT-*
+*-conflict-*
+* (kopie)*
+* (copy)*
+*.sync-temp-*
+*-WORKSTATION*
+*-ASUS-GEI*
+
+# Test- & Coverage-Artefakte / Caches
+.coverage*
+coverage/
+.nyc_output/
+.pytest_cache/
+.mypy_cache/
+.tox/
+*.orig
+*.tmp
+*.bak
 
 mobile_icons/
