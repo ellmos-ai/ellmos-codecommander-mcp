@@ -37,20 +37,22 @@ A developer-focused **Model Context Protocol (MCP) server** that gives AI assist
 ## Quick Navigation
 
 1. [Overview & Highlights](#1-overview--highlights)
-2. [Architecture & System Overview](#2-architecture--system-overview)
-3. [Safe Structural Edit Lifecycle](#3-safe-structural-edit-lifecycle)
-4. [Governance & Runtime Invariants](#4-governance--runtime-invariants)
-5. [Developer Tool Suite (23 Tools)](#5-developer-tool-suite-23-tools)
-6. [Shared Tools with FileCommander](#6-shared-tools-with-filecommander)
-7. [Installation & Quickstart](#7-installation--quickstart)
-8. [Configuration & MCP Client Setup](#8-configuration--mcp-client-setup)
-9. [Multi-Language Support (i18n)](#9-multi-language-support-i18n)
-10. [Development & Quality Assurance](#10-development--quality-assurance)
-11. [Sibling Ecosystem & Partner Matrix](#11-sibling-ecosystem--partner-matrix)
-12. [Third-Party Licenses & Transparency](#12-third-party-licenses--transparency)
-13. [Security Policy & Response SLA](#13-security-policy--response-sla)
-14. [Changelog & Version History](#14-changelog--version-history)
-15. [License & Liability Notice](#15-license--liability-notice)
+2. [Target Personas & Discoverability](#2-target-personas--discoverability)
+3. [Comparative Matrix vs. Alternatives](#3-comparative-matrix-vs-alternatives)
+4. [Architecture & System Overview](#4-architecture--system-overview)
+5. [Safe Structural Edit Lifecycle](#5-safe-structural-edit-lifecycle)
+6. [Governance & Runtime Invariants](#6-governance--runtime-invariants)
+7. [Developer Tool Suite (23 Tools)](#7-developer-tool-suite-23-tools)
+8. [Shared Tools with FileCommander](#8-shared-tools-with-filecommander)
+9. [Installation & Quickstart](#9-installation--quickstart)
+10. [Configuration & MCP Client Setup](#10-configuration--mcp-client-setup)
+11. [Multi-Language Support (i18n)](#11-multi-language-support-i18n)
+12. [Development & Quality Assurance](#12-development--quality-assurance)
+13. [Sibling Ecosystem & Partner Matrix](#13-sibling-ecosystem--partner-matrix)
+14. [Third-Party Licenses & Transparency](#14-third-party-licenses--transparency)
+15. [Security Policy & Response SLA](#15-security-policy--response-sla)
+16. [Changelog & Version History](#16-changelog--version-history)
+17. [License & Liability Notice](#17-license--liability-notice)
 
 ---
 
@@ -72,7 +74,67 @@ While FileCommander handles filesystem operations and system processes, CodeComm
 
 ---
 
-## 2. Architecture & System Overview
+## 2. Target Personas & Discoverability <a id="target-personas--discoverability"></a>
+
+CodeCommander MCP is engineered to address key bottlenecks in modern autonomous AI coding, local multi-agent swarms, and safety-compliant developer tooling:
+
+### Target Audience & Stakeholder Personas
+
+- **`[PERSONA-1]` Autonomous AI Coding Agents & LLM Pair-Programmers**
+  - **Profile:** Agents such as Claude Code, Antigravity, Codex, Cursor, and Windsurf performing automated code refactoring, test repair, and feature development.
+  - **Pain Point:** Standard LLM code outputs frequently suffer from hallucinated imports, broken indentation in complex Python control flows, invalid JSON configs, or syntax corruption during naive chunk edits.
+  - **Solution:** Native AST extraction (`cc_extract_classes`, `cc_analyze_methods`), preview-safe structural editing with unified diffs (`cc_python_structural_edit`), automatic indentation checking (`cc_check_indentation`), and deterministic JSON repair (`cc_fix_json`).
+
+- **`[PERSONA-2]` Full-Stack & Python/TypeScript Software Engineers**
+  - **Profile:** Developers maintaining polyglot projects, CLI utilities, and data pipelines requiring cross-language AST analysis and rapid configuration format transitions.
+  - **Pain Point:** Tedious manual format conversions (JSON ↔ YAML ↔ TOML ↔ TOON ↔ XML), broken German umlauts or Mojibake from legacy encodings, and circular runtime imports.
+  - **Solution:** Universal format converter (`cc_convert_format`), non-destructive encoding and umlaut repair (`cc_fix_encoding`, `cc_fix_umlauts`), isolated runtime import diagnostics (`cc_runtime_import_diagnose`), and interactive regex tester (`cc_regex_test`).
+
+- **`[PERSONA-3]` Enterprise AI Safety, SecOps & Code Governance Officers**
+  - **Profile:** Security auditors, compliance engineers, and enterprise architects evaluating MCP toolchains for developer workstations and CI/CD runners.
+  - **Pain Point:** Risk of confidential code leakage via cloud telemetry, unauthorized process elevation, or destructive in-place file overwrites by AI assistants.
+  - **Solution:** 100% Zero-Egress local stdio transport (`INV-LOCAL-01`), unprivileged user-space execution (`INV-SEC-02`), mandatory timestamped `.bak` backups before mutations (`INV-BAK-04`), dry-run diff preview safety (`INV-PREV-03`), and isolated subprocess timeouts (`INV-ISOL-05`).
+
+- **`[PERSONA-4]` Open-Source Ecosystem Architects & MCP Tool Developers**
+  - **Profile:** Maintainers building, publishing, and indexing MCP servers across Glama, Smithery, npm, and GitHub.
+  - **Pain Point:** Fragmented directory manifests, missing third-party license disclosures, and lack of machine-readable indexing context for AI agents.
+  - **Solution:** 100% manifest parity across `package.json`, `server.json`, `glama.json`, `smithery.yaml`, and `llms.txt`, verified by automated contract tests and a complete open-source license audit (`THIRD_PARTY_LICENSES.md`).
+
+### High-Intent Search Queries (SEO & Discoverability)
+
+- `mcp code analysis server`
+- `model context protocol python ast tools`
+- `mcp server codecommander`
+- `python structural edit mcp`
+- `claude code developer mcp server`
+- `mcp json repair and encoding fix`
+- `local-first mcp tools for coding`
+- `mcp python runtime import diagnose`
+- `format converter mcp json yaml toml toon`
+- `offline code intelligence mcp server`
+
+---
+
+## 3. Comparative Matrix vs. Alternatives <a id="comparative-matrix-vs-alternatives"></a>
+
+The following matrix compares CodeCommander MCP against alternative developer tooling approaches across 10 critical operational dimensions:
+
+| Dimension / Capability | Generic File MCP | Raw Shell / Ad-Hoc Scripts | Heavyweight Cloud LLMOps | Traditional IDE Plugins | ellmos CodeCommander MCP |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **1. AST Code Intelligence** | None (raw text reads) | Requires custom python scripts | Cloud parser required | Built-in (GUI only) | **Native AST & regex JS/TS (`cc_analyze_code`)** |
+| **2. Safe Structural Edit Preview** | None (blind overwrite) | High risk (`sed`/`awk`) | Cloud gateway dependent | Interactive dialog | **Preview-safe diffs (`mode: "preview"`)** |
+| **3. Mandatory Pre-Mutation Backups** | None | Manual scripting | None | Local history (opaque) | **Automatic `.bak` creation (`INV-BAK-04`)** |
+| **4. Runtime Import Diagnostics** | None | Unsafe direct execution | None | Partial / static only | **Isolated subprocess + timeout (`INV-ISOL-05`)** |
+| **5. Encoding & Mojibake Recovery** | None | Fragile `iconv` calls | None | Basic encoding switch | **27+ Mojibake, 70+ Umlauts (`cc_fix_encoding`)** |
+| **6. Universal Format Conversion** | None | Multiple disparate CLI tools | SaaS conversion API | Multi-plugin setup | **Lossless 7 formats (`JSON/YAML/TOML/XML/TOON`)** |
+| **7. Diff Engine & Regex Workbench** | None | Basic `diff`/`grep` | None | GUI panel only | **LCS Unified Diff & Regex with groups/replace** |
+| **8. Local-First & Zero-Egress** | Host-dependent | Local | Cloud egress / telemetry | Often connects to cloud | **100% Offline Stdio JSON-RPC (`INV-LOCAL-01`)** |
+| **9. Multi-Language (i18n) Support** | English only | None | English only | Language packs | **Dynamic 6 languages (`cc_set_language`)** |
+| **10. Registry & Manifest Parity** | Minimal | None | Proprietary | Marketplace specific | **npm, Glama, Smithery, MCP Registry, `llms.txt`** |
+
+---
+
+## 4. Architecture & System Overview
 
 ```mermaid
 graph TD
@@ -129,7 +191,7 @@ graph TD
 
 ---
 
-## 3. Safe Structural Edit Lifecycle
+## 5. Safe Structural Edit Lifecycle
 
 ```mermaid
 sequenceDiagram
@@ -161,7 +223,7 @@ sequenceDiagram
 
 ---
 
-## 4. Governance & Runtime Invariants
+## 6. Governance & Runtime Invariants
 
 `ellmos-codecommander-mcp` guarantees 10 core architectural and runtime invariants across all platforms:
 
@@ -180,7 +242,7 @@ sequenceDiagram
 
 ---
 
-## 5. Developer Tool Suite (23 Tools)
+## 7. Developer Tool Suite (23 Tools)
 
 ### Code Analysis (3 tools)
 
@@ -259,7 +321,7 @@ sequenceDiagram
 
 ---
 
-## 6. Shared Tools with FileCommander
+## 8. Shared Tools with FileCommander
 
 7 tools exist in both FileCommander and CodeCommander for convenience:
 
@@ -277,7 +339,7 @@ All tools in CodeCommander use the `cc_` prefix to guarantee seamless coexistenc
 
 ---
 
-## 7. Installation & Quickstart
+## 9. Installation & Quickstart
 
 ### Prerequisites
 
@@ -301,7 +363,7 @@ npm run build
 
 ---
 
-## 8. Configuration & MCP Client Setup
+## 10. Configuration & MCP Client Setup
 
 ### Claude Desktop
 
@@ -354,7 +416,7 @@ FileCommander and CodeCommander are designed to run concurrently:
 
 ---
 
-## 9. Multi-Language Support (i18n)
+## 11. Multi-Language Support (i18n)
 
 CodeCommander natively supports 6 languages for all tool descriptions, output notices, and diagnostic messages:
 - `en` — English (Default)
@@ -368,7 +430,7 @@ Use `cc_get_language` to check the current language or `cc_set_language` to dyna
 
 ---
 
-## 10. Development & Quality Assurance
+## 12. Development & Quality Assurance
 
 ```bash
 npm install
@@ -385,7 +447,7 @@ The test gates are deliberately separated and automated in CI across **Ubuntu**,
 
 ---
 
-## 11. Sibling Ecosystem & Partner Matrix
+## 13. Sibling Ecosystem & Partner Matrix
 
 Part of the **[ellmos-ai](https://github.com/ellmos-ai)** and **[open-bricks](https://github.com/open-bricks)** family of local-first tools:
 
@@ -421,7 +483,7 @@ Part of the **[ellmos-ai](https://github.com/ellmos-ai)** and **[open-bricks](ht
 
 ---
 
-## 12. Third-Party Licenses & Transparency
+## 14. Third-Party Licenses & Transparency <a id="third-party-licenses--transparency"></a>
 
 This project strictly adheres to open-source transparency:
 - All runtime and development dependencies are audited in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
@@ -431,7 +493,7 @@ This project strictly adheres to open-source transparency:
 
 ---
 
-## 13. Security Policy & Response SLA
+## 15. Security Policy & Response SLA
 
 Please review [SECURITY.md](SECURITY.md) for full vulnerability disclosure procedures.
 
@@ -442,13 +504,13 @@ Please review [SECURITY.md](SECURITY.md) for full vulnerability disclosure proce
 
 ---
 
-## 14. Changelog & Version History
+## 16. Changelog & Version History
 
 See [CHANGELOG.md](CHANGELOG.md) for release notes and version history.
 
 ---
 
-## 15. License & Liability Notice
+## 17. License & Liability Notice
 
 This project is licensed under the [MIT License](LICENSE) — Copyright © 2026 Lukas Geiger ([ellmos-ai](https://github.com/ellmos-ai)).
 

@@ -4,7 +4,7 @@
 
 Core capabilities: Python AST-based class/method extraction with complexity metrics, BACH-derived method guardrails, import analysis, runtime import diagnostics in isolated Python subprocesses, structural Python edits with preview/test/apply modes, optional inline class/helper blocks for LLM context packaging, BACH-derived indentation diagnostics and Python code generation templates, JSON repair (trailing commas, single quotes, BOM, comments), PEP 8 import sorting and deduplication, Mojibake/double-encoded UTF-8 repair (27+ patterns), German umlaut repair (70+ patterns), format conversion across JSON / CSV / INI / YAML / TOML / XML / TOON, unified diff output (LCS algorithm), regex tester with match details and replace preview, Markdown-to-HTML/PDF export with code blocks, tables, nested lists, and blockquotes. Cross-platform: Windows, macOS, Linux.
 
-Node.js >= 20, MIT. Published as `ellmos-codecommander-mcp` 1.3.25 on npm. Visible on Glama at `https://glama.ai/mcp/servers/b9kjs4uaav`. Registry metadata is provided in `server.json` (MCP Registry namespace `io.github.ellmos-ai/ellmos-codecommander-mcp`), `glama.json`, and `smithery.yaml`.
+Node.js >= 20, MIT. Published as `ellmos-codecommander-mcp` 1.3.26 on npm. Visible on Glama at `https://glama.ai/mcp/servers/b9kjs4uaav`. Registry metadata is provided in `server.json` (MCP Registry namespace `io.github.ellmos-ai/ellmos-codecommander-mcp`), `glama.json`, and `smithery.yaml`.
 
 Security & Governance Invariants: 10 guaranteed invariants (INV-LOCAL-01 to INV-SLA-10) including 100% offline stdio JSON-RPC transport (Zero-Egress), preview-safe mutation modes (`mode: "preview"`), automatic `.bak` backups before modifying files, isolated Python subprocess execution with timeouts, explicit language gates, non-destructive encoding repair, format roundtrip parity, dynamic i18n language switching, and standard unprivileged user-mode execution (`RunAsInvoker`).
 
@@ -12,7 +12,7 @@ Test gates: `npm test` runs 197 Vitest tests; `npm run test:integration` runs 52
 
 ## Docs
 
-- [README (English)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/README.md): 15-point quick navigation, 23 tools, installation, client configuration, invariants, and partner matrix
+- [README (English)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/README.md): 17-point quick navigation, 23 tools, Target Personas, Comparative Matrix, installation, client configuration, invariants, and partner matrix
 - [README (Deutsch)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/README_de.md): German version with full reciprocal anchor parity
 - [SECURITY (Security Policy)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/SECURITY.md): Bilingual security architecture, 48h SLA response & 5-day triage commitment
 - [THIRD_PARTY_LICENSES](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/THIRD_PARTY_LICENSES.md): Audited dependency inventory with permissive licenses and security guarantees
@@ -68,4 +68,4 @@ BACH Python runtime import diagnose structural edit indentation checker code gen
 regex tester format conversion markdown PDF MCP
 ```
 
-## Last-checked: 2026-09-11 (292 tests passed: 197 Vitest, 52 MCP stdio integration, 43 i18n assertions)
+## Last-checked: 2026-09-13 (292 tests passed: 197 Vitest, 52 MCP stdio integration, 43 i18n assertions)

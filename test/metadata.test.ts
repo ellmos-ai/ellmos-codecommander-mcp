@@ -145,7 +145,7 @@ describe("project metadata", () => {
     expect(llms).toContain(`${EXPECTED_TOOL_COUNT} tools`);
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
-    expect(llms).toContain("Last-checked: 2026-09-11");
+    expect(llms).toContain("Last-checked: 2026-09-13");
     expect(llms).toContain("292 tests passed");
     expect(llms).toContain("Zero-Egress");
     expect(llms).toContain("INV-LOCAL-01");
@@ -242,14 +242,14 @@ describe("project metadata", () => {
     }
   });
 
-  it("verifies 15-point quick navigation parity across English and German READMEs", async () => {
+  it("verifies 17-point quick navigation parity across English and German READMEs", async () => {
     const readmeEn = await readText("README.md");
     const readmeDe = await readText("README_de.md");
 
     expect(readmeEn).toContain("## Quick Navigation");
     expect(readmeDe).toContain("## Schnellnavigation");
 
-    for (let i = 1; i <= 15; i++) {
+    for (let i = 1; i <= 17; i++) {
       const enItem = `${i}. [`;
       const deItem = `${i}. [`;
       const enHeading = `## ${i}. `;
@@ -259,6 +259,25 @@ describe("project metadata", () => {
       expect(readmeDe).toContain(deItem);
       expect(readmeEn).toContain(enHeading);
       expect(readmeDe).toContain(deHeading);
+    }
+
+    expect(readmeEn).toContain('id="target-personas--discoverability"');
+    expect(readmeDe).toContain('id="zielgruppen--auffindbarkeit"');
+    expect(readmeEn).toContain('id="comparative-matrix-vs-alternatives"');
+    expect(readmeDe).toContain('id="vergleichsmatrix-gegenueber-alternativen"');
+    expect(readmeEn).toContain('id="third-party-licenses--transparency"');
+    expect(readmeDe).toContain('id="drittanbieter-lizenzen--transparenz"');
+  });
+
+  it("verifies target personas and comparative matrix in English and German READMEs", async () => {
+    for (const fileName of ["README.md", "README_de.md"]) {
+      const content = await readText(fileName);
+      expect(content).toContain("[PERSONA-1]");
+      expect(content).toContain("[PERSONA-2]");
+      expect(content).toContain("[PERSONA-3]");
+      expect(content).toContain("[PERSONA-4]");
+      expect(content).toContain("INV-LOCAL-01");
+      expect(content).toContain("INV-SLA-10");
     }
   });
 
@@ -341,6 +360,8 @@ describe("project metadata", () => {
   it("verifies CHANGELOG.md contains recent Pfad A and Pfad B release entries", async () => {
     const content = await readText("CHANGELOG.md");
 
+    expect(content).toContain("## [1.3.26] - 2026-09-13");
+    expect(content).toContain("Discoverability, Personas & Comparison Parity (Pfad B)");
     expect(content).toContain("## [1.3.25] - 2026-09-11");
     expect(content).toContain("Repository Hygiene, CI Hardening & Multi-Host Defense (Pfad A)");
     expect(content).toContain("## [1.3.24] - 2026-09-10");

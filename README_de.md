@@ -37,20 +37,22 @@ Ein entwicklerfokussierter **Model Context Protocol (MCP) Server**, der KI-Assis
 ## Schnellnavigation
 
 1. [Übersicht & Highlights](#1-übersicht--highlights)
-2. [Architektur & Systemübersicht](#2-architektur--systemübersicht)
-3. [Sicherer struktureller Edit-Lebenszyklus](#3-sicherer-struktureller-edit-lebenszyklus)
-4. [Governance & Laufzeit-Invarianten](#4-governance--laufzeit-invarianten)
-5. [Entwickler-Toolsuite (23 Tools)](#5-entwickler-toolsuite-23-tools)
-6. [Geteilte Werkzeuge mit FileCommander](#6-geteilte-werkzeuge-mit-filecommander)
-7. [Installation & Schnellstart](#7-installation--schnellstart)
-8. [Konfiguration & MCP-Client-Einrichtung](#8-konfiguration--mcp-client-einrichtung)
-9. [Mehrsprachigkeit & Lokalisierung (i18n)](#9-mehrsprachigkeit--lokalisierung-i18n)
-10. [Entwicklung & Qualitätssicherung](#10-entwicklung--qualitätssicherung)
-11. [Geschwister-Ökosystem & Partner-Matrix](#11-geschwister-ökosystem--partner-matrix)
-12. [Drittanbieter-Lizenzen & Transparenz](#12-drittanbieter-lizenzen--transparenz)
-13. [Sicherheitsrichtlinie & Reaktions-SLA](#13-sicherheitsrichtlinie--reaktions-sla)
-14. [Änderungsprotokoll & Versionshistorie](#14-änderungsprotokoll--versionshistorie)
-15. [Lizenz & Haftungsausschluss](#15-lizenz--haftungsausschluss)
+2. [Zielgruppen & Auffindbarkeit](#2-zielgruppen--auffindbarkeit)
+3. [Vergleichsmatrix gegenüber Alternativen](#3-vergleichsmatrix-gegenüber-alternativen)
+4. [Architektur & Systemübersicht](#4-architektur--systemübersicht)
+5. [Sicherer struktureller Edit-Lebenszyklus](#5-sicherer-struktureller-edit-lebenszyklus)
+6. [Governance & Laufzeit-Invarianten](#6-governance--laufzeit-invarianten)
+7. [Entwickler-Toolsuite (23 Tools)](#7-entwickler-toolsuite-23-tools)
+8. [Geteilte Werkzeuge mit FileCommander](#8-geteilte-werkzeuge-mit-filecommander)
+9. [Installation & Schnellstart](#9-installation--schnellstart)
+10. [Konfiguration & MCP-Client-Einrichtung](#10-konfiguration--mcp-client-einrichtung)
+11. [Mehrsprachigkeit & Lokalisierung (i18n)](#11-mehrsprachigkeit--lokalisierung-i18n)
+12. [Entwicklung & Qualitätssicherung](#12-entwicklung--qualitätssicherung)
+13. [Geschwister-Ökosystem & Partner-Matrix](#13-geschwister-ökosystem--partner-matrix)
+14. [Drittanbieter-Lizenzen & Transparenz](#14-drittanbieter-lizenzen--transparenz)
+15. [Sicherheitsrichtlinie & Reaktions-SLA](#15-sicherheitsrichtlinie--reaktions-sla)
+16. [Änderungsprotokoll & Versionshistorie](#16-änderungsprotokoll--versionshistorie)
+17. [Lizenz & Haftungsausschluss](#17-lizenz--haftungsausschluss)
 
 ---
 
@@ -72,7 +74,67 @@ Während FileCommander Dateisystemoperationen und Systemprozesse abdeckt, konzen
 
 ---
 
-## 2. Architektur & Systemübersicht
+## 2. Zielgruppen & Auffindbarkeit <a id="zielgruppen--auffindbarkeit"></a>
+
+CodeCommander MCP wurde gezielt entwickelt, um zentrale Engpässe moderner autonomer KI-Coding-Agenten, lokaler Multi-Agenten-Schwärme und sicherheitskonformer Entwickler-Umgebungen zu lösen:
+
+### Zielgruppen & Stakeholder-Personas
+
+- **`[PERSONA-1]` Autonome KI-Coding-Agenten & LLM-Pair-Programmer**
+  - **Profil:** Agenten wie Claude Code, Antigravity, Codex, Cursor und Windsurf, die selbstständige Code-Refactorings, Bugfixes, Test-Reparaturen und Feature-Erweiterungen durchführen.
+  - **Problem:** LLM-Codeausgaben leiden häufig unter halluzinierten Importen, fehlerhafter Einrückung in verschachtelten Python-Blöcken, Syntaxbeschädigungen bei naiven Chunk-Edits oder ungültigem JSON.
+  - **Lösung:** Native AST-Extraktion (`cc_extract_classes`, `cc_analyze_methods`), vorschau-sichere strukturelle Edits mit Unified Diff (`cc_python_structural_edit`), automatische Einrückungsprüfung (`cc_check_indentation`) und deterministische JSON-Reparatur (`cc_fix_json`).
+
+- **`[PERSONA-2]` Full-Stack- & Python/TypeScript-Software-Entwickler**
+  - **Profil:** Entwickler polyglotter Microservices, CLI-Werkzeuge und Datenpipelines mit Bedarf an sprachübergreifender AST-Analyse und schnellen Konfigurationswechseln.
+  - **Problem:** Mühsame manuelle Formatkonvertierungen (JSON ↔ YAML ↔ TOML ↔ TOON ↔ XML), zerschossene deutsche Umlaute oder Mojibake aus Altsystemen sowie zirkuläre Laufzeit-Importe.
+  - **Lösung:** Universeller Formatkonverter (`cc_convert_format`), verlustfreie Encoding- und Umlaut-Reparatur (`cc_fix_encoding`, `cc_fix_umlauts`), isolierte Laufzeit-Importdiagnose (`cc_runtime_import_diagnose`) und interaktive Regex-Testwerkbank (`cc_regex_test`).
+
+- **`[PERSONA-3]` Enterprise AI Safety, SecOps & Code-Governance-Beauftragte**
+  - **Profil:** Sicherheitsprüfer, Compliance-Ingenieure und Enterprise-Architekten, die MCP-Toolchains für Entwickler-Workstations und CI/CD-Runner auditieren.
+  - **Problem:** Risiko von Code-Abfluss über Cloud-Telemetrie, unkontrollierte Prozess-Privilegien oder zerstörerische Dateimodifikationen durch KI-Assistenten.
+  - **Lösung:** 100% Zero-Egress lokaler stdio-Transport (`INV-LOCAL-01`), unprivilegierte Ausführung (`INV-SEC-02`), zwingende `.bak`-Backups vor Modifikationen (`INV-BAK-04`), Dry-Run-Vorschau-Sicherheit (`INV-PREV-03`) und isolierte Subprozess-Timeouts (`INV-ISOL-05`).
+
+- **`[PERSONA-4]` Open-Source-Ökosystem-Architekten & MCP-Tool-Entwickler**
+  - **Profil:** Maintainer, die MCP-Server über Glama, Smithery, npm und GitHub veröffentlichen und distribuieren.
+  - **Problem:** Fragmentierte Verzeichnis-Manifeste, fehlende Drittanbieter-Lizenznachweise und mangelnder maschinenlesbarer Kontext für KI-Crawler.
+  - **Lösung:** 100% Manifest-Parität über `package.json`, `server.json`, `glama.json`, `smithery.yaml` und `llms.txt`, abgesichert durch automatisierte Vertragstests und ein vollständiges Open-Source-Lizenzinventar (`THIRD_PARTY_LICENSES.md`).
+
+### Suchbegriffe mit hoher Absicht (SEO & Auffindbarkeit)
+
+- `mcp server code analyse entwickler tools`
+- `model context protocol python ast tools`
+- `python structural edit mcp`
+- `claude code entwickler mcp server`
+- `mcp server json reparatur encoding korrektur`
+- `offline mcp entwickler werkzeuge`
+- `mcp python runtime import diagnose`
+- `format converter mcp json yaml toml toon`
+- `claude desktop mcp python ast refactoring`
+- `offline code intelligence mcp server`
+
+---
+
+## 3. Vergleichsmatrix gegenüber Alternativen <a id="vergleichsmatrix-gegenueber-alternativen"></a>
+
+Die folgende Matrix vergleicht CodeCommander MCP mit alternativen Entwickler-Werkzeugen über 10 kritische Dimensionen:
+
+| Dimension / Fähigkeit | Generischer Datei-MCP | Rohe Shell / Ad-Hoc-Skripte | Schwergewichtige Cloud-LLMOps | Traditionelle IDE-Plugins | ellmos CodeCommander MCP |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **1. AST-Code-Intelligenz** | Keine (rohe Text-Leseoperationen) | Erfordert eigene Python-Skripte | Cloud-Parser erforderlich | Integriert (nur GUI) | **Natives AST & regex JS/TS (`cc_analyze_code`)** |
+| **2. Sichere Edit-Vorschau** | Keine (blindes Überschreiben) | Hohes Risiko (`sed`/`awk`) | Abhängig von Cloud-Gateways | Interaktiver Dialog | **Vorschau-sichere Diffs (`mode: "preview"`)** |
+| **3. Zwingende Pre-Mutation-Backups** | Keine | Manuelles Skripting | Keine | Lokale Historie (opak) | **Automatische `.bak`-Erstellung (`INV-BAK-04`)** |
+| **4. Laufzeit-Importdiagnose** | Keine | Unsichere direkte Ausführung | Keine | Teilweise / nur statisch | **Isolierter Subprozess + Timeout (`INV-ISOL-05`)** |
+| **5. Encoding- & Mojibake-Reparatur** | Keine | Fragile `iconv`-Aufrufe | Keine | Einfacher Encoding-Wechsel | **27+ Mojibake, 70+ Umlaute (`cc_fix_encoding`)** |
+| **6. Universelle Formatkonvertierung** | Keine | Mehrere disparate CLI-Tools | SaaS-Konvertierungs-APIs | Multi-Plugin-Setup | **Verlustfreie 7 Formate (`JSON/YAML/TOML/XML/TOON`)** |
+| **7. Diff-Engine & Regex-Werkbank** | Keine | Einfaches `diff`/`grep` | Keine | Nur GUI-Bedienfeld | **LCS-Unified-Diff & Regex mit Gruppen/Ersetzung** |
+| **8. Local-First & Zero-Egress** | Host-abhängig | Lokal | Cloud-Egress / Telemetrie | Häufig Cloud-Verbindung | **100% Offline-Stdio-JSON-RPC (`INV-LOCAL-01`)** |
+| **9. Mehrsprachigkeit (i18n)** | Nur Englisch | Keine | Nur Englisch | Sprachpakete | **Dynamisch 6 Sprachen (`cc_set_language`)** |
+| **10. Registry- & Manifest-Parität** | Minimal | Keine | Proprietär | Marktplatz-spezifisch | **npm, Glama, Smithery, MCP Registry, `llms.txt`** |
+
+---
+
+## 4. Architektur & Systemübersicht
 
 ```mermaid
 graph TD
@@ -129,7 +191,7 @@ graph TD
 
 ---
 
-## 3. Sicherer struktureller Edit-Lebenszyklus
+## 5. Sicherer struktureller Edit-Lebenszyklus
 
 ```mermaid
 sequenceDiagram
@@ -161,7 +223,7 @@ sequenceDiagram
 
 ---
 
-## 4. Governance & Laufzeit-Invarianten
+## 6. Governance & Laufzeit-Invarianten
 
 `ellmos-codecommander-mcp` garantiert 10 fundamentale architektonische und Laufzeit-Invarianten über alle Betriebssysteme hinweg:
 
@@ -180,7 +242,7 @@ sequenceDiagram
 
 ---
 
-## 5. Entwickler-Toolsuite (23 Tools)
+## 7. Entwickler-Toolsuite (23 Tools)
 
 ### Code-Analyse (3 Tools)
 
@@ -259,7 +321,7 @@ sequenceDiagram
 
 ---
 
-## 6. Geteilte Werkzeuge mit FileCommander
+## 8. Geteilte Werkzeuge mit FileCommander
 
 7 Werkzeuge sind zwecks maximalem Nutzungskomfort sowohl in FileCommander als auch in CodeCommander verfügbar:
 
@@ -277,7 +339,7 @@ Alle Tools in CodeCommander nutzen das `cc_`-Präfix, um eine konfliktfreie Koex
 
 ---
 
-## 7. Installation & Schnellstart
+## 9. Installation & Schnellstart
 
 ### Voraussetzungen
 
@@ -301,7 +363,7 @@ npm run build
 
 ---
 
-## 8. Konfiguration & MCP-Client-Einrichtung
+## 10. Konfiguration & MCP-Client-Einrichtung
 
 ### Claude Desktop
 
@@ -354,7 +416,7 @@ FileCommander und CodeCommander können problemlos gleichzeitig betrieben werden
 
 ---
 
-## 9. Mehrsprachigkeit & Lokalisierung (i18n)
+## 11. Mehrsprachigkeit & Lokalisierung (i18n)
 
 CodeCommander unterstützt 6 Sprachen nativ für alle Toolbeschreibungen, Hinweistexte und Diagnosemeldungen:
 - `en` — English (Standard)
@@ -368,7 +430,7 @@ CodeCommander unterstützt 6 Sprachen nativ für alle Toolbeschreibungen, Hinwei
 
 ---
 
-## 10. Entwicklung & Qualitätssicherung
+## 12. Entwicklung & Qualitätssicherung
 
 ```bash
 npm install
@@ -385,7 +447,7 @@ Die Test-Gates sind getrennt und laufen in der CI auf **Ubuntu**, **macOS** und 
 
 ---
 
-## 11. Geschwister-Ökosystem & Partner-Matrix
+## 13. Geschwister-Ökosystem & Partner-Matrix
 
 Teil der Familie lokaler Open-Source-Tools von **[ellmos-ai](https://github.com/ellmos-ai)** und **[open-bricks](https://github.com/open-bricks)**:
 
@@ -421,7 +483,7 @@ Teil der Familie lokaler Open-Source-Tools von **[ellmos-ai](https://github.com/
 
 ---
 
-## 12. Drittanbieter-Lizenzen & Transparenz
+## 14. Drittanbieter-Lizenzen & Transparenz <a id="drittanbieter-lizenzen--transparenz"></a>
 
 Dieses Projekt befolgt strenge Open-Source-Transparenzstandards:
 - Alle Laufzeit- und Entwicklungsabhängigkeiten sind in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) auditiert.
@@ -431,7 +493,7 @@ Dieses Projekt befolgt strenge Open-Source-Transparenzstandards:
 
 ---
 
-## 13. Sicherheitsrichtlinie & Reaktions-SLA
+## 15. Sicherheitsrichtlinie & Reaktions-SLA
 
 Bitte beachten Sie [SECURITY.md](SECURITY.md) für detaillierte Hinweise zur Sicherheitsarchitektur und Meldung von Schwachstellen.
 
@@ -442,13 +504,13 @@ Bitte beachten Sie [SECURITY.md](SECURITY.md) für detaillierte Hinweise zur Sic
 
 ---
 
-## 14. Änderungsprotokoll & Versionshistorie
+## 16. Änderungsprotokoll & Versionshistorie
 
 Siehe [CHANGELOG.md](CHANGELOG.md) für detaillierte Versionshinweise.
 
 ---
 
-## 15. Lizenz & Haftungsausschluss
+## 17. Lizenz & Haftungsausschluss
 
 Lizenziert unter der [MIT-Lizenz](LICENSE) — Copyright © 2026 Lukas Geiger ([ellmos-ai](https://github.com/ellmos-ai)).
 

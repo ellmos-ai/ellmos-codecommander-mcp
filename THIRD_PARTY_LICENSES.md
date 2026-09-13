@@ -1,7 +1,7 @@
 # Third-Party Licenses and Open-Source Transparency Notice
 
-> **Project:** `ellmos-ai/ellmos-codecommander-mcp` (CodeCommander)  
-> **Audited:** 2026-09-10  
+> **Project:** `ellmos-ai/ellmos-codecommander-mcp` (CodeCommander)
+> **Audited:** 2026-09-13
 > **Repository License:** [MIT License](LICENSE)  
 > **Architecture & Privacy:** 100% Local-First, Zero-Egress by default, Unprivileged User-Mode (`RunAsInvoker`)
 
@@ -97,3 +97,22 @@ Used by `typescript`.
 > http://www.apache.org/licenses/LICENSE-2.0
 >
 > Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+---
+
+## 6. Governance & Runtime Invariants Statement
+
+`ellmos-codecommander-mcp` binds all runtime tools, dependency usage, and file mutations to 10 verified architectural invariants:
+
+| Invariant ID | Classification | Architectural Guarantee | Verification Mechanism |
+| :--- | :--- | :--- | :--- |
+| `INV-LOCAL-01` | Zero-Egress Privacy | 100% offline local stdio JSON-RPC transport; zero telemetry, zero analytics, zero external network egress. | Code audit & test assertions (`test/metadata.test.ts`) |
+| `INV-SEC-02` | Unprivileged Execution | Runs strictly in user space as `RunAsInvoker`; zero administrative elevation or root privileges requested. | Process isolation & runtime permissions check |
+| `INV-PREV-03` | Preview Safety | Structural Python edits default to non-mutating preview mode (`mode: "preview"`), emitting unified diffs without file writes. | `test/index.test.ts` & `test/metadata.test.ts` |
+| `INV-BAK-04` | Mandatory Backups | In-place file mutations automatically generate timestamped `.bak` backup copies before writing to disk. | `test/index.test.ts` & file modification tests |
+| `INV-ISOL-05` | Subprocess Isolation | Runtime Python import diagnostics (`cc_runtime_import_diagnose`) execute in isolated child processes with hard timeouts. | `test/index.test.ts` subprocess execution suite |
+| `INV-GATE-06` | Explicit Language Gates | Python-only tools explicitly reject non-`.py` files; JS/TS analysis is read-only and dependency-free. | `test/test_new_tools.mjs` dispatch tests |
+| `INV-ENC-07` | Non-Destructive Encoding | Repairs 27+ Mojibake patterns, 70+ German umlaut corruptions, and normalizes UTF-8 without data loss. | `test/index.test.ts` encoding recovery suite |
+| `INV-FMT-08` | Lossless Format Parity | Roundtrip format conversion across JSON, CSV, INI, YAML, TOML, XML, and TOON preserving types and schemas. | `test/test_new_tools.mjs` roundtrip assertions |
+| `INV-I18N-09` | Dynamic Multi-Language | Full runtime i18n across 6 languages (EN, DE, ES, ZH, JA, RU) via `cc_set_language` and `cc_get_language`. | `test-i18n.mjs` & `test/i18n.test.ts` |
+| `INV-SLA-10` | 48h Response / 5d Triage SLA | Multi-OS CI (Ubuntu, Windows, macOS across Node 20, 22, 24) and binding 48h vulnerability response SLA. | `.github/workflows/tests.yml` & `SECURITY.md` |

@@ -40,7 +40,7 @@ const execFileAsync = promisify(execFile);
 
 const server = new McpServer({
   name: "ellmos-codecommander-mcp",
-  version: "1.3.25"
+  version: "1.3.26"
 });
 
 // ============================================================================

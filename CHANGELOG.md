@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.26] - 2026-09-13
+
+### Discoverability, Personas & Comparison Parity (Pfad B)
+- **Target Personas & Discoverability:** Formalized 4 target stakeholder personas in both English and German documentation (`[PERSONA-1]` Autonomous AI Coding Agents & LLM Pair-Programmers, `[PERSONA-2]` Full-Stack & Python/TypeScript Software Engineers, `[PERSONA-3]` Enterprise AI Safety & Governance Officers, `[PERSONA-4]` Open-Source Ecosystem Architects) alongside bilingual high-intent discovery search phrases.
+- **10-Dimension Comparative Matrix:** Embedded comprehensive comparative matrix in `README.md` and `README_de.md` benchmarking CodeCommander MCP against Generic File MCP, Raw Shell/Bash CLI scripts, Heavyweight Cloud LLMOps gateways, and Traditional IDE plugins across AST intelligence, safe preview-first diffs, mandatory `.bak` backups, isolated runtime import diagnostics, encoding recovery, multi-format conversion, diff/regex workbenches, zero-egress privacy, i18n, and registry parity.
+- **17-Point Quick Navigation Parity:** Expanded bilingual documentation navigation from 15 to 17 points in `README.md` and `README_de.md` with 100% reciprocal anchor parity (`#target-personas--discoverability` / `#zielgruppen--auffindbarkeit`, `#comparative-matrix-vs-alternatives` / `#vergleichsmatrix-gegenueber-alternativen`, `#third-party-licenses--transparency` / `#drittanbieter-lizenzen--transparenz`).
+- **Third-Party License Re-Audit:** Re-audited all direct runtime and dev dependencies in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) to Stand 2026-09-13, formalizing the 10 Governance & Runtime Invariants Statement (`INV-LOCAL-01` to `INV-SLA-10`) with 100% permissive open-source licenses (MIT, BSD-2-Clause, BSD-3-Clause, Apache-2.0) and zero copyleft.
+- **Marketing Log & Context Sync:** Updated [`MARKETING-LOG.txt`](MARKETING-LOG.txt) and [`llms.txt`](llms.txt) with active version 1.3.26, Last-checked 2026-09-13, 292 verified test assertions, and audit milestone records.
+- **Manifest & Runtime Version Parity:** Synchronized version 1.3.26 across `package.json`, `server.json`, `glama.json`, `smithery.yaml`, and `src/index.ts`.
+- **Contract Test Suite Expansion:** Extended automated contract tests in `test/metadata.test.ts` to assert 17-point navigation parity, target personas, comparative matrix, third-party transparency anchors, and release changelog parity.
+
 ## [1.3.25] - 2026-09-11
 
 ### Repository Hygiene, CI Hardening & Multi-Host Defense (Pfad A)
