@@ -9,6 +9,7 @@ type PackageMetadata = {
   name: string;
   version: string;
   mcpName: string;
+  dependencies?: Record<string, string>;
   author?: string;
   license?: string;
   type?: string;
@@ -17,6 +18,23 @@ type PackageMetadata = {
   bugs?: { url: string };
   homepage?: string;
 };
+
+type PackageLockMetadata = {
+  version: string;
+  packages: Record<string, {
+    version?: string;
+    dependencies?: Record<string, string>;
+  }>;
+};
+
+function semverAtLeast(version: string, minimum: string): boolean {
+  const current = version.replace(/^[^0-9]*/, "").split(".").map(Number);
+  const floor = minimum.split(".").map(Number);
+  return floor.every((part, index) => (current[index] ?? 0) === part)
+    || current.some((part, index) => part !== (floor[index] ?? 0)
+      && part > (floor[index] ?? 0)
+      && current.slice(0, index).every((value, prefix) => value === (floor[prefix] ?? 0)));
+}
 
 type TsConfigMetadata = {
   compilerOptions?: {
@@ -55,6 +73,19 @@ function codeCommanderFamilyRow(readme: string): string {
 }
 
 describe("project metadata", () => {
+  it("keeps the TOON decoder on the prototype-pollution fix", async () => {
+    const pkg = await readJson<PackageMetadata>("package.json");
+    const lock = await readJson<PackageLockMetadata>("package-lock.json");
+    const declaredVersion = pkg.dependencies?.["@toon-format/toon"];
+    const lockedVersion = lock.packages["node_modules/@toon-format/toon"]?.version;
+
+    expect(declaredVersion).toBeDefined();
+    expect(lockedVersion).toBeDefined();
+    expect(semverAtLeast(declaredVersion ?? "0.0.0", "2.3.1")).toBe(true);
+    expect(semverAtLeast(lockedVersion ?? "0.0.0", "2.3.1")).toBe(true);
+    expect(lock.packages[""]?.version).toBe(pkg.version);
+  });
+
   it("keeps package and MCP Registry metadata versions aligned", async () => {
     const pkg = await readJson<PackageMetadata>("package.json");
     const server = await readJson<ServerMetadata>("server.json");

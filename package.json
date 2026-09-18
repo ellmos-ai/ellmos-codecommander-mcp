@@ -64,7 +64,7 @@
   "homepage": "https://github.com/ellmos-ai/ellmos-codecommander-mcp#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "@toon-format/toon": "^2.1.0",
+    "@toon-format/toon": "^2.3.1",
     "fast-xml-parser": "^5.8.0",
     "js-yaml": "^4.3.1",
     "smol-toml": "^1.6.0",

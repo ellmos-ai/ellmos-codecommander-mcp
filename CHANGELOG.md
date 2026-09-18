@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Security
+- Upgraded `@toon-format/toon` to the patched 2.3.1 line for `cc_convert_format` and added a metadata regression test that rejects vulnerable declared or locked versions (GHSA-p95v-992w-h6c3).
+
 ## [1.3.26] - 2026-09-13
 
 ### Discoverability, Personas & Comparison Parity (Pfad B)
