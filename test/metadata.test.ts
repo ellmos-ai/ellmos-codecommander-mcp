@@ -128,6 +128,7 @@ describe("project metadata", () => {
     expect(pkg.files).toContain("llms.txt");
     expect(pkg.files).toContain("THIRD_PARTY_LICENSES.md");
     expect(pkg.files).toContain("MARKETING-LOG.txt");
+    expect(pkg.files).toContain("NOTICE");
   });
 
   it("verifies presence of required core documentation and configuration files", async () => {
@@ -137,6 +138,7 @@ describe("project metadata", () => {
       "CHANGELOG.md",
       "SECURITY.md",
       "LICENSE",
+      "NOTICE",
       "server.json",
       "glama.json",
       "smithery.yaml",
@@ -159,7 +161,7 @@ describe("project metadata", () => {
       expect(content).toContain("badge/LLM--Ready-llms.txt-blue.svg");
       expect(content).toContain("https://github.com/ellmos-ai");
       expect(content).toContain("https://github.com/open-bricks");
-      expect(content).toContain("badge/tests-292%20passed%20%7C%20100%25-brightgreen.svg");
+      expect(content).toContain("badge/tests-296%20passed%20%7C%20100%25-brightgreen.svg");
       expect(content).toContain("badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg");
       expect(content).toContain("badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg");
       expect(content).toContain("badge/security-48h%20Response%20%7C%205d%20Triage-blue.svg");
@@ -176,11 +178,12 @@ describe("project metadata", () => {
     expect(llms).toContain(`${EXPECTED_TOOL_COUNT} tools`);
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
-    expect(llms).toContain("Last-checked: 2026-09-13");
-    expect(llms).toContain("292 tests passed");
+    expect(llms).toContain("Last-checked: 2026-09-20");
+    expect(llms).toContain("296 tests passed");
     expect(llms).toContain("Zero-Egress");
     expect(llms).toContain("INV-LOCAL-01");
     expect(llms).toContain("THIRD_PARTY_LICENSES.md");
+    expect(llms).toContain("NOTICE");
     expect(llms).toContain("MARKETING-LOG.txt");
     expect(llms).not.toContain("automation-master");
   });
@@ -337,8 +340,10 @@ describe("project metadata", () => {
   it("verifies THIRD_PARTY_LICENSES.md inventory, permissive licenses, and security guarantees", async () => {
     const content = await readText("THIRD_PARTY_LICENSES.md");
 
+    expect(content).toContain("Audited:** 2026-09-20");
     expect(content).toContain("@modelcontextprotocol/sdk");
     expect(content).toContain("@toon-format/toon");
+    expect(content).toContain("^2.3.1");
     expect(content).toContain("fast-xml-parser");
     expect(content).toContain("js-yaml");
     expect(content).toContain("smol-toml");
@@ -381,24 +386,68 @@ describe("project metadata", () => {
     expect(gitignore).toContain("*.sync-conflict-*");
     expect(gitignore).toContain("*.conflict");
     expect(gitignore).toContain("*-CONFLIT-*");
+    expect(gitignore).toContain("*conflicted copy*");
+    expect(gitignore).toContain("*-WORKSTATION-LG*");
+    expect(gitignore).toContain("*-LAPTOP*");
+    expect(gitignore).toContain("*-ASUS*");
+    expect(gitignore).toContain("*-Mac Studio*");
+    expect(gitignore).toContain("*-MacBook*");
     expect(gitignore).toContain("LOCK.*");
     expect(gitignore).toContain("LOCK");
+    expect(gitignore).toContain("LOCK.user.*");
+    expect(gitignore).toContain("LOCK.until.*");
+    expect(gitignore).toContain("LOCK.condition.*");
+    expect(gitignore).toContain("LOCK.permissions.json");
+    expect(gitignore).toContain(".automation-lock");
     expect(gitignore).toContain("!package-lock.json");
     expect(gitignore).toContain(".coverage*");
     expect(gitignore).toContain(".pytest_cache/");
+    expect(gitignore).toContain(".hypothesis/");
+    expect(gitignore).toContain(".turbo/");
+    expect(gitignore).toContain("*.rej");
   });
 
   it("verifies CHANGELOG.md contains recent Pfad A and Pfad B release entries", async () => {
     const content = await readText("CHANGELOG.md");
 
+    expect(content).toContain("## [1.3.27] - 2026-09-20");
+    expect(content).toContain("Repository Hygiene, CI Hardening & Multi-Host Defense (Pfad A)");
     expect(content).toContain("## [1.3.26] - 2026-09-13");
     expect(content).toContain("Discoverability, Personas & Comparison Parity (Pfad B)");
     expect(content).toContain("## [1.3.25] - 2026-09-11");
-    expect(content).toContain("Repository Hygiene, CI Hardening & Multi-Host Defense (Pfad A)");
     expect(content).toContain("## [1.3.24] - 2026-09-10");
     expect(content).toContain("INV-LOCAL-01");
     expect(content).toContain("THIRD_PARTY_LICENSES.md");
     expect(content).toContain("MARKETING-LOG.txt");
     expect(content).toContain("Quick Navigation");
+  });
+
+  it("verifies all GitHub Actions workflows enforce timeout-minutes and concurrency boundaries", async () => {
+    const testsWf = await readText(".github/workflows/tests.yml");
+    expect(testsWf).toContain("timeout-minutes: 15");
+    expect(testsWf).toContain("cancel-in-progress: true");
+
+    const staleWf = await readText(".github/workflows/stale.yml");
+    expect(staleWf).toContain("timeout-minutes: 10");
+
+    const welcomeWf = await readText(".github/workflows/welcome.yml");
+    expect(welcomeWf).toContain("timeout-minutes: 5");
+    expect(welcomeWf).toContain("cancel-in-progress: true");
+
+    const autoAssignWf = await readText(".github/workflows/auto-assign.yml");
+    expect(autoAssignWf).toContain("timeout-minutes: 5");
+    expect(autoAssignWf).toContain("cancel-in-progress: true");
+
+    const labelSyncWf = await readText(".github/workflows/label-sync.yml");
+    expect(labelSyncWf).toContain("timeout-minutes: 5");
+    expect(labelSyncWf).toContain("cancel-in-progress: true");
+  });
+
+  it("verifies NOTICE file contains legal attribution, umbrella governance, and SBOM reference", async () => {
+    const notice = await readText("NOTICE");
+    expect(notice).toContain("ellmos-codecommander-mcp");
+    expect(notice).toContain("Copyright (c) 2026 Lukas Geiger");
+    expect(notice).toContain("open-bricks open-source umbrella");
+    expect(notice).toContain("THIRD_PARTY_LICENSES.md");
   });
 });

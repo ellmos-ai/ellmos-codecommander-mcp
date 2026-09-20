@@ -9,8 +9,8 @@
 # Registry:     Glama (https://glama.ai/mcp/servers/b9kjs4uaav), Smithery, MCP Registry
 # Author:       Lukas Geiger
 # License:      MIT
-# Version:      1.3.26
-# Last Updated: 2026-09-13
+# Version:      1.3.27
+# Last Updated: 2026-09-20
 # ==============================================================================
 
 1. PRODUCT POSITIONING & VALUE PROPOSITION
@@ -177,3 +177,20 @@ i18n Multi-Language Support   | English only     | None             | 6 Language
 - Context Sync: llms.txt synchronized to v1.3.26, Last-checked 2026-09-13, 292 tests passed.
 - Manifest Parity: 100% synchronized across package.json, server.json, glama.json, smithery.yaml,
   and src/index.ts.
+
+10. AUDIT & RELEASE MILESTONE [Pfad A: 2026-09-20]
+------------------------------------------------------------------------------
+- Release: v1.3.27
+- Scope: Pfad A Technical Hygiene & Multi-Host Security Hardening
+- CI Workflow Hardening: All 5 GitHub Actions workflows hardened with runaway execution
+  timeouts (tests.yml: 15 min, stale.yml: 10 min, welcome.yml: 5 min, auto-assign.yml: 5 min,
+  label-sync.yml: 5 min) and concurrency cancellation guards.
+- Canonical Lock & Sync Defense: .gitignore hardened with multi-host cloud-sync conflict rules
+  (*conflicted copy*, *-WORKSTATION-LG*, *-LAPTOP*, *-ASUS*, *-Mac Studio*, *-MacBook*)
+  and canonical lock patterns (LOCK, LOCK.*, LOCK*.txt, LOCK.user.*, LOCK.until.*,
+  LOCK.condition.*, LOCK.permissions.json, .automation-lock, *.lock with !package-lock.json).
+- Root NOTICE & Packaging Whitelist: Added NOTICE attribution file and whitelisted in package.json.
+- Level 1 SBOM Audit: THIRD_PARTY_LICENSES.md re-audited to 2026-09-20 with @toon-format/toon ^2.3.1
+  security patch and certified unprivileged RunAsInvoker non-elevation execution.
+- Automated Contract Tests: test/metadata.test.ts expanded to assert CI workflow timeouts,
+  concurrency cancellation, .gitignore lock defense, NOTICE inclusion, and 1.3.27 version parity.

@@ -1,7 +1,7 @@
 # Third-Party Licenses and Open-Source Transparency Notice
 
 > **Project:** `ellmos-ai/ellmos-codecommander-mcp` (CodeCommander)
-> **Audited:** 2026-09-13
+> **Audited:** 2026-09-20
 > **Repository License:** [MIT License](LICENSE)  
 > **Architecture & Privacy:** 100% Local-First, Zero-Egress by default, Unprivileged User-Mode (`RunAsInvoker`)
 
@@ -27,7 +27,7 @@ Furthermore, `ellmos-codecommander-mcp` guarantees:
 | Package | Version Range | License | Project URL / Source | Purpose |
 | :--- | :--- | :--- | :--- | :--- |
 | [`@modelcontextprotocol/sdk`](https://github.com/modelcontextprotocol/typescript-sdk) | `^1.0.0` | MIT | [GitHub](https://github.com/modelcontextprotocol/typescript-sdk) | Official Model Context Protocol TypeScript SDK (stdio transport, JSON-RPC protocol handling) |
-| [`@toon-format/toon`](https://github.com/toon-format/toon) | `^2.1.0` | MIT | [GitHub](https://github.com/toon-format/toon) | Token-Oriented Object Notation serializer and parser for LLM-optimized data exchange |
+| [`@toon-format/toon`](https://github.com/toon-format/toon) | `^2.3.1` | MIT | [GitHub](https://github.com/toon-format/toon) | Token-Oriented Object Notation serializer and parser for LLM-optimized data exchange |
 | [`fast-xml-parser`](https://github.com/NaturalIntelligence/fast-xml-parser) | `^5.8.0` | MIT | [GitHub](https://github.com/NaturalIntelligence/fast-xml-parser) | High-performance XML parser, validator, and builder for format conversions |
 | [`js-yaml`](https://github.com/nodeca/js-yaml) | `^4.3.1` | MIT | [GitHub](https://github.com/nodeca/js-yaml) | JavaScript YAML parser and dumper for `cc_convert_format` operations |
 | [`smol-toml`](https://github.com/cyyperia/smol-toml) | `^1.6.0` | BSD-3-Clause | [GitHub](https://github.com/cyyperia/smol-toml) | Fast, specification-compliant TOML parser and serializer |

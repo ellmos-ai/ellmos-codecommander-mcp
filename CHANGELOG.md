@@ -2,10 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.3.27] - 2026-09-20
 
 ### Security
 - Upgraded `@toon-format/toon` to the patched 2.3.1 line for `cc_convert_format` and added a metadata regression test that rejects vulnerable declared or locked versions (GHSA-p95v-992w-h6c3).
+
+### Repository Hygiene, CI Hardening & Multi-Host Defense (Pfad A)
+- **CI Workflow Timeouts & Concurrency Hardening:** Enforced runaway execution boundaries and race condition defenses across all 5 GitHub Actions workflows (`tests.yml` with `timeout-minutes: 15` & concurrency cancellation; `stale.yml` with `timeout-minutes: 10`; `welcome.yml`, `auto-assign.yml`, and `label-sync.yml` with `timeout-minutes: 5` and concurrency `cancel-in-progress: true`).
+- **Canonical Lock-System & Multi-Host Sync Defense:** Hardened `.gitignore` against multi-host conflict files (`*conflicted copy*`, `* (Kopie)*`, `* (Copy)*`, `*-WORKSTATION*`, `*-WORKSTATION-LG*`, `*-LAPTOP*`, `*-ASUS*`, `*-ASUS-GEI*`, `*-Mac Studio*`, `*-MacBook*`) and fail-closed lock coordination patterns (`LOCK`, `LOCK.*`, `LOCK*.txt`, `LOCK.user.*`, `LOCK.until.*`, `LOCK.condition.*`, `LOCK.permissions.json`, `.automation-lock`, `*.lock` with `!package-lock.json` exception).
+- **Formal NOTICE & Packaging Whitelist:** Added root `NOTICE` file specifying attribution, open-bricks ecosystem affiliation, and licensing transparency; whitelisted `NOTICE` in `package.json` `files` array for publication.
+- **Level 1 SBOM & Dependency Audit:** Re-audited runtime and development dependencies in `THIRD_PARTY_LICENSES.md` to Stand 2026-09-20, certifying unprivileged `RunAsInvoker` user-mode execution, 100% Zero-Egress local-first stdio operation, and zero viral copyleft dependencies.
+- **Manifest & Metadata Parity:** Synchronized version 1.3.27 across `package.json`, `package-lock.json`, `server.json`, `glama.json`, `src/index.ts`, `MARKETING-LOG.txt`, and discovery index `llms.txt`.
+- **Automated Contract Tests:** Extended Vitest test suite in `test/metadata.test.ts` to assert CI workflow timeouts, concurrency guards, `.gitignore` canonical lock defense, NOTICE file bundling, and manifest version alignment.
 
 ## [1.3.26] - 2026-09-13
 
