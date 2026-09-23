@@ -437,13 +437,13 @@ npm install
 npm run dev               # TypeScript watch mode
 npm run build             # Compile TypeScript to dist/
 npm start                 # Run built server via stdio
-npm test                  # Run Vitest unit suite (196 tests)
+npm test                  # Run Vitest unit suite (201 tests)
 npm run test:integration  # Real MCP stdio test suite (52 assertions, build first)
 npm run test:i18n         # Translation parity test suite (43 assertions)
 npm run test:all          # Run full QA pipeline (build + vitest + integration + i18n)
 ```
 
-The test gates are deliberately separated and automated in CI across **Ubuntu**, **macOS**, and **Windows** on Node.js 20, 22, and 24 (totaling 292 automated assertions, 100% green).
+The test gates are deliberately separated and automated in CI across **Ubuntu**, **macOS**, and **Windows** on Node.js 20, 22, and 24 (totaling 296 automated assertions, 100% green).
 
 ---
 
@@ -487,6 +487,7 @@ Part of the **[ellmos-ai](https://github.com/ellmos-ai)** and **[open-bricks](ht
 
 This project strictly adheres to open-source transparency:
 - All runtime and development dependencies are audited in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
+- The current production dependency audit (`npm audit --omit=dev --json`, checked 2026-09-20) reports 5 vulnerable package nodes (3 high, 2 moderate); remediation is tracked in TASKPLAN #2198.
 - Distributed exclusively under permissive open-source licenses (**MIT**, **BSD-2-Clause**, **BSD-3-Clause**, **Apache-2.0**).
 - Comprehensive discoverability, personas, and marketing metrics are documented in [`MARKETING-LOG.txt`](MARKETING-LOG.txt).
 - Zero proprietary tracking, zero telemetric beacons, and zero viral copyleft dependencies.

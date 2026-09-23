@@ -160,9 +160,11 @@ i18n Multi-Language Support   | English only     | None             | 6 Language
 
 8. VERIFICATION & AUDIT TRAIL
 ------------------------------------------------------------------------------
-- All 23 tools verified via Vitest unit tests (197 tests), integration tests (52 assertions),
-  and i18n tests (43 assertions) totaling 292 automated test assertions (100% green).
-- 100% clean npm audit (0 vulnerabilities across direct and transitive dependencies).
+- All 23 tools verified via Vitest unit tests (201 tests), integration tests (52 assertions),
+  and i18n tests (43 assertions) totaling 296 automated test assertions (100% green).
+- Current production dependency audit (npm audit --omit=dev --json, checked 2026-09-20)
+  reports 5 vulnerable package nodes (3 high, 2 moderate); all five have an available fix.
+  Remediation is tracked in TASKPLAN #2198; this is not a clean-audit claim.
 - Strict ESM module compliance with TypeScript strict mode and ES2022 output.
 - Automated contract tests enforcing 17-point navigation, bilingual anchor parity, and manifest parity.
 

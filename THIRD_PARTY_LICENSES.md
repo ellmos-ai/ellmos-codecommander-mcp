@@ -22,6 +22,12 @@ Furthermore, `ellmos-codecommander-mcp` guarantees:
 
 ---
 
+## Current Dependency Audit Status
+
+The current production dependency audit (`npm audit --omit=dev --json`, checked 2026-09-20) reports 5 vulnerable package nodes: 3 high-severity and 2 moderate-severity findings across `js-yaml`, `smol-toml`, `fast-uri`, `hono`, and `qs`. Each of the five nodes reports an available fix. The license matrix below is a license inventory and does not claim that the vulnerability audit is clean; remediation is tracked in TASKPLAN #2198.
+
+---
+
 ## 2. Direct Runtime Dependency Matrix
 
 | Package | Version Range | License | Project URL / Source | Purpose |

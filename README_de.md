@@ -437,13 +437,13 @@ npm install
 npm run dev               # TypeScript Watch-Modus
 npm run build             # TypeScript-Kompilierung nach dist/
 npm start                 # Gebauten Server via stdio starten
-npm test                  # Vitest Unit-Testsuite ausführen (196 Tests)
+npm test                  # Vitest Unit-Testsuite ausführen (201 Tests)
 npm run test:integration  # Echte MCP-Stdio-Integrationstests (52 Assertions)
 npm run test:i18n         # Lokalisierungs- & Übersetzungstests (43 Assertions)
 npm run test:all          # Gesamte Testpipeline ausführen (Build + Vitest + Integration + i18n)
 ```
 
-Die Test-Gates sind getrennt und laufen in der CI auf **Ubuntu**, **macOS** und **Windows** auf Node.js 20, 22 und 24 (insgesamt 292 automatisierte Test-Assertions, 100% grün).
+Die Test-Gates sind getrennt und laufen in der CI auf **Ubuntu**, **macOS** und **Windows** auf Node.js 20, 22 und 24 (insgesamt 296 automatisierte Test-Assertions, 100% grün).
 
 ---
 
@@ -487,6 +487,7 @@ Teil der Familie lokaler Open-Source-Tools von **[ellmos-ai](https://github.com/
 
 Dieses Projekt befolgt strenge Open-Source-Transparenzstandards:
 - Alle Laufzeit- und Entwicklungsabhängigkeiten sind in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) auditiert.
+- Der aktuelle Produktionsabhängigkeits-Audit (`npm audit --omit=dev --json`, geprüft am 20.09.2026) meldet 5 verwundbare Paketknoten (3 hoch, 2 mittel); die Behebung ist in TASKPLAN #2198 erfasst.
 - Ausschließliche Verwendung permissiver Open-Source-Lizenzen (**MIT**, **BSD-2-Clause**, **BSD-3-Clause**, **Apache-2.0**).
 - Vollständige Zielgruppenanalysen, Personas und Marketingmetriken sind in [`MARKETING-LOG.txt`](MARKETING-LOG.txt) hinterlegt.
 - Null proprietäres Tracking, null Telemetrie-Beacons und null virale Copyleft-Abhängigkeiten.
