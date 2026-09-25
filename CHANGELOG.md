@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Discoverability, Visual Architecture & 18-Point Bilingual Navigation Parity (Pfad B: 2026-09-26)
+- **18-Point Bilingual Navigation Parity & Dual Reciprocal Anchors:**
+  - Synchronized comprehensive 18-point navigation structure across English (`README.md`) and German (`README_de.md`) documentation with reciprocal `<a id="sec-01">` .. `<a id="sec-18">` HTML anchor aliases and semantic fallbacks.
+- **Persona Profiles & High-Intent SEO Queries:**
+  - Codified explicit operational profiles, pain points, and tool solutions for `[PERSONA-01]` Autonomous AI Coding Agents & LLM Pair-Programmers, `[PERSONA-02]` Full-Stack & Python/TypeScript Software Engineers, `[PERSONA-03]` Enterprise AI Safety, SecOps & Code Governance Officers, and `[PERSONA-04]` Open-Source Ecosystem Architects alongside targeted discovery queries.
+- **Comparative Matrix & Invariant Cross-References:**
+  - Explicitly mapped the 10 comparative dimensions to system runtime invariants (`INV-LOCAL-01` through `INV-SLA-10`) contrasting CodeCommander (23 tools) against Generic File MCP, Raw Shell/Bash CLI, Heavyweight Cloud LLMOps, and Traditional IDE plugins.
+- **Level 1 SBOM Transparency & Invariant Matrix (`THIRD_PARTY_LICENSES.md`):**
+  - Updated inventory audit stamp to `Stand: 2026-09-26`, added the Level 1 SBOM Invariant Cross-Reference Matrix section, and re-certified unprivileged user-mode `RunAsInvoker` execution and Zero-Copyleft isolation (100% permissive licenses).
+- **Machine-Readable Documentation (`llms.txt`):**
+  - Updated context manifest audit date to `Last-checked: 2026-09-26` asserting 296 passed tests baseline across Node 20-24 and 18-point quick navigation.
+- **Statutory Notice (§ 521 BGB) & 48h Security Response SLA:**
+  - Codified German statutory notice under § 521 BGB Gefälligkeitsrecht and binding 48h initial security response commitment across Section 18 of both READMEs.
+- **Package Keywords & Topic Saturation:**
+  - Saturated `package.json` keywords to 20 topics matching GitHub repository topics (`local-first`, `zero-egress`).
+- **Automated Contract Test Suite Expansion (`test/metadata.test.ts`):**
+  - Expanded contract assertions to strictly validate 18-point bilingual navigation parity, dual HTML anchor aliases (`sec-01`..`sec-18`), `[PERSONA-01]`..`[PERSONA-04]`, § 521 BGB disclaimers, and Stand 2026-09-26 audit timestamps.
+- **Strict Version Freeze Discipline:**
+  - Version remains frozen at 1.3.27 per AGENTS.md / CLAUDE.md rule (T-20260920-167562623).
+
 ## [1.3.27] - 2026-09-20
 
 ### Security

@@ -51,7 +51,9 @@
     "mcp-registry",
     "regex-tester",
     "markdown-export",
-    "pdf-export"
+    "pdf-export",
+    "local-first",
+    "zero-egress"
   ],
   "author": "Lukas Geiger",
   "license": "MIT",

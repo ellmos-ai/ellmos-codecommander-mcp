@@ -16,9 +16,12 @@
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
 [![Security](https://img.shields.io/badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg)](SECURITY.md)
+[![Security: RunAsInvoker](https://img.shields.io/badge/Security-RunAsInvoker-blue.svg)](SECURITY.md)
 [![Security SLA](https://img.shields.io/badge/security-48h%20Response%20%7C%205d%20Triage-blue.svg)](SECURITY.md)
 [![Third-Party Audited](https://img.shields.io/badge/third--party-audited-success.svg)](THIRD_PARTY_LICENSES.md)
 [![Marketing Log](https://img.shields.io/badge/marketing-audited-blueviolet.svg)](MARKETING-LOG.txt)
+[![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
+[![Verified: 2026-09-26](https://img.shields.io/badge/Verified-2026--09--26-success.svg)](CHANGELOG.md)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -36,26 +39,28 @@ A developer-focused **Model Context Protocol (MCP) server** that gives AI assist
 
 ## Quick Navigation
 
-1. [Overview & Highlights](#1-overview--highlights)
-2. [Target Personas & Discoverability](#2-target-personas--discoverability)
-3. [Comparative Matrix vs. Alternatives](#3-comparative-matrix-vs-alternatives)
-4. [Architecture & System Overview](#4-architecture--system-overview)
-5. [Safe Structural Edit Lifecycle](#5-safe-structural-edit-lifecycle)
-6. [Governance & Runtime Invariants](#6-governance--runtime-invariants)
-7. [Developer Tool Suite (23 Tools)](#7-developer-tool-suite-23-tools)
-8. [Shared Tools with FileCommander](#8-shared-tools-with-filecommander)
-9. [Installation & Quickstart](#9-installation--quickstart)
-10. [Configuration & MCP Client Setup](#10-configuration--mcp-client-setup)
-11. [Multi-Language Support (i18n)](#11-multi-language-support-i18n)
-12. [Development & Quality Assurance](#12-development--quality-assurance)
-13. [Sibling Ecosystem & Partner Matrix](#13-sibling-ecosystem--partner-matrix)
-14. [Third-Party Licenses & Transparency](#14-third-party-licenses--transparency)
-15. [Security Policy & Response SLA](#15-security-policy--response-sla)
-16. [Changelog & Version History](#16-changelog--version-history)
-17. [License & Liability Notice](#17-license--liability-notice)
+1. [Overview & Highlights](#sec-01)
+2. [Target Personas & Discoverability](#sec-02)
+3. [Comparative Matrix vs. Alternatives](#sec-03)
+4. [Architecture & System Overview](#sec-04)
+5. [Safe Structural Edit Lifecycle](#sec-05)
+6. [Governance & Runtime Invariants](#sec-06)
+7. [Developer Tool Suite (23 Tools)](#sec-07)
+8. [Shared Tools with FileCommander](#sec-08)
+9. [Installation & Quickstart](#sec-09)
+10. [Configuration & MCP Client Setup](#sec-10)
+11. [Multi-Language Support (i18n)](#sec-11)
+12. [Development & Quality Assurance](#sec-12)
+13. [Sibling Ecosystem & Partner Matrix](#sec-13)
+14. [Third-Party Licenses & Transparency](#sec-14)
+15. [Security Policy & Response SLA](#sec-15)
+16. [Changelog & Version History](#sec-16)
+17. [License & Legal Attribution](#sec-17)
+18. [Statutory Notice, Liability Limitation & SLA (§ 521 BGB)](#sec-18)
 
 ---
 
+<a id="sec-01"></a><a id="1-overview--highlights"></a><a id="overview--highlights"></a><a id="overview"></a>
 ## 1. Overview & Highlights
 
 While FileCommander handles filesystem operations and system processes, CodeCommander focuses specifically on **code intelligence and developer precision**:
@@ -74,28 +79,29 @@ While FileCommander handles filesystem operations and system processes, CodeComm
 
 ---
 
-## 2. Target Personas & Discoverability <a id="target-personas--discoverability"></a>
+<a id="sec-02"></a><a id="2-target-personas--discoverability"></a><a id="target-personas--discoverability"></a><a id="personas"></a><a id="zielgruppen--auffindbarkeit"></a>
+## 2. Target Personas & Discoverability
 
 CodeCommander MCP is engineered to address key bottlenecks in modern autonomous AI coding, local multi-agent swarms, and safety-compliant developer tooling:
 
 ### Target Audience & Stakeholder Personas
 
-- **`[PERSONA-1]` Autonomous AI Coding Agents & LLM Pair-Programmers**
+- **`[PERSONA-01]` (`[PERSONA-1]`) Autonomous AI Coding Agents & LLM Pair-Programmers**
   - **Profile:** Agents such as Claude Code, Antigravity, Codex, Cursor, and Windsurf performing automated code refactoring, test repair, and feature development.
   - **Pain Point:** Standard LLM code outputs frequently suffer from hallucinated imports, broken indentation in complex Python control flows, invalid JSON configs, or syntax corruption during naive chunk edits.
   - **Solution:** Native AST extraction (`cc_extract_classes`, `cc_analyze_methods`), preview-safe structural editing with unified diffs (`cc_python_structural_edit`), automatic indentation checking (`cc_check_indentation`), and deterministic JSON repair (`cc_fix_json`).
 
-- **`[PERSONA-2]` Full-Stack & Python/TypeScript Software Engineers**
+- **`[PERSONA-02]` (`[PERSONA-2]`) Full-Stack & Python/TypeScript Software Engineers**
   - **Profile:** Developers maintaining polyglot projects, CLI utilities, and data pipelines requiring cross-language AST analysis and rapid configuration format transitions.
   - **Pain Point:** Tedious manual format conversions (JSON ↔ YAML ↔ TOML ↔ TOON ↔ XML), broken German umlauts or Mojibake from legacy encodings, and circular runtime imports.
   - **Solution:** Universal format converter (`cc_convert_format`), non-destructive encoding and umlaut repair (`cc_fix_encoding`, `cc_fix_umlauts`), isolated runtime import diagnostics (`cc_runtime_import_diagnose`), and interactive regex tester (`cc_regex_test`).
 
-- **`[PERSONA-3]` Enterprise AI Safety, SecOps & Code Governance Officers**
+- **`[PERSONA-03]` (`[PERSONA-3]`) Enterprise AI Safety, SecOps & Code Governance Officers**
   - **Profile:** Security auditors, compliance engineers, and enterprise architects evaluating MCP toolchains for developer workstations and CI/CD runners.
   - **Pain Point:** Risk of confidential code leakage via cloud telemetry, unauthorized process elevation, or destructive in-place file overwrites by AI assistants.
   - **Solution:** 100% Zero-Egress local stdio transport (`INV-LOCAL-01`), unprivileged user-space execution (`INV-SEC-02`), mandatory timestamped `.bak` backups before mutations (`INV-BAK-04`), dry-run diff preview safety (`INV-PREV-03`), and isolated subprocess timeouts (`INV-ISOL-05`).
 
-- **`[PERSONA-4]` Open-Source Ecosystem Architects & MCP Tool Developers**
+- **`[PERSONA-04]` (`[PERSONA-4]`) Open-Source Ecosystem Architects & MCP Tool Developers**
   - **Profile:** Maintainers building, publishing, and indexing MCP servers across Glama, Smithery, npm, and GitHub.
   - **Pain Point:** Fragmented directory manifests, missing third-party license disclosures, and lack of machine-readable indexing context for AI agents.
   - **Solution:** 100% manifest parity across `package.json`, `server.json`, `glama.json`, `smithery.yaml`, and `llms.txt`, verified by automated contract tests and a complete open-source license audit (`THIRD_PARTY_LICENSES.md`).
@@ -115,7 +121,8 @@ CodeCommander MCP is engineered to address key bottlenecks in modern autonomous 
 
 ---
 
-## 3. Comparative Matrix vs. Alternatives <a id="comparative-matrix-vs-alternatives"></a>
+<a id="sec-03"></a><a id="3-comparative-matrix-vs-alternatives"></a><a id="comparative-matrix-vs-alternatives"></a><a id="vergleichsmatrix-gegenueber-alternativen"></a>
+## 3. Comparative Matrix vs. Alternatives
 
 The following matrix compares CodeCommander MCP against alternative developer tooling approaches across 10 critical operational dimensions:
 
@@ -134,6 +141,7 @@ The following matrix compares CodeCommander MCP against alternative developer to
 
 ---
 
+<a id="sec-04"></a><a id="4-architecture--system-overview"></a><a id="architecture--system-overview"></a><a id="architecture"></a>
 ## 4. Architecture & System Overview
 
 ```mermaid
@@ -191,6 +199,7 @@ graph TD
 
 ---
 
+<a id="sec-05"></a><a id="5-safe-structural-edit-lifecycle"></a><a id="safe-structural-edit-lifecycle"></a><a id="edit-lifecycle"></a>
 ## 5. Safe Structural Edit Lifecycle
 
 ```mermaid
@@ -223,6 +232,7 @@ sequenceDiagram
 
 ---
 
+<a id="sec-06"></a><a id="6-governance--runtime-invariants"></a><a id="governance--runtime-invariants"></a><a id="governance-invariants"></a><a id="governance--laufzeit-invarianten"></a>
 ## 6. Governance & Runtime Invariants
 
 `ellmos-codecommander-mcp` guarantees 10 core architectural and runtime invariants across all platforms:
@@ -242,6 +252,7 @@ sequenceDiagram
 
 ---
 
+<a id="sec-07"></a><a id="7-developer-tool-suite-23-tools"></a><a id="developer-tool-suite-23-tools"></a><a id="tools"></a><a id="tool-suite"></a>
 ## 7. Developer Tool Suite (23 Tools)
 
 ### Code Analysis (3 tools)
@@ -321,6 +332,7 @@ sequenceDiagram
 
 ---
 
+<a id="sec-08"></a><a id="8-shared-tools-with-filecommander"></a><a id="shared-tools-with-filecommander"></a><a id="shared-tools"></a>
 ## 8. Shared Tools with FileCommander
 
 7 tools exist in both FileCommander and CodeCommander for convenience:
@@ -339,6 +351,7 @@ All tools in CodeCommander use the `cc_` prefix to guarantee seamless coexistenc
 
 ---
 
+<a id="sec-09"></a><a id="9-installation--quickstart"></a><a id="installation--quickstart"></a><a id="installation"></a>
 ## 9. Installation & Quickstart
 
 ### Prerequisites
@@ -363,6 +376,7 @@ npm run build
 
 ---
 
+<a id="sec-10"></a><a id="10-configuration--mcp-client-setup"></a><a id="configuration--mcp-client-setup"></a><a id="configuration"></a>
 ## 10. Configuration & MCP Client Setup
 
 ### Claude Desktop
@@ -416,6 +430,7 @@ FileCommander and CodeCommander are designed to run concurrently:
 
 ---
 
+<a id="sec-11"></a><a id="11-multi-language-support-i18n"></a><a id="multi-language-support-i18n"></a><a id="i18n"></a>
 ## 11. Multi-Language Support (i18n)
 
 CodeCommander natively supports 6 languages for all tool descriptions, output notices, and diagnostic messages:
@@ -430,6 +445,7 @@ Use `cc_get_language` to check the current language or `cc_set_language` to dyna
 
 ---
 
+<a id="sec-12"></a><a id="12-development--quality-assurance"></a><a id="development--quality-assurance"></a><a id="development"></a><a id="testing"></a>
 ## 12. Development & Quality Assurance
 
 ```bash
@@ -447,6 +463,7 @@ The test gates are deliberately separated and automated in CI across **Ubuntu**,
 
 ---
 
+<a id="sec-13"></a><a id="13-sibling-ecosystem--partner-matrix"></a><a id="sibling-ecosystem--partner-matrix"></a><a id="ecosystem"></a>
 ## 13. Sibling Ecosystem & Partner Matrix
 
 Part of the **[ellmos-ai](https://github.com/ellmos-ai)** and **[open-bricks](https://github.com/open-bricks)** family of local-first tools:
@@ -483,7 +500,8 @@ Part of the **[ellmos-ai](https://github.com/ellmos-ai)** and **[open-bricks](ht
 
 ---
 
-## 14. Third-Party Licenses & Transparency <a id="third-party-licenses--transparency"></a>
+<a id="sec-14"></a><a id="14-third-party-licenses--transparency"></a><a id="third-party-licenses--transparency"></a><a id="drittanbieter-lizenzen--transparenz"></a>
+## 14. Third-Party Licenses & Transparency
 
 This project strictly adheres to open-source transparency:
 - All runtime and development dependencies are audited in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
@@ -494,6 +512,7 @@ This project strictly adheres to open-source transparency:
 
 ---
 
+<a id="sec-15"></a><a id="15-security-policy--response-sla"></a><a id="security-policy--response-sla"></a><a id="security"></a>
 ## 15. Security Policy & Response SLA
 
 Please review [SECURITY.md](SECURITY.md) for full vulnerability disclosure procedures.
@@ -505,16 +524,31 @@ Please review [SECURITY.md](SECURITY.md) for full vulnerability disclosure proce
 
 ---
 
+<a id="sec-16"></a><a id="16-changelog--version-history"></a><a id="changelog--version-history"></a><a id="changelog"></a>
 ## 16. Changelog & Version History
 
 See [CHANGELOG.md](CHANGELOG.md) for release notes and version history.
 
 ---
 
-## 17. License & Liability Notice
+<a id="sec-17"></a><a id="17-license--legal-attribution"></a><a id="license--legal-attribution"></a><a id="license"></a>
+## 17. License & Legal Attribution
 
 This project is licensed under the [MIT License](LICENSE) — Copyright © 2026 Lukas Geiger ([ellmos-ai](https://github.com/ellmos-ai)).
 
-Dieses Projekt ist eine **unentgeltliche Open-Source-Schenkung** im Sinne der §§ 516 ff. BGB. Die Haftung des Urhebers ist gemäß **§ 521 BGB** auf **Vorsatz und grobe Fahrlässigkeit** beschränkt. Ergänzend gilt der Haftungsausschluss der MIT-Lizenz. Nutzung auf eigenes Risiko. Keine Wartungszusage, keine Verfügbarkeitsgarantie, keine Gewähr für Fehlerfreiheit oder Eignung für einen bestimmten Zweck.
+See [`NOTICE`](NOTICE) for open-bricks umbrella attribution and [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) for the Level 1 SBOM invariant inventory.
 
-*This project is an unpaid open-source donation under German law. Liability is limited to intent and gross negligence (§ 521 German Civil Code), supplemented by the MIT License warranty disclaimer. Use at your own risk.*
+---
+
+<a id="sec-18"></a><a id="18-statutory-notice-liability-limitation--sla-521-bgb"></a><a id="statutory-notice--liability"></a><a id="haftung--liability"></a><a id="haftung"></a>
+## 18. Statutory Notice, Liability Limitation & SLA (§ 521 BGB)
+
+Dieses Projekt ist eine **unentgeltliche Open-Source-Schenkung** im Sinne der §§ 516 ff. BGB (Gefälligkeitsrecht). Die Haftung des Urhebers und der Mitwirkenden ist gemäß **§ 521 BGB** auf **Vorsatz und grobe Fahrlässigkeit** beschränkt. Ergänzend gilt der Haftungsausschluss der MIT-Lizenz.
+
+Nutzung auf eigenes Risiko. Keine Wartungszusage, keine Verfügbarkeitsgarantie, keine Gewähr für Fehlerfreiheit oder Eignung für einen bestimmten Zweck.
+
+Sicherheitsrelevante Vorfälle und Schwachstellen werden über das verbindliche **48-Stunden-SLA** unter `security@open-bricks.org`, `security@ellmos.ai` und `support@lukasgeiger.com` entgegengenommen und innerhalb von 5 Werktagen triagiert.
+
+*This project is an unpaid open-source donation under German law (§§ 516 et seq. BGB). Liability is strictly limited to intent and gross negligence (§ 521 German Civil Code). The MIT license disclaimer applies complementarily. Use at your own risk. No warranty, no maintenance guarantee, no fitness-for-purpose assumed.*
+
+*Security incidents and vulnerabilities are handled under a binding **48-hour response SLA** via `security@open-bricks.org`, `security@ellmos.ai` and `support@lukasgeiger.com` with formal triage within 5 business days.*

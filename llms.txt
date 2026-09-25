@@ -12,7 +12,7 @@ Test gates: `npm test` runs 201 Vitest tests; `npm run test:integration` runs 52
 
 ## Docs
 
-- [README (English)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/README.md): 17-point quick navigation, 23 tools, Target Personas, Comparative Matrix, installation, client configuration, invariants, and partner matrix
+- [README (English)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/README.md): 18-point quick navigation, 23 tools, Target Personas, Comparative Matrix, installation, client configuration, invariants, and partner matrix
 - [README (Deutsch)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/README_de.md): German version with full reciprocal anchor parity
 - [SECURITY (Security Policy)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/SECURITY.md): Bilingual security architecture, 48h SLA response & 5-day triage commitment
 - [THIRD_PARTY_LICENSES](https://github.com/ellmos-ai/ellmos-codecommander-mcp/blob/master/THIRD_PARTY_LICENSES.md): Audited dependency inventory with permissive licenses and security guarantees
@@ -69,4 +69,4 @@ BACH Python runtime import diagnose structural edit indentation checker code gen
 regex tester format conversion markdown PDF MCP
 ```
 
-## Last-checked: 2026-09-20 (296 tests passed: 201 Vitest, 52 MCP stdio integration, 43 i18n assertions)
+## Last-checked: 2026-09-26 (296 tests passed: 201 Vitest, 52 MCP stdio integration, 43 i18n assertions)

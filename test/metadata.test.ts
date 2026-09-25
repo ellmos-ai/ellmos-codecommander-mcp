@@ -14,6 +14,7 @@ type PackageMetadata = {
   license?: string;
   type?: string;
   files?: string[];
+  keywords?: string[];
   repository?: { type: string; url: string };
   bugs?: { url: string };
   homepage?: string;
@@ -131,6 +132,17 @@ describe("project metadata", () => {
     expect(pkg.files).toContain("NOTICE");
   });
 
+  it("verifies package.json keywords saturation and discoverability terms", async () => {
+    const pkg = await readJson<PackageMetadata>("package.json");
+
+    expect(pkg.keywords).toBeDefined();
+    expect(pkg.keywords?.length).toBe(20);
+    expect(pkg.keywords).toContain("local-first");
+    expect(pkg.keywords).toContain("zero-egress");
+    expect(pkg.keywords).toContain("claude");
+    expect(pkg.keywords).toContain("mcp-server");
+  });
+
   it("verifies presence of required core documentation and configuration files", async () => {
     const requiredFiles = [
       "README.md",
@@ -178,7 +190,7 @@ describe("project metadata", () => {
     expect(llms).toContain(`${EXPECTED_TOOL_COUNT} tools`);
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
-    expect(llms).toContain("Last-checked: 2026-09-20");
+    expect(llms).toContain("Last-checked: 2026-09-26");
     expect(llms).toContain("296 tests passed");
     expect(llms).toContain("Zero-Egress");
     expect(llms).toContain("INV-LOCAL-01");
@@ -276,23 +288,28 @@ describe("project metadata", () => {
     }
   });
 
-  it("verifies 17-point quick navigation parity across English and German READMEs", async () => {
+  it("verifies 18-point quick navigation parity and dual reciprocal anchors across English and German READMEs", async () => {
     const readmeEn = await readText("README.md");
     const readmeDe = await readText("README_de.md");
 
     expect(readmeEn).toContain("## Quick Navigation");
     expect(readmeDe).toContain("## Schnellnavigation");
 
-    for (let i = 1; i <= 17; i++) {
+    for (let i = 1; i <= 18; i++) {
       const enItem = `${i}. [`;
       const deItem = `${i}. [`;
       const enHeading = `## ${i}. `;
       const deHeading = `## ${i}. `;
+      const pad = String(i).padStart(2, "0");
 
       expect(readmeEn).toContain(enItem);
       expect(readmeDe).toContain(deItem);
       expect(readmeEn).toContain(enHeading);
       expect(readmeDe).toContain(deHeading);
+      expect(readmeEn).toContain(`id="sec-${pad}"`);
+      expect(readmeDe).toContain(`id="sec-${pad}"`);
+      expect(readmeEn).toContain(`#sec-${pad}`);
+      expect(readmeDe).toContain(`#sec-${pad}`);
     }
 
     expect(readmeEn).toContain('id="target-personas--discoverability"');
@@ -301,11 +318,19 @@ describe("project metadata", () => {
     expect(readmeDe).toContain('id="vergleichsmatrix-gegenueber-alternativen"');
     expect(readmeEn).toContain('id="third-party-licenses--transparency"');
     expect(readmeDe).toContain('id="drittanbieter-lizenzen--transparenz"');
+    expect(readmeEn).toContain('id="statutory-notice--liability"');
+    expect(readmeDe).toContain('id="haftung--liability"');
+    expect(readmeEn).toContain("§ 521 German Civil Code");
+    expect(readmeDe).toContain("§ 521 BGB");
   });
 
   it("verifies target personas and comparative matrix in English and German READMEs", async () => {
     for (const fileName of ["README.md", "README_de.md"]) {
       const content = await readText(fileName);
+      expect(content).toContain("[PERSONA-01]");
+      expect(content).toContain("[PERSONA-02]");
+      expect(content).toContain("[PERSONA-03]");
+      expect(content).toContain("[PERSONA-04]");
       expect(content).toContain("[PERSONA-1]");
       expect(content).toContain("[PERSONA-2]");
       expect(content).toContain("[PERSONA-3]");
@@ -340,7 +365,8 @@ describe("project metadata", () => {
   it("verifies THIRD_PARTY_LICENSES.md inventory, permissive licenses, and security guarantees", async () => {
     const content = await readText("THIRD_PARTY_LICENSES.md");
 
-    expect(content).toContain("Audited:** 2026-09-20");
+    expect(content).toContain("Audited:** 2026-09-26");
+    expect(content).toContain("Stand:** 2026-09-26");
     expect(content).toContain("@modelcontextprotocol/sdk");
     expect(content).toContain("@toon-format/toon");
     expect(content).toContain("^2.3.1");
@@ -361,6 +387,8 @@ describe("project metadata", () => {
     expect(content).toContain("RunAsInvoker");
     expect(content).toContain(".bak");
     expect(content).toContain("Subprocess Isolation");
+    expect(content).toContain("INV-LOCAL-01");
+    expect(content).toContain("INV-SLA-10");
   });
 
   it("verifies MARKETING-LOG.txt personas, search queries, competitive matrix, and invariants", async () => {
@@ -368,6 +396,10 @@ describe("project metadata", () => {
 
     expect(content).toContain("PRODUCT POSITIONING & VALUE PROPOSITION");
     expect(content).toContain("TARGET AUDIENCE & STAKEHOLDER PERSONAS");
+    expect(content).toContain("[PERSONA-01]");
+    expect(content).toContain("[PERSONA-02]");
+    expect(content).toContain("[PERSONA-03]");
+    expect(content).toContain("[PERSONA-04]");
     expect(content).toContain("[PERSONA-1]");
     expect(content).toContain("[PERSONA-2]");
     expect(content).toContain("[PERSONA-3]");
@@ -410,6 +442,8 @@ describe("project metadata", () => {
   it("verifies CHANGELOG.md contains recent Pfad A and Pfad B release entries", async () => {
     const content = await readText("CHANGELOG.md");
 
+    expect(content).toContain("## [Unreleased]");
+    expect(content).toContain("Discoverability, Visual Architecture & 18-Point Bilingual Navigation Parity (Pfad B: 2026-09-26)");
     expect(content).toContain("## [1.3.27] - 2026-09-20");
     expect(content).toContain("Repository Hygiene, CI Hardening & Multi-Host Defense (Pfad A)");
     expect(content).toContain("## [1.3.26] - 2026-09-13");

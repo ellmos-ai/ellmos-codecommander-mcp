@@ -10,7 +10,7 @@
 # Author:       Lukas Geiger
 # License:      MIT
 # Version:      1.3.27
-# Last Updated: 2026-09-20
+# Last Updated: 2026-09-26
 # ==============================================================================
 
 1. PRODUCT POSITIONING & VALUE PROPOSITION
@@ -36,22 +36,22 @@ Key Differentiators:
 
 2. TARGET AUDIENCE & STAKEHOLDER PERSONAS
 ------------------------------------------------------------------------------
-[PERSONA-1] Autonomous AI Coding Agents & LLM Pair-Programmers
+[PERSONA-01] ([PERSONA-1]) Autonomous AI Coding Agents & LLM Pair-Programmers
 - Profile: Agents like Claude Code, Antigravity, Codex, Cursor, and Windsurf performing code refactoring.
 - Pain Point: LLMs generating broken code chunks, losing indentation, causing syntax errors, or hallucinating imports.
 - Solution: AST class/method extraction (cc_extract_classes, cc_analyze_methods), structural edits with unified diffs (cc_python_structural_edit), and PEP 8 import organizing (cc_organize_imports).
 
-[PERSONA-2] Full-Stack & Python/TypeScript Software Engineers
+[PERSONA-02] ([PERSONA-2]) Full-Stack & Python/TypeScript Software Engineers
 - Profile: Developers building complex applications requiring accurate AST analysis and fast format transitions.
 - Pain Point: Manual file conversions across JSON/YAML/TOML/TOON/XML and tedious import dependency tracking.
 - Solution: Deterministic multi-format converter (cc_convert_format), import diagnostics (cc_diagnose_imports, cc_runtime_import_diagnose), and regex testing (cc_regex_test).
 
-[PERSONA-3] Security, QA & Code Governance Engineers
+[PERSONA-03] ([PERSONA-3]) Security, QA & Code Governance Engineers
 - Profile: Security auditors and compliance officers enforcing local-first, unprivileged tool execution.
 - Pain Point: Risk of accidental code corruption, secret leakage, or uncontrolled elevation by AI agent tools.
 - Solution: Zero-Egress architecture, unprivileged user mode (RunAsInvoker), mandatory .bak backups prior to write operations, and isolated subprocess execution.
 
-[PERSONA-4] Open-Source Ecosystem Architects & MCP Tool Developers
+[PERSONA-04] ([PERSONA-4]) Open-Source Ecosystem Architects & MCP Tool Developers
 - Profile: Maintainers building and cataloging MCP servers across Glama, Smithery, and GitHub.
 - Pain Point: Unsynchronized tool manifests, missing third-party license notices, and inconsistent metadata.
 - Solution: 100% parity across package.json, server.json, glama.json, smithery.yaml, llms.txt, and automated contract test validation.
@@ -196,3 +196,21 @@ i18n Multi-Language Support   | English only     | None             | 6 Language
   security patch and certified unprivileged RunAsInvoker non-elevation execution.
 - Automated Contract Tests: test/metadata.test.ts expanded to assert CI workflow timeouts,
   concurrency cancellation, .gitignore lock defense, NOTICE inclusion, and 1.3.27 version parity.
+
+11. AUDIT & RELEASE MILESTONE [Pfad B: 2026-09-26]
+------------------------------------------------------------------------------
+- Release: v1.3.27 (version frozen per T-20260920-167562623)
+- Scope: Pfad B Discoverability, 18-Point Navigation Parity & Level 1 SBOM Invariants
+- Bilingual Documentation: 18-point Quick Navigation established in README.md and README_de.md
+  with reciprocal dual HTML anchor aliases (<a id="sec-01"> .. <a id="sec-18">) and semantic fallbacks.
+- Personas & High-Intent Queries: Formalized [PERSONA-01] to [PERSONA-04] profiles and SEO search phrases.
+- Comparative Matrix: 10-dimension comparison matrix mapping INV-LOCAL-01 through INV-SLA-10.
+- Level 1 SBOM Audit: THIRD_PARTY_LICENSES.md audited to Stand 2026-09-26 with Level 1 SBOM Invariant
+  Cross-Reference Matrix table and unprivileged RunAsInvoker non-elevation certification.
+- Statutory Notice & SLA: Statutory notice under § 521 BGB Gefälligkeitsrecht and binding 48h Security
+  Response SLA codified in Section 18 of both READMEs.
+- Keywords & Saturation: 20 saturated keywords in package.json matching 20/20 GitHub topics.
+- Context Sync: llms.txt synchronized to 18-point navigation, Last-checked 2026-09-26, 296 tests passed.
+- Automated Contract Tests: test/metadata.test.ts expanded to assert 18-point navigation, sec-01..sec-18
+  anchors, personas, § 521 BGB disclaimer, and Stand 2026-09-26 audit recency.
+

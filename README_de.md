@@ -16,9 +16,12 @@
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
 [![Security](https://img.shields.io/badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg)](SECURITY.md)
+[![Security: RunAsInvoker](https://img.shields.io/badge/Security-RunAsInvoker-blue.svg)](SECURITY.md)
 [![Security SLA](https://img.shields.io/badge/security-48h%20Response%20%7C%205d%20Triage-blue.svg)](SECURITY.md)
 [![Third-Party Audited](https://img.shields.io/badge/third--party-audited-success.svg)](THIRD_PARTY_LICENSES.md)
 [![Marketing Log](https://img.shields.io/badge/marketing-audited-blueviolet.svg)](MARKETING-LOG.txt)
+[![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
+[![Verified: 2026-09-26](https://img.shields.io/badge/Verified-2026--09--26-success.svg)](CHANGELOG.md)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -36,26 +39,28 @@ Ein entwicklerfokussierter **Model Context Protocol (MCP) Server**, der KI-Assis
 
 ## Schnellnavigation
 
-1. [Übersicht & Highlights](#1-übersicht--highlights)
-2. [Zielgruppen & Auffindbarkeit](#2-zielgruppen--auffindbarkeit)
-3. [Vergleichsmatrix gegenüber Alternativen](#3-vergleichsmatrix-gegenüber-alternativen)
-4. [Architektur & Systemübersicht](#4-architektur--systemübersicht)
-5. [Sicherer struktureller Edit-Lebenszyklus](#5-sicherer-struktureller-edit-lebenszyklus)
-6. [Governance & Laufzeit-Invarianten](#6-governance--laufzeit-invarianten)
-7. [Entwickler-Toolsuite (23 Tools)](#7-entwickler-toolsuite-23-tools)
-8. [Geteilte Werkzeuge mit FileCommander](#8-geteilte-werkzeuge-mit-filecommander)
-9. [Installation & Schnellstart](#9-installation--schnellstart)
-10. [Konfiguration & MCP-Client-Einrichtung](#10-konfiguration--mcp-client-einrichtung)
-11. [Mehrsprachigkeit & Lokalisierung (i18n)](#11-mehrsprachigkeit--lokalisierung-i18n)
-12. [Entwicklung & Qualitätssicherung](#12-entwicklung--qualitätssicherung)
-13. [Geschwister-Ökosystem & Partner-Matrix](#13-geschwister-ökosystem--partner-matrix)
-14. [Drittanbieter-Lizenzen & Transparenz](#14-drittanbieter-lizenzen--transparenz)
-15. [Sicherheitsrichtlinie & Reaktions-SLA](#15-sicherheitsrichtlinie--reaktions-sla)
-16. [Änderungsprotokoll & Versionshistorie](#16-änderungsprotokoll--versionshistorie)
-17. [Lizenz & Haftungsausschluss](#17-lizenz--haftungsausschluss)
+1. [Übersicht & Highlights](#sec-01)
+2. [Zielgruppen & Auffindbarkeit](#sec-02)
+3. [Vergleichsmatrix gegenüber Alternativen](#sec-03)
+4. [Architektur & Systemübersicht](#sec-04)
+5. [Sicherer struktureller Edit-Lebenszyklus](#sec-05)
+6. [Governance & Laufzeit-Invarianten](#sec-06)
+7. [Entwickler-Toolsuite (23 Tools)](#sec-07)
+8. [Geteilte Werkzeuge mit FileCommander](#sec-08)
+9. [Installation & Schnellstart](#sec-09)
+10. [Konfiguration & MCP-Client-Einrichtung](#sec-10)
+11. [Mehrsprachigkeit & Lokalisierung (i18n)](#sec-11)
+12. [Entwicklung & Qualitätssicherung](#sec-12)
+13. [Geschwister-Ökosystem & Partner-Matrix](#sec-13)
+14. [Drittanbieter-Lizenzen & Transparenz](#sec-14)
+15. [Sicherheitsrichtlinie & Reaktions-SLA](#sec-15)
+16. [Änderungsprotokoll & Versionshistorie](#sec-16)
+17. [Lizenz & Rechtliche Zuschreibung](#sec-17)
+18. [Gesetzlicher Hinweis, Haftungsbeschränkung & SLA (§ 521 BGB)](#sec-18)
 
 ---
 
+<a id="sec-01"></a><a id="1-uebersicht--highlights"></a><a id="übersicht--highlights"></a><a id="uebersicht--highlights"></a><a id="übersicht"></a>
 ## 1. Übersicht & Highlights
 
 Während FileCommander Dateisystemoperationen und Systemprozesse abdeckt, konzentriert sich CodeCommander auf **Code-Intelligenz und Entwickler-Präzision**:
@@ -74,28 +79,29 @@ Während FileCommander Dateisystemoperationen und Systemprozesse abdeckt, konzen
 
 ---
 
-## 2. Zielgruppen & Auffindbarkeit <a id="zielgruppen--auffindbarkeit"></a>
+<a id="sec-02"></a><a id="2-zielgruppen--auffindbarkeit"></a><a id="zielgruppen--auffindbarkeit"></a><a id="target-personas--discoverability"></a>
+## 2. Zielgruppen & Auffindbarkeit
 
 CodeCommander MCP wurde gezielt entwickelt, um zentrale Engpässe moderner autonomer KI-Coding-Agenten, lokaler Multi-Agenten-Schwärme und sicherheitskonformer Entwickler-Umgebungen zu lösen:
 
 ### Zielgruppen & Stakeholder-Personas
 
-- **`[PERSONA-1]` Autonome KI-Coding-Agenten & LLM-Pair-Programmer**
+- **`[PERSONA-01]` (`[PERSONA-1]`) Autonome KI-Coding-Agenten & LLM-Pair-Programmer**
   - **Profil:** Agenten wie Claude Code, Antigravity, Codex, Cursor und Windsurf, die selbstständige Code-Refactorings, Bugfixes, Test-Reparaturen und Feature-Erweiterungen durchführen.
   - **Problem:** LLM-Codeausgaben leiden häufig unter halluzinierten Importen, fehlerhafter Einrückung in verschachtelten Python-Blöcken, Syntaxbeschädigungen bei naiven Chunk-Edits oder ungültigem JSON.
   - **Lösung:** Native AST-Extraktion (`cc_extract_classes`, `cc_analyze_methods`), vorschau-sichere strukturelle Edits mit Unified Diff (`cc_python_structural_edit`), automatische Einrückungsprüfung (`cc_check_indentation`) und deterministische JSON-Reparatur (`cc_fix_json`).
 
-- **`[PERSONA-2]` Full-Stack- & Python/TypeScript-Software-Entwickler**
+- **`[PERSONA-02]` (`[PERSONA-2]`) Full-Stack- & Python/TypeScript-Software-Entwickler**
   - **Profil:** Entwickler polyglotter Microservices, CLI-Werkzeuge und Datenpipelines mit Bedarf an sprachübergreifender AST-Analyse und schnellen Konfigurationswechseln.
   - **Problem:** Mühsame manuelle Formatkonvertierungen (JSON ↔ YAML ↔ TOML ↔ TOON ↔ XML), zerschossene deutsche Umlaute oder Mojibake aus Altsystemen sowie zirkuläre Laufzeit-Importe.
   - **Lösung:** Universeller Formatkonverter (`cc_convert_format`), verlustfreie Encoding- und Umlaut-Reparatur (`cc_fix_encoding`, `cc_fix_umlauts`), isolierte Laufzeit-Importdiagnose (`cc_runtime_import_diagnose`) und interaktive Regex-Testwerkbank (`cc_regex_test`).
 
-- **`[PERSONA-3]` Enterprise AI Safety, SecOps & Code-Governance-Beauftragte**
+- **`[PERSONA-03]` (`[PERSONA-3]`) Enterprise AI Safety, SecOps & Code-Governance-Beauftragte**
   - **Profil:** Sicherheitsprüfer, Compliance-Ingenieure und Enterprise-Architekten, die MCP-Toolchains für Entwickler-Workstations und CI/CD-Runner auditieren.
   - **Problem:** Risiko von Code-Abfluss über Cloud-Telemetrie, unkontrollierte Prozess-Privilegien oder zerstörerische Dateimodifikationen durch KI-Assistenten.
   - **Lösung:** 100% Zero-Egress lokaler stdio-Transport (`INV-LOCAL-01`), unprivilegierte Ausführung (`INV-SEC-02`), zwingende `.bak`-Backups vor Modifikationen (`INV-BAK-04`), Dry-Run-Vorschau-Sicherheit (`INV-PREV-03`) und isolierte Subprozess-Timeouts (`INV-ISOL-05`).
 
-- **`[PERSONA-4]` Open-Source-Ökosystem-Architekten & MCP-Tool-Entwickler**
+- **`[PERSONA-04]` (`[PERSONA-4]`) Open-Source-Ökosystem-Architekten & MCP-Tool-Entwickler**
   - **Profil:** Maintainer, die MCP-Server über Glama, Smithery, npm und GitHub veröffentlichen und distribuieren.
   - **Problem:** Fragmentierte Verzeichnis-Manifeste, fehlende Drittanbieter-Lizenznachweise und mangelnder maschinenlesbarer Kontext für KI-Crawler.
   - **Lösung:** 100% Manifest-Parität über `package.json`, `server.json`, `glama.json`, `smithery.yaml` und `llms.txt`, abgesichert durch automatisierte Vertragstests und ein vollständiges Open-Source-Lizenzinventar (`THIRD_PARTY_LICENSES.md`).
@@ -115,7 +121,8 @@ CodeCommander MCP wurde gezielt entwickelt, um zentrale Engpässe moderner auton
 
 ---
 
-## 3. Vergleichsmatrix gegenüber Alternativen <a id="vergleichsmatrix-gegenueber-alternativen"></a>
+<a id="sec-03"></a><a id="3-vergleichsmatrix-gegenueber-alternativen"></a><a id="vergleichsmatrix-gegenueber-alternativen"></a><a id="vergleichsmatrix-gegenüber-alternativen"></a><a id="comparative-matrix-vs-alternatives"></a>
+## 3. Vergleichsmatrix gegenüber Alternativen
 
 Die folgende Matrix vergleicht CodeCommander MCP mit alternativen Entwickler-Werkzeugen über 10 kritische Dimensionen:
 
@@ -134,6 +141,7 @@ Die folgende Matrix vergleicht CodeCommander MCP mit alternativen Entwickler-Wer
 
 ---
 
+<a id="sec-04"></a><a id="4-architektur--systemuebersicht"></a><a id="architektur--systemuebersicht"></a><a id="architektur--systemübersicht"></a><a id="architektur"></a>
 ## 4. Architektur & Systemübersicht
 
 ```mermaid
@@ -191,6 +199,7 @@ graph TD
 
 ---
 
+<a id="sec-05"></a><a id="5-sicherer-struktureller-edit-lebenszyklus"></a><a id="sicherer-struktureller-edit-lebenszyklus"></a><a id="safe-structural-edit-lifecycle"></a>
 ## 5. Sicherer struktureller Edit-Lebenszyklus
 
 ```mermaid
@@ -223,6 +232,7 @@ sequenceDiagram
 
 ---
 
+<a id="sec-06"></a><a id="6-governance--laufzeit-invarianten"></a><a id="governance--laufzeit-invarianten"></a><a id="governance-invariants"></a><a id="governance--runtime-invariants"></a>
 ## 6. Governance & Laufzeit-Invarianten
 
 `ellmos-codecommander-mcp` garantiert 10 fundamentale architektonische und Laufzeit-Invarianten über alle Betriebssysteme hinweg:
@@ -242,6 +252,7 @@ sequenceDiagram
 
 ---
 
+<a id="sec-07"></a><a id="7-entwickler-toolsuite-23-tools"></a><a id="entwickler-toolsuite-23-tools"></a><a id="tools"></a><a id="tool-suite"></a>
 ## 7. Entwickler-Toolsuite (23 Tools)
 
 ### Code-Analyse (3 Tools)
@@ -321,6 +332,7 @@ sequenceDiagram
 
 ---
 
+<a id="sec-08"></a><a id="8-geteilte-werkzeuge-mit-filecommander"></a><a id="geteilte-werkzeuge-mit-filecommander"></a><a id="shared-tools"></a>
 ## 8. Geteilte Werkzeuge mit FileCommander
 
 7 Werkzeuge sind zwecks maximalem Nutzungskomfort sowohl in FileCommander als auch in CodeCommander verfügbar:
@@ -339,6 +351,7 @@ Alle Tools in CodeCommander nutzen das `cc_`-Präfix, um eine konfliktfreie Koex
 
 ---
 
+<a id="sec-09"></a><a id="9-installation--schnellstart"></a><a id="installation--schnellstart"></a><a id="installation"></a>
 ## 9. Installation & Schnellstart
 
 ### Voraussetzungen
@@ -363,6 +376,7 @@ npm run build
 
 ---
 
+<a id="sec-10"></a><a id="10-konfiguration--mcp-client-einrichtung"></a><a id="konfiguration--mcp-client-einrichtung"></a><a id="configuration"></a>
 ## 10. Konfiguration & MCP-Client-Einrichtung
 
 ### Claude Desktop
@@ -416,6 +430,7 @@ FileCommander und CodeCommander können problemlos gleichzeitig betrieben werden
 
 ---
 
+<a id="sec-11"></a><a id="11-mehrsprachigkeit--lokalisierung-i18n"></a><a id="mehrsprachigkeit--lokalisierung-i18n"></a><a id="i18n"></a>
 ## 11. Mehrsprachigkeit & Lokalisierung (i18n)
 
 CodeCommander unterstützt 6 Sprachen nativ für alle Toolbeschreibungen, Hinweistexte und Diagnosemeldungen:
@@ -430,6 +445,7 @@ CodeCommander unterstützt 6 Sprachen nativ für alle Toolbeschreibungen, Hinwei
 
 ---
 
+<a id="sec-12"></a><a id="12-entwicklung--qualitaetssicherung"></a><a id="entwicklung--qualitaetssicherung"></a><a id="entwicklung--qualitätssicherung"></a><a id="development"></a><a id="testing"></a>
 ## 12. Entwicklung & Qualitätssicherung
 
 ```bash
@@ -447,6 +463,7 @@ Die Test-Gates sind getrennt und laufen in der CI auf **Ubuntu**, **macOS** und 
 
 ---
 
+<a id="sec-13"></a><a id="13-geschwister-oekosystem--partner-matrix"></a><a id="geschwister-oekosystem--partner-matrix"></a><a id="geschwister-ökosystem--partner-matrix"></a><a id="ecosystem"></a>
 ## 13. Geschwister-Ökosystem & Partner-Matrix
 
 Teil der Familie lokaler Open-Source-Tools von **[ellmos-ai](https://github.com/ellmos-ai)** und **[open-bricks](https://github.com/open-bricks)**:
@@ -483,7 +500,8 @@ Teil der Familie lokaler Open-Source-Tools von **[ellmos-ai](https://github.com/
 
 ---
 
-## 14. Drittanbieter-Lizenzen & Transparenz <a id="drittanbieter-lizenzen--transparenz"></a>
+<a id="sec-14"></a><a id="14-drittanbieter-lizenzen--transparenz"></a><a id="drittanbieter-lizenzen--transparenz"></a><a id="third-party-licenses--transparency"></a>
+## 14. Drittanbieter-Lizenzen & Transparenz
 
 Dieses Projekt befolgt strenge Open-Source-Transparenzstandards:
 - Alle Laufzeit- und Entwicklungsabhängigkeiten sind in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) auditiert.
@@ -494,6 +512,7 @@ Dieses Projekt befolgt strenge Open-Source-Transparenzstandards:
 
 ---
 
+<a id="sec-15"></a><a id="15-sicherheitsrichtlinie--reaktions-sla"></a><a id="sicherheitsrichtlinie--reaktions-sla"></a><a id="security"></a>
 ## 15. Sicherheitsrichtlinie & Reaktions-SLA
 
 Bitte beachten Sie [SECURITY.md](SECURITY.md) für detaillierte Hinweise zur Sicherheitsarchitektur und Meldung von Schwachstellen.
@@ -505,16 +524,31 @@ Bitte beachten Sie [SECURITY.md](SECURITY.md) für detaillierte Hinweise zur Sic
 
 ---
 
+<a id="sec-16"></a><a id="16-aenderungsprotokoll--versionshistorie"></a><a id="aenderungsprotokoll--versionshistorie"></a><a id="änderungsprotokoll--versionshistorie"></a><a id="changelog"></a>
 ## 16. Änderungsprotokoll & Versionshistorie
 
 Siehe [CHANGELOG.md](CHANGELOG.md) für detaillierte Versionshinweise.
 
 ---
 
-## 17. Lizenz & Haftungsausschluss
+<a id="sec-17"></a><a id="17-lizenz--rechtliche-zuschreibung"></a><a id="lizenz--rechtliche-zuschreibung"></a><a id="lizenz"></a>
+## 17. Lizenz & Rechtliche Zuschreibung
 
 Lizenziert unter der [MIT-Lizenz](LICENSE) — Copyright © 2026 Lukas Geiger ([ellmos-ai](https://github.com/ellmos-ai)).
 
-Dieses Projekt ist eine **unentgeltliche Open-Source-Schenkung** im Sinne der §§ 516 ff. BGB. Die Haftung des Urhebers ist gemäß **§ 521 BGB** auf **Vorsatz und grobe Fahrlässigkeit** beschränkt. Ergänzend gilt der Haftungsausschluss der MIT-Lizenz. Nutzung auf eigenes Risiko. Keine Wartungszusage, keine Verfügbarkeitsgarantie, keine Gewähr für Fehlerfreiheit oder Eignung für einen bestimmten Zweck.
+Siehe [`NOTICE`](NOTICE) für die open-bricks-Dachzuschreibung und [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) für das Level-1-SBOM-Invarianten-Inventar.
 
-*This project is an unpaid open-source donation under German law. Liability is limited to intent and gross negligence (§ 521 German Civil Code), supplemented by the MIT License warranty disclaimer. Use at your own risk.*
+---
+
+<a id="sec-18"></a><a id="18-gesetzlicher-hinweis-haftungsbeschraenkung--sla-521-bgb"></a><a id="gesetzlicher-hinweis--haftungsbeschraenkung--sla"></a><a id="gesetzlicher-hinweis--haftungsbeschränkung--sla"></a><a id="haftung--liability"></a><a id="haftung"></a>
+## 18. Gesetzlicher Hinweis, Haftungsbeschränkung & SLA (§ 521 BGB)
+
+Dieses Projekt ist eine **unentgeltliche Open-Source-Schenkung** im Sinne der §§ 516 ff. BGB (Gefälligkeitsrecht). Die Haftung des Urhebers und der Mitwirkenden ist gemäß **§ 521 BGB** auf **Vorsatz und grobe Fahrlässigkeit** beschränkt. Ergänzend gilt der Haftungsausschluss der MIT-Lizenz.
+
+Nutzung auf eigenes Risiko. Keine Wartungszusage, keine Verfügbarkeitsgarantie, keine Gewähr für Fehlerfreiheit oder Eignung für einen bestimmten Zweck.
+
+Sicherheitsrelevante Vorfälle und Schwachstellen werden über das verbindliche **48-Stunden-SLA** unter `security@open-bricks.org`, `security@ellmos.ai` und `support@lukasgeiger.com` entgegengenommen und innerhalb von 5 Werktagen triagiert.
+
+*This project is an unpaid open-source donation under German law (§§ 516 et seq. BGB). Liability is strictly limited to intent and gross negligence (§ 521 German Civil Code). The MIT license disclaimer applies complementarily. Use at your own risk. No warranty, no maintenance guarantee, no fitness-for-purpose assumed.*
+
+*Security incidents and vulnerabilities are handled under a binding **48-hour response SLA** via `security@open-bricks.org`, `security@ellmos.ai` and `support@lukasgeiger.com` with formal triage within 5 business days.*
