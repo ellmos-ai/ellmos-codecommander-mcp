@@ -65,7 +65,7 @@ The following tools are used exclusively for building, testing, linting, and ver
 | Package | Version Range | License | Project URL | Purpose |
 | :--- | :--- | :--- | :--- | :--- |
 | [`typescript`](https://github.com/microsoft/TypeScript) | `^5.3.3` | Apache-2.0 | [GitHub](https://github.com/microsoft/TypeScript) | TypeScript compiler (`tsc`) for strict static typing and compilation |
-| [`vitest`](https://github.com/vitest-dev/vitest) | `^3.2.6` | MIT | [GitHub](https://github.com/vitest-dev/vitest) | Fast unit and contract testing framework |
+| [`vitest`](https://github.com/vitest-dev/vitest) | `^4.1.11` | MIT | [GitHub](https://github.com/vitest-dev/vitest) | Fast unit and contract testing framework |
 | [`@types/node`](https://github.com/DefinitelyTyped/DefinitelyTyped) | `^20.11.0` | MIT | [GitHub](https://github.com/DefinitelyTyped/DefinitelyTyped) | Type definitions for Node.js runtime APIs |
 | [`@types/js-yaml`](https://github.com/DefinitelyTyped/DefinitelyTyped) | `^4.0.9` | MIT | [GitHub](https://github.com/DefinitelyTyped/DefinitelyTyped) | Type definitions for `js-yaml` library |
 | [`@emnapi/core`](https://github.com/toyobayashi/emnapi) | `^1.10.0` | MIT | [GitHub](https://github.com/toyobayashi/emnapi) | Emscripten N-API implementation helper |
