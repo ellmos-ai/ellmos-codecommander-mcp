@@ -21,6 +21,7 @@
     "smithery.yaml",
     "llms.txt",
     "THIRD_PARTY_LICENSES.md",
+    "THIRD_PARTY_LICENSES.txt",
     "MARKETING-LOG.txt"
   ],
   "scripts": {

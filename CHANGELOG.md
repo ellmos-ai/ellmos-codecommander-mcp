@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Repository Lifecycle Hardening, Plain-Text SBOM Companion & Multi-Host Defense (Pfad A: 2026-09-29)
+- **Level 1 SBOM Plain-Text Companion (`THIRD_PARTY_LICENSES.txt`):** Created plain-text companion file covering core runtime dependencies, transitive override packages, development and testing tooling, and explicit confirmation of all 10 Governance and Runtime Invariants (`INV-LOCAL-01` through `INV-SLA-10`) under unprivileged `RunAsInvoker` user-mode execution; whitelisted in `package.json` `files` array.
+- **Level 1 SBOM Stand 2026-09-29 Re-Audit (`THIRD_PARTY_LICENSES.md`):** Updated SBOM audit timestamp to `Audited: 2026-09-29` | `Stand: 2026-09-29`, re-certifying patched Vitest 4.1.11 (GHSA-82fw-gwwq-j7x9 fix), `@toon-format/toon` 2.3.1 prototype-pollution fix, zero viral copyleft dependencies, and 100% Zero-Egress local-first stdio architecture.
+- **CI Lifecycle Workflow Hardening (`stale.yml`):** Added concurrency group with `cancel-in-progress: true` to `.github/workflows/stale.yml` to prevent duplicate workflow executions.
+- **Multi-Host Lock & Cloud-Sync Defense (`.gitignore`):** Hardened against multi-host tokens (`*-IDEAPAD*`, `*_WORKSTATION*`, `*_WORKSTATION-LG*`, `*-WORKSTATION.*`, `*-WORKSTATION-LG.*`), canonical lock-system files (`LOCK.user.*`, `LOCK.until.*`, `LOCK.condition.*`, `.automation-lock`), Windows shell artifacts (`Desktop.ini`, `desktop.ini`), and Pytest test caches (`.pytest_temp/`, `.pytest_tmp*/`).
+- **Attribution & Notice Alignment (`NOTICE`):** Updated canonical notice to reference `THIRD_PARTY_LICENSES.txt` plain-text companion.
+- **Discovery Index & Documentation Sync (`llms.txt`, `README.md`, `README_de.md`):** Synchronized documentation badges, verified status, and context manifest to `Last-checked: 2026-09-29` and verified passing test surface.
+- **Automated Contract Tests Expansion (`test/metadata.test.ts`):** Added new contract test assertions validating `THIRD_PARTY_LICENSES.txt` existence, packaging whitelist inclusion, SBOM invariant confirmation, `.gitignore` extended multi-host tokens, and `stale.yml` concurrency configuration.
+- **Strict Version Freeze Discipline:** Version 1.3.27 strictly maintained unchanged per T-20260920-167562623.
+
 ### Discoverability, Visual Architecture & 18-Point Bilingual Navigation Parity (Pfad B: 2026-09-26)
 - **18-Point Bilingual Navigation Parity & Dual Reciprocal Anchors:**
   - Synchronized comprehensive 18-point navigation structure across English (`README.md`) and German (`README_de.md`) documentation with reciprocal `<a id="sec-01">` .. `<a id="sec-18">` HTML anchor aliases and semantic fallbacks.

@@ -40,17 +40,26 @@ LOCK.permissions.json
 *.sync-temp-*
 *-WORKSTATION*
 *-WORKSTATION-LG*
+*_WORKSTATION*
+*_WORKSTATION-LG*
+*-WORKSTATION.*
+*-WORKSTATION-LG.*
 *-LAPTOP*
 *-ASUS*
 *-ASUS-GEI*
 *-Mac Studio*
 *-MacBook*
+*-IDEAPAD*
+Desktop.ini
+desktop.ini
 
 # Test- & Coverage-Artefakte / Caches
 .coverage*
 coverage/
 .nyc_output/
 .pytest_cache/
+.pytest_temp/
+.pytest_tmp*/
 .mypy_cache/
 .hypothesis/
 .turbo/

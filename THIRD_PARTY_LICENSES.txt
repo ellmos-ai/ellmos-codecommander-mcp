@@ -1,0 +1,77 @@
+# Third-Party Licenses & Level 1 SBOM
+
+Last checked: 2026-09-29 against npm metadata.
+Audited: Stand: 2026-09-29 against Level 1 SBOM and runtime invariants.
+
+Scope: direct runtime dependencies declared in `package.json`, transitive
+overrides, and development/testing tooling. This inventory provides a direct
+dependency review and Level 1 SBOM affirmation, complementing the markdown
+review in `THIRD_PARTY_LICENSES.md`.
+
+## Project License & Attribution
+
+ellmos-codecommander-mcp is licensed under the MIT License.
+Canonical copyright attribution is maintained in `NOTICE`:
+Copyright (c) 2026 Lukas Geiger, ellmos-ai family under open-bricks umbrella.
+
+## Architecture & Security Invariants
+
+- 100% Local-First & Zero Cloud Egress (Stdio JSON-RPC transport)
+- Unprivileged User-Mode Execution: RunAsInvoker Non-Elevation
+- Preview-Safe Mutations & Mandatory .bak Backups
+- Subprocess Isolation with Hard Execution Timeouts
+- Zero-Copyleft & 100% Permissive Open-Source Licensing
+- Level 1 SBOM mapping invariants INV-LOCAL-01 to INV-SLA-10 (verified)
+
+## Core Runtime Dependencies
+
+| Package | Ecosystem | Version / Range | License | Role & Purpose |
+|---|---|---:|---|---|
+| @modelcontextprotocol/sdk | Node / npm | ^1.0.0 | MIT | Model Context Protocol TypeScript SDK (stdio transport, JSON-RPC handling) |
+| @toon-format/toon | Node / npm | ^2.3.1 | MIT | Token-Oriented Object Notation serializer and parser for LLM-optimized exchange |
+| fast-xml-parser | Node / npm | ^5.8.0 | MIT | High-performance XML parser, validator, and builder for format conversions |
+| js-yaml | Node / npm | ^4.3.1 | MIT | JavaScript YAML parser and dumper for cc_convert_format operations |
+| smol-toml | Node / npm | ^1.6.0 | BSD-3-Clause | Fast, specification-compliant TOML parser and serializer |
+| update-notifier | Node / npm | ^7.3.1 | BSD-2-Clause | Non-intrusive interactive CLI update notification (suppressed in stdio) |
+| zod | Node / npm | ^3.23.8 | MIT | TypeScript-first schema declaration and input validation with static inference |
+
+## Transitive & Managed Override Dependencies
+
+| Package | Ecosystem | Version / Range | License | Role & Purpose |
+|---|---|---:|---|---|
+| hono | Node / npm | ^4.13.0 | MIT | Web standard HTTP router primitives used transitively |
+| @hono/node-server | Node / npm | ^2.0.5 | MIT | Node.js adapter for Hono HTTP interfaces |
+| nanoid | Node / npm | ^3.3.17 | MIT | Secure, URL-friendly unique string ID generator |
+| fast-uri | Node / npm | ^3.1.5 | BSD-3-Clause | RFC 3986 URI parsing and formatting |
+| express-rate-limit | Node / npm | ^8.6.2 | MIT | Rate limiting middleware component |
+| ip-address | Node / npm | ^10.4.0 | MIT | IPv4 and IPv6 validation and parsing library |
+| fast-xml-builder | Node / npm | ^1.1.7 | MIT | XML serialization companion library |
+| qs | Node / npm | ^6.15.2 | BSD-3-Clause | Query string parsing and stringification |
+| postcss | Node / npm | ^8.5.18 | MIT | CSS parsing and transformation pipeline |
+
+## Development & Test Tooling
+
+| Package | Ecosystem | Version / Range | License | Role & Purpose |
+|---|---|---:|---|---|
+| typescript | Node / npm | ^5.3.3 | Apache-2.0 | TypeScript compiler (tsc) for strict static typing and compilation |
+| vitest | Node / npm | ^4.1.11 | MIT | Fast unit and contract testing framework (v4.1.11 security patch) |
+| @types/node | Node / npm | ^20.11.0 | MIT | Type definitions for Node.js runtime APIs |
+| @types/js-yaml | Node / npm | ^4.0.9 | MIT | Type definitions for js-yaml library |
+| @emnapi/core | Node / npm | ^1.10.0 | MIT | Emscripten N-API implementation helper |
+| @emnapi/runtime | Node / npm | ^1.10.0 | MIT | Emscripten N-API runtime support |
+
+## Level 1 SBOM Invariant Verification (Stand: 2026-09-29)
+
+All 10 architectural and runtime governance invariants are confirmed:
+- INV-LOCAL-01: Zero-Egress Privacy (100% offline local stdio JSON-RPC transport; zero telemetry, zero analytics, zero external network egress)
+- INV-SEC-02: Unprivileged Execution (Runs strictly in user space as RunAsInvoker; zero administrative elevation or root privileges requested)
+- INV-PREV-03: Preview Safety (Structural Python edits default to non-mutating preview mode emitting unified diffs without file writes)
+- INV-BAK-04: Mandatory Backups (In-place file mutations automatically generate timestamped .bak backup copies before writing to disk)
+- INV-ISOL-05: Subprocess Isolation (Runtime Python import diagnostics execute in isolated child processes with hard timeouts)
+- INV-GATE-06: Explicit Language Gates (Python-only tools explicitly reject non-.py files; JS/TS analysis is read-only and dependency-free)
+- INV-ENC-07: Non-Destructive Encoding (Repairs 27+ Mojibake patterns, 70+ German umlaut corruptions, and normalizes UTF-8 without data loss)
+- INV-FMT-08: Lossless Format Parity (Roundtrip format conversion across JSON, CSV, INI, YAML, TOML, XML, and TOON preserving types and schemas)
+- INV-I18N-09: Dynamic Multi-Language (Full runtime i18n across 6 languages EN, DE, ES, ZH, JA, RU via cc_set_language and cc_get_language)
+- INV-SLA-10: 48h Response / 5d Triage SLA (Multi-OS CI Ubuntu, Windows, macOS across Node 20, 22, 24 and binding 48h vulnerability response SLA)
+
+Refer to `THIRD_PARTY_LICENSES.md` for full cross-reference matrix and component analyses.

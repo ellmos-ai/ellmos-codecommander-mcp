@@ -11,7 +11,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CI Tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Tests](https://img.shields.io/badge/tests-296%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
+[![Tests](https://img.shields.io/badge/tests-299%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
@@ -21,7 +21,7 @@
 [![Third-Party Audited](https://img.shields.io/badge/third--party-audited-success.svg)](THIRD_PARTY_LICENSES.md)
 [![Marketing Log](https://img.shields.io/badge/marketing-audited-blueviolet.svg)](MARKETING-LOG.txt)
 [![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
-[![Verified: 2026-09-26](https://img.shields.io/badge/Verified-2026--09--26-success.svg)](CHANGELOG.md)
+[![Verified: 2026-09-29](https://img.shields.io/badge/Verified-2026--09--29-success.svg)](CHANGELOG.md)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -504,7 +504,7 @@ Teil der Familie lokaler Open-Source-Tools von **[ellmos-ai](https://github.com/
 ## 14. Drittanbieter-Lizenzen & Transparenz
 
 Dieses Projekt befolgt strenge Open-Source-Transparenzstandards:
-- Alle Laufzeit- und Entwicklungsabhängigkeiten sind in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) auditiert.
+- Alle Laufzeit- und Entwicklungsabhängigkeiten sind in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) sowie der Plain-Text-Begleitdatei [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt) auditiert.
 - Der aktuelle Produktionsabhängigkeits-Audit (`npm audit --omit=dev --json`, geprüft am 20.09.2026) meldet 5 verwundbare Paketknoten (3 hoch, 2 mittel); die Behebung ist in TASKPLAN #2198 erfasst.
 - Ausschließliche Verwendung permissiver Open-Source-Lizenzen (**MIT**, **BSD-2-Clause**, **BSD-3-Clause**, **Apache-2.0**).
 - Vollständige Zielgruppenanalysen, Personas und Marketingmetriken sind in [`MARKETING-LOG.txt`](MARKETING-LOG.txt) hinterlegt.
@@ -536,7 +536,7 @@ Siehe [CHANGELOG.md](CHANGELOG.md) für detaillierte Versionshinweise.
 
 Lizenziert unter der [MIT-Lizenz](LICENSE) — Copyright © 2026 Lukas Geiger ([ellmos-ai](https://github.com/ellmos-ai)).
 
-Siehe [`NOTICE`](NOTICE) für die open-bricks-Dachzuschreibung und [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) für das Level-1-SBOM-Invarianten-Inventar.
+Siehe [`NOTICE`](NOTICE) für die open-bricks-Dachzuschreibung und [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) / [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt) für das Level-1-SBOM-Invarianten-Inventar.
 
 ---
 
