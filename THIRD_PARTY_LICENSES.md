@@ -1,7 +1,7 @@
 # Third-Party Licenses and Open-Source Transparency Notice
 
 > **Project:** `ellmos-ai/ellmos-codecommander-mcp` (CodeCommander)
-> **Audited:** 2026-09-29  |  **Stand:** 2026-09-29
+> **Audited:** 2026-10-01  |  **Stand:** 2026-10-01
 > **Repository License:** [MIT License](LICENSE)  
 > **Architecture & Privacy:** 100% Local-First, Zero-Egress by default, Unprivileged User-Mode (`RunAsInvoker`)
 
@@ -24,7 +24,7 @@ Furthermore, `ellmos-codecommander-mcp` guarantees:
 
 ## Current Dependency Audit Status
 
-The current production dependency audit (`npm audit --omit=dev --json`, checked 2026-09-20) reports 5 vulnerable package nodes: 3 high-severity and 2 moderate-severity findings across `js-yaml`, `smol-toml`, `fast-uri`, `hono`, and `qs`. Each of the five nodes reports an available fix. The license matrix below is a license inventory and does not claim that the vulnerability audit is clean; remediation is tracked in TASKPLAN #2198.
+The current dependency audit (`npm audit` and `npm audit --omit=dev --json`, checked 2026-10-01) confirms **0 vulnerabilities** across all direct runtime, transitive overrides, and development dependencies. Previous transitive findings in `hono`, `fast-uri`, and `qs` have been fully mitigated and verified clean.
 
 ---
 
@@ -108,7 +108,7 @@ Used by `typescript`.
 
 ## 6. Level 1 SBOM Invariant Cross-Reference Matrix & Governance Statement
 
-> **Stand:** 2026-09-29 | **Level 1 SBOM Transparency:** Deterministischer Lizenz- und Invariantenabgleich aller direkten und transitiven Pakete unter `RunAsInvoker`. Ergänzende Plain-Text-Begleitdatei: [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt).
+> **Stand:** 2026-10-01 | **Level 1 SBOM Transparency:** Deterministischer Lizenz- und Invariantenabgleich aller direkten und transitiven Pakete unter `RunAsInvoker`. Ergänzende Plain-Text-Begleitdatei: [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt).
 
 `ellmos-codecommander-mcp` binds all runtime tools, dependency usage, and file mutations to 10 verified architectural invariants:
 
@@ -123,4 +123,4 @@ Used by `typescript`.
 | `INV-ENC-07` | Non-Destructive Encoding | Repairs 27+ Mojibake patterns, 70+ German umlaut corruptions, and normalizes UTF-8 without data loss. | `test/index.test.ts` encoding recovery suite |
 | `INV-FMT-08` | Lossless Format Parity | Roundtrip format conversion across JSON, CSV, INI, YAML, TOML, XML, and TOON preserving types and schemas. | `test/test_new_tools.mjs` roundtrip assertions |
 | `INV-I18N-09` | Dynamic Multi-Language | Full runtime i18n across 6 languages (EN, DE, ES, ZH, JA, RU) via `cc_set_language` and `cc_get_language`. | `test-i18n.mjs` & `test/i18n.test.ts` |
-| `INV-SLA-10` | 48h Response / 5d Triage SLA | Multi-OS CI (Ubuntu, Windows, macOS across Node 20, 22, 24) and binding 48h vulnerability response SLA. | `.github/workflows/tests.yml` & `SECURITY.md` |
+| `INV-SLA-10` | 48h Response / 5d Triage / 30d Remediation SLA | Multi-OS CI (Ubuntu, Windows, macOS across Node 20, 22, 24), binding 48h vulnerability response SLA, and 30 calendar days remediation SLA. | `.github/workflows/tests.yml` & `SECURITY.md` |

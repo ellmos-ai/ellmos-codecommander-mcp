@@ -2,6 +2,8 @@
 
 [English](#english) • [Deutsch](#deutsch)
 
+> **Last Updated / Zuletzt aktualisiert:** 2026-10-01 | **SLA:** 48 hours acknowledgment, 5 business days triage, 30 calendar days remediation SLA / 48 Stunden Eingangsbestätigung, 5 Werktage Triage, 30 Kalendertage Behebungszusage
+
 ---
 
 <a name="english"></a>
@@ -47,7 +49,7 @@ If you discover a security vulnerability in `ellmos-codecommander-mcp`:
 
 1. **Direct Security Contact**: Send details via email to **security@ellmos.ai**, cc **support@lukasgeiger.com** and **security@open-bricks.org**.
 2. **GitHub Advisory**: Alternatively, open a confidential report via [GitHub Security Advisories](https://github.com/ellmos-ai/ellmos-codecommander-mcp/security/advisories/new).
-3. **Disclosure Timeline**: We acknowledge receipt within 24-48 hours (INV-SLA-10), provide structured triage within 5 business days, and provide a patch release within 7 days.
+3. **Disclosure Timeline**: We commit to acknowledging receipt within 48 hours (INV-SLA-10), providing structured triage within 5 business days, and releasing an official patch or remediation within 30 calendar days for confirmed vulnerabilities.
 
 ---
 
@@ -94,4 +96,4 @@ Wenn Sie eine Sicherheitslücke in `ellmos-codecommander-mcp` entdecken:
 
 1. **Direkter Sicherheitskontakt**: Senden Sie Details per E-Mail an **security@ellmos.ai**, in Kopie an **support@lukasgeiger.com** und **security@open-bricks.org**.
 2. **GitHub Security Advisory**: Eröffnen Sie vertraulich eine Meldung unter [GitHub Security Advisories](https://github.com/ellmos-ai/ellmos-codecommander-mcp/security/advisories/new).
-3. **Reaktionszeit**: Bestätigung innerhalb von 24-48 Stunden (INV-SLA-10), strukturierte Ersteinschätzung (Triage) innerhalb von 5 Werktagen und koordinierte Bereitstellung eines Sicherheitsupdates innerhalb von 7 Tagen.
+3. **Reaktionszeit**: Wir bestätigen den Eingang von Sicherheitsmeldungen innerhalb von maximal 48 Stunden (INV-SLA-10), liefern eine strukturierte Triage-Bewertung innerhalb von 5 Werktagen und stellen für bestätigte Sicherheitslücken innerhalb von 30 Kalendertagen eine offizielle Behebung oder ein Sicherheitsupdate bereit.

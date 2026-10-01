@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### AI Security and Dependency Audit & Supply-Chain Hardening (2026-10-01)
+- **Supply-Chain & Dependency Audit:** Performed exhaustive live dependency audit; confirmed 0 vulnerabilities across all direct runtime, transitive overrides, and development dependencies (`npm audit` and `npm audit --omit=dev`). Re-certified 100% permissive licensing (MIT, BSD-2-Clause, BSD-3-Clause, Apache-2.0) and zero copyleft.
+- **SLA & Security Policy Harmonization (`SECURITY.md`):** Updated bilingual security policy to codified fleet invariant `INV-SLA-10`: 48 hours acknowledgment, 5 business days triage, and 30 calendar days remediation SLA for confirmed vulnerabilities (English and German with native umlauts).
+- **Gitignore Hardening (`.gitignore`):** Hardened exclusion patterns against local credentials, tokens and keys (`.env`, `.env.*`, `secrets.json`, `credentials.json`, `token.json`, `tokens.json`, `*.pem`, `*.key`, `*.p12`, `*.pfx`, `*.crt`, `*.cer`, `*.cert`, `*.csr`, `*.secret`, `*.token`, `*secret*.json`, `*recovery*code*.txt`, `*recovery*codes*.txt`), SSH wildcards (`id_rsa*`, `id_dsa*`, `id_ecdsa*`, `id_ed25519*`), package manager auth (`.npmrc`), and multi-host fleet tokens (`*-IDEAPAD-GEI*`, `*-IDEAPAD-GEI.*`, `CONFLICT_REVIEW_LOG*`).
+- **Level 1 SBOM Stand 2026-10-01 Re-Audit (`THIRD_PARTY_LICENSES.md`, `THIRD_PARTY_LICENSES.txt`):** Updated audit timestamps to `Stand: 2026-10-01` / `Audited: 2026-10-01`, updated `INV-SLA-10` mapping to 30d remediation SLA, and affirmed clean production audit status.
+- **Automated Hygiene & Security Contract Tests (`test/metadata.test.ts`):** Extended contract tests asserting 30d remediation SLA, expanded `.gitignore` patterns, zero hardcoded credentials, and zero personal developer paths across repository metadata and configurations.
+- **Plan-D OneDrive Mirror Sanitization:** Removed legacy `.git` folder from cloud mirror and initialized canonical `REPO.pointer.json` per Plan-D specifications (`repo_mirror.py`).
+- **Strict Version Freeze Discipline:** Version 1.3.27 strictly maintained unchanged per T-20260920-167562623.
+
 ### Repository Lifecycle Hardening, Plain-Text SBOM Companion & Multi-Host Defense (Pfad A: 2026-09-29)
 - **Level 1 SBOM Plain-Text Companion (`THIRD_PARTY_LICENSES.txt`):** Created plain-text companion file covering core runtime dependencies, transitive override packages, development and testing tooling, and explicit confirmation of all 10 Governance and Runtime Invariants (`INV-LOCAL-01` through `INV-SLA-10`) under unprivileged `RunAsInvoker` user-mode execution; whitelisted in `package.json` `files` array.
 - **Level 1 SBOM Stand 2026-09-29 Re-Audit (`THIRD_PARTY_LICENSES.md`):** Updated SBOM audit timestamp to `Audited: 2026-09-29` | `Stand: 2026-09-29`, re-certifying patched Vitest 4.1.11 (GHSA-82fw-gwwq-j7x9 fix), `@toon-format/toon` 2.3.1 prototype-pollution fix, zero viral copyleft dependencies, and 100% Zero-Egress local-first stdio architecture.

@@ -15,6 +15,34 @@ Thumbs.db
 # mcp-publisher login artifacts (credentials, never commit)
 .mcpregistry_*
 
+# Local secrets, tokens and credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+.npmrc
+secrets.json
+credentials.json
+token.json
+tokens.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.cert
+*.csr
+*.secret
+*.token
+*secret*.json
+id_rsa*
+id_dsa*
+id_ecdsa*
+id_ed25519*
+*recovery*code*.txt
+*recovery*codes*.txt
+
 # Interne Multi-Agenten-Koordination & Kanonisches Lock-System (Fail-Closed)
 LOCK
 LOCK.*
@@ -50,6 +78,9 @@ LOCK.permissions.json
 *-Mac Studio*
 *-MacBook*
 *-IDEAPAD*
+*-IDEAPAD-GEI*
+*-IDEAPAD-GEI.*
+CONFLICT_REVIEW_LOG*
 Desktop.ini
 desktop.ini
 

@@ -214,6 +214,9 @@ describe("project metadata", () => {
     expect(sec).toContain("23 spezialisierten Werkzeugen");
     expect(sec).toContain("Zero-Egress");
     expect(sec).toContain("Subprocess Isolation");
+    expect(sec).toContain("30 calendar days");
+    expect(sec).toContain("30 Kalendertagen");
+    expect(sec).toContain("INV-SLA-10");
   });
 
   it("verifies GitHub Actions CI workflow matrices include Node 20, 22, and 24 across multi-OS with concurrency", async () => {
@@ -368,8 +371,8 @@ describe("project metadata", () => {
   it("verifies THIRD_PARTY_LICENSES.md inventory, permissive licenses, and security guarantees", async () => {
     const content = await readText("THIRD_PARTY_LICENSES.md");
 
-    expect(content).toContain("Audited:** 2026-09-29");
-    expect(content).toContain("Stand:** 2026-09-29");
+    expect(content).toContain("Audited:** 2026-10-01");
+    expect(content).toContain("Stand:** 2026-10-01");
     expect(content).toContain("@modelcontextprotocol/sdk");
     expect(content).toContain("@toon-format/toon");
     expect(content).toContain("^2.3.1");
@@ -392,6 +395,8 @@ describe("project metadata", () => {
     expect(content).toContain("Subprocess Isolation");
     expect(content).toContain("INV-LOCAL-01");
     expect(content).toContain("INV-SLA-10");
+    expect(content).toContain("30d Remediation SLA");
+    expect(content).toContain("0 vulnerabilities");
   });
 
   it("verifies MARKETING-LOG.txt personas, search queries, competitive matrix, and invariants", async () => {
@@ -448,12 +453,25 @@ describe("project metadata", () => {
     expect(gitignore).toContain(".hypothesis/");
     expect(gitignore).toContain(".turbo/");
     expect(gitignore).toContain("*.rej");
+    expect(gitignore).toContain("id_rsa*");
+    expect(gitignore).toContain("id_ed25519*");
+    expect(gitignore).toContain("id_ecdsa*");
+    expect(gitignore).toContain("id_dsa*");
+    expect(gitignore).toContain("*.cert");
+    expect(gitignore).toContain("*.csr");
+    expect(gitignore).toContain("*.secret");
+    expect(gitignore).toContain("*.token");
+    expect(gitignore).toContain("*secret*.json");
+    expect(gitignore).toContain("CONFLICT_REVIEW_LOG*");
+    expect(gitignore).toContain("*-IDEAPAD-GEI*");
+    expect(gitignore).toContain("*-IDEAPAD-GEI.*");
   });
 
   it("verifies CHANGELOG.md contains recent Pfad A and Pfad B release entries", async () => {
     const content = await readText("CHANGELOG.md");
 
     expect(content).toContain("## [Unreleased]");
+    expect(content).toContain("AI Security and Dependency Audit & Supply-Chain Hardening (2026-10-01)");
     expect(content).toContain("Repository Lifecycle Hardening, Plain-Text SBOM Companion & Multi-Host Defense (Pfad A: 2026-09-29)");
     expect(content).toContain("Discoverability, Visual Architecture & 18-Point Bilingual Navigation Parity (Pfad B: 2026-09-26)");
     expect(content).toContain("## [1.3.27] - 2026-09-20");
@@ -501,7 +519,7 @@ describe("project metadata", () => {
 
   it("verifies THIRD_PARTY_LICENSES.txt Level 1 SBOM text companion and invariant matrix", async () => {
     const textCompanion = await readText("THIRD_PARTY_LICENSES.txt");
-    expect(textCompanion).toContain("Audited: Stand: 2026-09-29");
+    expect(textCompanion).toContain("Audited: Stand: 2026-10-01");
     expect(textCompanion).toContain("ellmos-codecommander-mcp");
     expect(textCompanion).toContain("RunAsInvoker");
     expect(textCompanion).toContain("Zero-Egress");
@@ -514,6 +532,7 @@ describe("project metadata", () => {
     expect(textCompanion).toContain("zod");
     expect(textCompanion).toContain("vitest");
     expect(textCompanion).toContain("typescript");
+    expect(textCompanion).toContain("30d Remediation SLA");
 
     for (const inv of [
       "INV-LOCAL-01",
@@ -536,6 +555,27 @@ describe("project metadata", () => {
       const content = await readText(fileName);
       expect(content).toContain("badge/Verified-2026--09--29-success.svg");
       expect(content).toContain("THIRD_PARTY_LICENSES.txt");
+    }
+  });
+
+  it("verifies zero hardcoded credentials and zero personal developer paths across metadata and configs", async () => {
+    const filesToAudit = [
+      "package.json",
+      "server.json",
+      "glama.json",
+      "smithery.yaml",
+      "llms.txt",
+      "SECURITY.md",
+      "THIRD_PARTY_LICENSES.md",
+      "THIRD_PARTY_LICENSES.txt",
+      "NOTICE",
+    ];
+
+    for (const file of filesToAudit) {
+      const content = await readText(file);
+      expect(content).not.toContain("C:\\Users\\lukas");
+      expect(content).not.toContain("ghp_");
+      expect(content).not.toContain("-----BEGIN PRIVATE KEY-----");
     }
   });
 });
