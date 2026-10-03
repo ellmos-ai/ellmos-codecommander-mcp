@@ -533,6 +533,7 @@ Teil der Familie lokaler Open-Source-Tools von **[ellmos-ai](https://github.com/
 | **dev-bricks** | [DevCenter](https://github.com/dev-bricks/DevCenter) | PySide6 Entwickler-Desktop-Suite & Offline-Geheimnistresor |
 | **dev-bricks** | [CodeBox](https://github.com/dev-bricks/CodeBox) | Schneller Desktop-Snippet-Manager mit lokaler AST-Indizierung |
 | **dev-bricks** | [MethodenAnalyser](https://github.com/dev-bricks/MethodenAnalyser) | Methoden-Ablauf- und Komplexitätsanalyse |
+| **dev-bricks** | [Zombie Killer Tray](https://github.com/dev-bricks/zombie-killer-tray) | Optionales Windows-Werkzeug zur Prüfung verwaister MCP-Prozesse. CodeCommander ist beim Start über den unterstützten Einstiegspunkt `node_modules/ellmos-codecommander-mcp/dist/index.js` ein konfigurierter Kandidat; alle weiteren Prozess- und Apply-Schutzprüfungen gelten weiterhin |
 | **doc-bricks** | [PDFtoPDFocr](https://github.com/doc-bricks/PDFtoPDFocr) | Desktop-OCR-Pipeline für durchsuchbare PDFs mit Tesseract |
 | **doc-bricks** | [DokuReader](https://github.com/doc-bricks/DokuReader) | Multi-Format Dokumenten-Arbeitsbereich & Offline-PDF-Export |
 | **file-bricks** | [ProFiler](https://github.com/file-bricks/ProFiler) | Multi-Pane Dateimanager & Stapelverarbeitung |
