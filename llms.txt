@@ -50,6 +50,7 @@ Test gates: `npm test` runs 204 Vitest tests; `npm run test:integration` runs 52
 ## Optional
 
 - [GitHub Issues](https://github.com/ellmos-ai/ellmos-codecommander-mcp/issues): Bug reports and feature requests
+- [Zombie Killer Tray](https://github.com/dev-bricks/zombie-killer-tray): Optional Windows tool for checking orphaned MCP processes. CodeCommander is a configured candidate when launched through the supported `node_modules/ellmos-codecommander-mcp/dist/index.js` entrypoint; additional process and apply checks still apply.
 
 ## Audience
 
