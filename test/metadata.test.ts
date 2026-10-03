@@ -175,7 +175,7 @@ describe("project metadata", () => {
       expect(content).toContain("badge/LLM--Ready-llms.txt-blue.svg");
       expect(content).toContain("https://github.com/ellmos-ai");
       expect(content).toContain("https://github.com/open-bricks");
-      expect(content).toContain("badge/tests-299%20passed%20%7C%20100%25-brightgreen.svg");
+      expect(content).toContain("badge/tests-300%20passed%20%7C%20100%25-brightgreen.svg");
       expect(content).toContain("badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg");
       expect(content).toContain("badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg");
       expect(content).toContain("badge/security-48h%20Response%20%7C%205d%20Triage-blue.svg");
@@ -192,10 +192,11 @@ describe("project metadata", () => {
     expect(llms).toContain(`${EXPECTED_TOOL_COUNT} tools`);
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
-    expect(llms).toContain("Last-checked: 2026-09-29");
-    expect(llms).toContain("299 tests passed");
+    expect(llms).toContain("Last-checked: 2026-10-03");
+    expect(llms).toContain("300 tests passed");
     expect(llms).toContain("Zero-Egress");
     expect(llms).toContain("INV-LOCAL-01");
+    expect(llms).toContain("CONTRIBUTING.md");
     expect(llms).toContain("THIRD_PARTY_LICENSES.md");
     expect(llms).toContain("THIRD_PARTY_LICENSES.txt");
     expect(llms).toContain("NOTICE");
@@ -371,8 +372,8 @@ describe("project metadata", () => {
   it("verifies THIRD_PARTY_LICENSES.md inventory, permissive licenses, and security guarantees", async () => {
     const content = await readText("THIRD_PARTY_LICENSES.md");
 
-    expect(content).toContain("Audited:** 2026-10-01");
-    expect(content).toContain("Stand:** 2026-10-01");
+    expect(content).toContain("Audited:** 2026-10-03");
+    expect(content).toContain("Stand:** 2026-10-03");
     expect(content).toContain("@modelcontextprotocol/sdk");
     expect(content).toContain("@toon-format/toon");
     expect(content).toContain("^2.3.1");
@@ -419,6 +420,7 @@ describe("project metadata", () => {
     expect(content).toContain("INV-SLA-10");
     expect(content).toContain("SIBLING ECOSYSTEM PARTNER MATRIX");
     expect(content).toContain("THREE-PHASE DISCOVERABILITY ROADMAP");
+    expect(content).toContain("[Pfad B: 2026-10-03]");
   });
 
   it("verifies .gitignore hardens against multi-host cloud-sync conflicts and lock contention", async () => {
@@ -471,6 +473,7 @@ describe("project metadata", () => {
     const content = await readText("CHANGELOG.md");
 
     expect(content).toContain("## [Unreleased]");
+    expect(content).toContain("Discoverability, Four-View ASCII Topology, Bilingual CONTRIBUTING & Level 1 SBOM Re-Audit (Pfad B: 2026-10-03)");
     expect(content).toContain("AI Security and Dependency Audit & Supply-Chain Hardening (2026-10-01)");
     expect(content).toContain("Repository Lifecycle Hardening, Plain-Text SBOM Companion & Multi-Host Defense (Pfad A: 2026-09-29)");
     expect(content).toContain("Discoverability, Visual Architecture & 18-Point Bilingual Navigation Parity (Pfad B: 2026-09-26)");
@@ -519,7 +522,7 @@ describe("project metadata", () => {
 
   it("verifies THIRD_PARTY_LICENSES.txt Level 1 SBOM text companion and invariant matrix", async () => {
     const textCompanion = await readText("THIRD_PARTY_LICENSES.txt");
-    expect(textCompanion).toContain("Audited: Stand: 2026-10-01");
+    expect(textCompanion).toContain("Audited: Stand: 2026-10-03");
     expect(textCompanion).toContain("ellmos-codecommander-mcp");
     expect(textCompanion).toContain("RunAsInvoker");
     expect(textCompanion).toContain("Zero-Egress");
@@ -550,12 +553,44 @@ describe("project metadata", () => {
     }
   });
 
-  it("verifies Verified-2026-09-29 badge and text companion across English and German READMEs", async () => {
+  it("verifies Verified-2026-10-03 badge and text companion across English and German READMEs", async () => {
     for (const fileName of ["README.md", "README_de.md"]) {
       const content = await readText(fileName);
-      expect(content).toContain("badge/Verified-2026--09--29-success.svg");
+      expect(content).toContain("badge/Verified-2026--10--03-success.svg");
       expect(content).toContain("THIRD_PARTY_LICENSES.txt");
+      expect(content).toContain("CONTRIBUTING.md");
     }
+  });
+
+  it("verifies Four-View ASCII architecture topology parity across English and German READMEs", async () => {
+    const readmeEn = await readText("README.md");
+    const readmeDe = await readText("README_de.md");
+
+    expect(readmeEn).toContain("FOUR-VIEW ARCHITECTURAL TOPOLOGY");
+    expect(readmeEn).toContain("[VIEW 1: CLIENT RUNTIMES, USER INTERFACES & AGENT ENTRYPOINTS]");
+    expect(readmeEn).toContain("[VIEW 2: CODECOMMANDER MCP PROTOCOL & TOOL ENGINE]");
+    expect(readmeEn).toContain("[VIEW 3: RUNTIME PERSISTENCE, BACKUP VAULTS & ISOLATED SUBPROCESS RUNNERS]");
+    expect(readmeEn).toContain("[VIEW 4: AIR-GAP DEFENSE PERIMETER, ZERO-EGRESS & RUNASINVOKER SECURITY BOUNDARY]");
+
+    expect(readmeDe).toContain("VIER-SICHTEN-ARCHITEKTURTOPOLOGIE");
+    expect(readmeDe).toContain("[SICHT 1: CLIENT-LAUFZEITEN, BENUTZEROBERFLÄCHEN & AGENTEN-EINSTIEGSPUNKTE]");
+    expect(readmeDe).toContain("[SICHT 2: CODECOMMANDER MCP-PROTOKOLL & WERKZEUG-ENGINE]");
+    expect(readmeDe).toContain("[SICHT 3: LAUFZEIT-PERSISTENZ, BACKUP-SPEICHER & ISOLIERTE SUBPROZESS-RUNNER]");
+    expect(readmeDe).toContain("[SICHT 4: AIR-GAP-SCHUTZZONE, ZERO-EGRESS & RUNASINVOKER-SICHERHEITSGRENZE]");
+  });
+
+  it("verifies bilingual CONTRIBUTING.md guidelines integrity, invariants, and Plan D workflow", async () => {
+    const contributing = await readText("CONTRIBUTING.md");
+
+    expect(contributing).toContain("English: Contributing Guidelines");
+    expect(contributing).toContain("Deutsch: Mitwirkungs-Richtlinien");
+    expect(contributing).toContain("RunAsInvoker");
+    expect(contributing).toContain("Plan D");
+    expect(contributing).toContain("INV-LOCAL-01");
+    expect(contributing).toContain("INV-SLA-10");
+    expect(contributing).toContain("§ 521 BGB");
+    expect(contributing).toContain("npm run test:all");
+    expect(contributing).toContain("security@ellmos.ai");
   });
 
   it("verifies zero hardcoded credentials and zero personal developer paths across metadata and configs", async () => {
@@ -569,6 +604,7 @@ describe("project metadata", () => {
       "THIRD_PARTY_LICENSES.md",
       "THIRD_PARTY_LICENSES.txt",
       "NOTICE",
+      "CONTRIBUTING.md",
     ];
 
     for (const file of filesToAudit) {

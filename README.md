@@ -11,17 +11,18 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CI Tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Tests](https://img.shields.io/badge/tests-299%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
+[![Tests](https://img.shields.io/badge/tests-300%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
 [![Security](https://img.shields.io/badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg)](SECURITY.md)
 [![Security: RunAsInvoker](https://img.shields.io/badge/Security-RunAsInvoker-blue.svg)](SECURITY.md)
 [![Security SLA](https://img.shields.io/badge/security-48h%20Response%20%7C%205d%20Triage-blue.svg)](SECURITY.md)
+[![Contributing](https://img.shields.io/badge/Contributing-Guidelines-blue.svg)](CONTRIBUTING.md)
 [![Third-Party Audited](https://img.shields.io/badge/third--party-audited-success.svg)](THIRD_PARTY_LICENSES.md)
 [![Marketing Log](https://img.shields.io/badge/marketing-audited-blueviolet.svg)](MARKETING-LOG.txt)
 [![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
-[![Verified: 2026-09-29](https://img.shields.io/badge/Verified-2026--09--29-success.svg)](CHANGELOG.md)
+[![Verified: 2026-10-03](https://img.shields.io/badge/Verified-2026--10--03-success.svg)](CHANGELOG.md)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -143,6 +144,45 @@ The following matrix compares CodeCommander MCP against alternative developer to
 
 <a id="sec-04"></a><a id="4-architecture--system-overview"></a><a id="architecture--system-overview"></a><a id="architecture"></a>
 ## 4. Architecture & System Overview
+
+```text
++==============================================================================================================+
+|                            FOUR-VIEW ARCHITECTURAL TOPOLOGY (STANDARDIZED LEVEL-1 SPECIFICATION)             |
++==============================================================================================================+
+| [VIEW 1: CLIENT RUNTIMES, USER INTERFACES & AGENT ENTRYPOINTS]                                               |
+|  - Stdio JSON-RPC Clients: Claude Desktop, Claude Code CLI, Cursor, Windsurf, Codex, Antigravity, Kimi Code  |
+|  - MCP Tool Ingestion: 23 Developer Tools via standard Model Context Protocol Specification                  |
+|  - Multi-Language Runtime (i18n): Dynamic Locale Selector [EN, DE, ES, ZH, JA, RU] (INV-I18N-09)             |
++--------------------------------------------------------------------------------------------------------------+
+                                          | Stdio Transport (JSON-RPC)
+                                          v
++--------------------------------------------------------------------------------------------------------------+
+| [VIEW 2: CODECOMMANDER MCP PROTOCOL & TOOL ENGINE]                                                           |
+|  - Code Intelligence AST: Python AST Class/Method Extractors, Complexity Metrics & Guardrails (INV-GATE-06)   |
+|  - Structural Refactoring Engine: Preview-Safe Diffs & Dry-Run Syntax Verification (INV-PREV-03)             |
+|  - Import Diagnostics & Organizer: PEP 8 Cleaners & Subprocess Import Probers (INV-ISOL-05)                  |
+|  - Universal Format Converter: Lossless Roundtrip across JSON/CSV/INI/YAML/TOML/XML/TOON (INV-FMT-08)         |
+|  - Text & Encoding Heuristics: 27+ Mojibake & 70+ German Umlaut Restorations, JSON Fixers (INV-ENC-07)       |
++--------------------------------------------------------------------------------------------------------------+
+                                          | Process Isolation & Local I/O
+                                          v
++--------------------------------------------------------------------------------------------------------------+
+| [VIEW 3: RUNTIME PERSISTENCE, BACKUP VAULTS & ISOLATED SUBPROCESS RUNNERS]                                   |
+|  - Pre-Mutation Safety Vault: Timestamped `.bak` Disk Backups Before In-Place Modification (INV-BAK-04)       |
+|  - Ephemeral Python Runner: Isolated Child Processes with Strict Execution Timeout Bounds (INV-ISOL-05)     |
+|  - Unified Diff Pipeline: LCS Algorithm Unified Diff Generator with Configurable Context Chunks              |
+|  - Local Document Exporters: Self-Contained Markdown-to-HTML and Print-Safe PDF Artifact Generators          |
++--------------------------------------------------------------------------------------------------------------+
+                                          | Containment & Perimeter Defense
+                                          v
++--------------------------------------------------------------------------------------------------------------+
+| [VIEW 4: AIR-GAP DEFENSE PERIMETER, ZERO-EGRESS & RUNASINVOKER SECURITY BOUNDARY]                            |
+|  - Zero-Egress Network Isolation: 100% Offline Local Operation, Zero Sockets, Zero Cloud Telemetry (INV-LOCAL-01)|
+|  - Unprivileged User Mode: Standard RunAsInvoker Execution; Zero Root/Administrator Elevation (INV-SEC-02)  |
+|  - Supply Chain & License Hygiene: Zero Copyleft, 100% Permissive Open Source Stack (MIT, BSD, Apache)       |
+|  - Vulnerability Remediation SLA: 48h Response, 5-Day Triage & 30-Day Patch Commitment (INV-SLA-10)          |
++==============================================================================================================+
+```
 
 ```mermaid
 graph TD
@@ -453,13 +493,13 @@ npm install
 npm run dev               # TypeScript watch mode
 npm run build             # Compile TypeScript to dist/
 npm start                 # Run built server via stdio
-npm test                  # Run Vitest unit suite (201 tests)
+npm test                  # Run Vitest unit & contract suite (205 tests)
 npm run test:integration  # Real MCP stdio test suite (52 assertions, build first)
 npm run test:i18n         # Translation parity test suite (43 assertions)
 npm run test:all          # Run full QA pipeline (build + vitest + integration + i18n)
 ```
 
-The test gates are deliberately separated and automated in CI across **Ubuntu**, **macOS**, and **Windows** on Node.js 20, 22, and 24 (totaling 296 automated assertions, 100% green).
+The test gates are deliberately separated and automated in CI across **Ubuntu**, **macOS**, and **Windows** on Node.js 20, 22, and 24 (totaling 300 automated assertions, 100% green). Contribution workflow and development guidelines are detailed in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
@@ -536,7 +576,7 @@ See [CHANGELOG.md](CHANGELOG.md) for release notes and version history.
 
 This project is licensed under the [MIT License](LICENSE) — Copyright © 2026 Lukas Geiger ([ellmos-ai](https://github.com/ellmos-ai)).
 
-See [`NOTICE`](NOTICE) for open-bricks umbrella attribution and [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) / [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt) for the Level 1 SBOM invariant inventory.
+See [`NOTICE`](NOTICE) for open-bricks umbrella attribution, [`CONTRIBUTING.md`](CONTRIBUTING.md) for development guidelines, and [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) / [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt) for the Level 1 SBOM invariant inventory.
 
 ---
 

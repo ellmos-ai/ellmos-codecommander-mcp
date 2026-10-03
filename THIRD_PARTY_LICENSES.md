@@ -1,8 +1,9 @@
 # Third-Party Licenses and Open-Source Transparency Notice
 
 > **Project:** `ellmos-ai/ellmos-codecommander-mcp` (CodeCommander)
-> **Audited:** 2026-10-01  |  **Stand:** 2026-10-01
-> **Repository License:** [MIT License](LICENSE)  
+> **Audited:** 2026-10-03  |  **Stand:** 2026-10-03
+> **Repository License:** [MIT License](LICENSE)
+> **Development Guidelines:** [CONTRIBUTING.md](CONTRIBUTING.md)
 > **Architecture & Privacy:** 100% Local-First, Zero-Egress by default, Unprivileged User-Mode (`RunAsInvoker`)
 
 ---
@@ -108,7 +109,7 @@ Used by `typescript`.
 
 ## 6. Level 1 SBOM Invariant Cross-Reference Matrix & Governance Statement
 
-> **Stand:** 2026-10-01 | **Level 1 SBOM Transparency:** Deterministischer Lizenz- und Invariantenabgleich aller direkten und transitiven Pakete unter `RunAsInvoker`. Ergänzende Plain-Text-Begleitdatei: [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt).
+> **Stand:** 2026-10-03 | **Level 1 SBOM Transparency:** Deterministischer Lizenz- und Invariantenabgleich aller direkten und transitiven Pakete unter `RunAsInvoker`. Ergänzende Plain-Text-Begleitdatei: [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt). Richtlinien zur Mitwirkung in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 `ellmos-codecommander-mcp` binds all runtime tools, dependency usage, and file mutations to 10 verified architectural invariants:
 

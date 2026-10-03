@@ -11,17 +11,18 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CI Tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Tests](https://img.shields.io/badge/tests-299%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
+[![Tests](https://img.shields.io/badge/tests-300%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
 [![Security](https://img.shields.io/badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg)](SECURITY.md)
 [![Security: RunAsInvoker](https://img.shields.io/badge/Security-RunAsInvoker-blue.svg)](SECURITY.md)
 [![Security SLA](https://img.shields.io/badge/security-48h%20Response%20%7C%205d%20Triage-blue.svg)](SECURITY.md)
+[![Mitwirken-Leitfaden](https://img.shields.io/badge/Mitwirken-Leitfaden-blue.svg)](CONTRIBUTING.md)
 [![Third-Party Audited](https://img.shields.io/badge/third--party-audited-success.svg)](THIRD_PARTY_LICENSES.md)
 [![Marketing Log](https://img.shields.io/badge/marketing-audited-blueviolet.svg)](MARKETING-LOG.txt)
 [![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
-[![Verified: 2026-09-29](https://img.shields.io/badge/Verified-2026--09--29-success.svg)](CHANGELOG.md)
+[![Verified: 2026-10-03](https://img.shields.io/badge/Verified-2026--10--03-success.svg)](CHANGELOG.md)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -143,6 +144,45 @@ Die folgende Matrix vergleicht CodeCommander MCP mit alternativen Entwickler-Wer
 
 <a id="sec-04"></a><a id="4-architektur--systemuebersicht"></a><a id="architektur--systemuebersicht"></a><a id="architektur--systemübersicht"></a><a id="architektur"></a>
 ## 4. Architektur & Systemübersicht
+
+```text
++==============================================================================================================+
+|                            VIER-SICHTEN-ARCHITEKTURTOPOLOGIE (STANDARDISIERTE LEVEL-1 SPEZIFIKATION)         |
++==============================================================================================================+
+| [SICHT 1: CLIENT-LAUFZEITEN, BENUTZEROBERFLÄCHEN & AGENTEN-EINSTIEGSPUNKTE]                                  |
+|  - Stdio JSON-RPC Clients: Claude Desktop, Claude Code CLI, Cursor, Windsurf, Codex, Antigravity, Kimi Code  |
+|  - MCP Tool-Eingang: 23 Entwickler-Werkzeuge über standardisierte Model Context Protocol Spezifikation       |
+|  - Mehrsprachige Laufzeit (i18n): Dynamischer Sprachselektor [EN, DE, ES, ZH, JA, RU] (INV-I18N-09)          |
++--------------------------------------------------------------------------------------------------------------+
+                                          | Stdio Transport (JSON-RPC)
+                                          v
++--------------------------------------------------------------------------------------------------------------+
+| [SICHT 2: CODECOMMANDER MCP-PROTOKOLL & WERKZEUG-ENGINE]                                                     |
+|  - Code-Intelligenz AST: Python AST Klassen-/Methoden-Extraktoren, Metriken & Guardrails (INV-GATE-06)       |
+|  - Strukturelle Refactoring-Engine: Vorschau-sichere Diffs & Dry-Run Syntax-Verifikation (INV-PREV-03)       |
+|  - Import-Diagnose & Organizer: PEP 8 Bereinigung & Subprozess-Import-Prüfer (INV-ISOL-05)                   |
+|  - Universeller Formatkonverter: Verlustfreie Konvertierung über JSON/CSV/INI/YAML/TOML/XML/TOON (INV-FMT-08)|
+|  - Text- & Encoding-Heuristiken: 27+ Mojibake- & 70+ Umlaut-Reparaturen, deterministische JSON-Fixes (INV-ENC-07)|
++--------------------------------------------------------------------------------------------------------------+
+                                          | Prozess-Isolation & Lokales Dateisystem
+                                          v
++--------------------------------------------------------------------------------------------------------------+
+| [SICHT 3: LAUFZEIT-PERSISTENZ, BACKUP-SPEICHER & ISOLIERTE SUBPROZESS-RUNNER]                                |
+|  - Prä-Mutations-Sicherheitslager: Zeitgestempelte `.bak` Backups vor In-Place-Schreibvorgängen (INV-BAK-04) |
+|  - Ephemere Python-Runner: Isolierte Kindprozesse mit harten Ausführungs-Timeouts (INV-ISOL-05)               |
+|  - Unified-Diff-Pipeline: LCS-Algorithmus Unified-Diff-Generator mit konfigurierbaren Kontextzeilen          |
+|  - Lokale Dokument-Export-Engines: Autarke Markdown-nach-HTML- und druckbare PDF-Generatoren                 |
++--------------------------------------------------------------------------------------------------------------+
+                                          | Sicherheits-Perimeter & Abschirmung
+                                          v
++--------------------------------------------------------------------------------------------------------------+
+| [SICHT 4: AIR-GAP-SCHUTZZONE, ZERO-EGRESS & RUNASINVOKER-SICHERHEITSGRENZE]                                  |
+|  - Zero-Egress Netzwerk-Isolation: 100% Offline-Betrieb, null Sockets, null Telemetrie (INV-LOCAL-01)        |
+|  - Unprivilegierter Benutzermodus: Standard RunAsInvoker Ausführung; null Root/Admin-Rechte (INV-SEC-02)     |
+|  - Lizenz- & Supply-Chain-Hygiene: Null Copyleft, 100% permissiver Open-Source-Stack (MIT, BSD, Apache)      |
+|  - Sicherheits-SLA: Verbindliche 48h Reaktion, 5-Tage Triage und 30-Tage Behebung (INV-SLA-10)               |
++==============================================================================================================+
+```
 
 ```mermaid
 graph TD
@@ -453,13 +493,13 @@ npm install
 npm run dev               # TypeScript Watch-Modus
 npm run build             # TypeScript-Kompilierung nach dist/
 npm start                 # Gebauten Server via stdio starten
-npm test                  # Vitest Unit-Testsuite ausführen (201 Tests)
+npm test                  # Vitest Unit- und Vertragstestsuite ausführen (205 Tests)
 npm run test:integration  # Echte MCP-Stdio-Integrationstests (52 Assertions)
 npm run test:i18n         # Lokalisierungs- & Übersetzungstests (43 Assertions)
 npm run test:all          # Gesamte Testpipeline ausführen (Build + Vitest + Integration + i18n)
 ```
 
-Die Test-Gates sind getrennt und laufen in der CI auf **Ubuntu**, **macOS** und **Windows** auf Node.js 20, 22 und 24 (insgesamt 296 automatisierte Test-Assertions, 100% grün).
+Die Test-Gates sind getrennt und laufen in der CI auf **Ubuntu**, **macOS** und **Windows** auf Node.js 20, 22 und 24 (insgesamt 300 automatisierte Test-Assertions, 100% grün). Entwicklungs- und Mitwirkungsrichtlinien sind in [CONTRIBUTING.md](CONTRIBUTING.md) dokumentiert.
 
 ---
 
@@ -536,7 +576,7 @@ Siehe [CHANGELOG.md](CHANGELOG.md) für detaillierte Versionshinweise.
 
 Lizenziert unter der [MIT-Lizenz](LICENSE) — Copyright © 2026 Lukas Geiger ([ellmos-ai](https://github.com/ellmos-ai)).
 
-Siehe [`NOTICE`](NOTICE) für die open-bricks-Dachzuschreibung und [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) / [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt) für das Level-1-SBOM-Invarianten-Inventar.
+Siehe [`NOTICE`](NOTICE) für die open-bricks-Dachzuschreibung, [`CONTRIBUTING.md`](CONTRIBUTING.md) für Mitwirkungsrichtlinien und [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) / [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt) für das Level-1-SBOM-Invarianten-Inventar.
 
 ---
 

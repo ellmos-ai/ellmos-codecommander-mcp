@@ -1,7 +1,7 @@
 # Third-Party Licenses & Level 1 SBOM
 
-Last checked: 2026-10-01 against npm metadata.
-Audited: Stand: 2026-10-01 against Level 1 SBOM and runtime invariants.
+Last checked: 2026-10-03 against npm metadata.
+Audited: Stand: 2026-10-03 against Level 1 SBOM and runtime invariants.
 
 Scope: direct runtime dependencies declared in `package.json`, transitive
 overrides, and development/testing tooling. This inventory provides a direct
@@ -60,7 +60,7 @@ Copyright (c) 2026 Lukas Geiger, ellmos-ai family under open-bricks umbrella.
 | @emnapi/core | Node / npm | ^1.10.0 | MIT | Emscripten N-API implementation helper |
 | @emnapi/runtime | Node / npm | ^1.10.0 | MIT | Emscripten N-API runtime support |
 
-## Level 1 SBOM Invariant Verification (Stand: 2026-10-01)
+## Level 1 SBOM Invariant Verification (Stand: 2026-10-03)
 
 All 10 architectural and runtime governance invariants are confirmed:
 - INV-LOCAL-01: Zero-Egress Privacy (100% offline local stdio JSON-RPC transport; zero telemetry, zero analytics, zero external network egress)
@@ -74,4 +74,4 @@ All 10 architectural and runtime governance invariants are confirmed:
 - INV-I18N-09: Dynamic Multi-Language (Full runtime i18n across 6 languages EN, DE, ES, ZH, JA, RU via cc_set_language and cc_get_language)
 - INV-SLA-10: 48h Response / 5d Triage / 30d Remediation SLA (Multi-OS CI Ubuntu, Windows, macOS across Node 20, 22, 24, binding 48h vulnerability response SLA, 5d triage, and 30d remediation SLA)
 
-Refer to `THIRD_PARTY_LICENSES.md` for full cross-reference matrix and component analyses.
+Refer to `CONTRIBUTING.md` for contribution guidelines and `THIRD_PARTY_LICENSES.md` for full cross-reference matrix and component analyses. Statutory notice: § 521 BGB applies (liability limited to intent and gross negligence).

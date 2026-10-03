@@ -10,7 +10,7 @@
 # Author:       Lukas Geiger
 # License:      MIT
 # Version:      1.3.27
-# Last Updated: 2026-09-29
+# Last Updated: 2026-10-03
 # ==============================================================================
 
 1. PRODUCT POSITIONING & VALUE PROPOSITION
@@ -232,3 +232,30 @@ i18n Multi-Language Support   | English only     | None             | 6 Language
 - Automated Contract Tests: test/metadata.test.ts expanded to assert THIRD_PARTY_LICENSES.txt existence,
   packaging whitelist membership, invariant mapping, extended .gitignore tokens, and stale.yml concurrency.
 
+13. AUDIT & RELEASE MILESTONE [Pfad B: 2026-10-03]
+------------------------------------------------------------------------------
+- Release: v1.3.27 (version frozen per T-20260920-167562623)
+- Scope: Pfad B Discoverability, Four-View ASCII Topology, Bilingual CONTRIBUTING Guidelines & Level 1 SBOM Re-Audit
+- Four-View ASCII Architecture Topology: Deployed standardized four-view ASCII topology
+  ([VIEW 1: CLIENT RUNTIMES, USER INTERFACES & AGENT ENTRYPOINTS] through [VIEW 4: AIR-GAP DEFENSE
+  PERIMETER, ZERO-EGRESS & RUNASINVOKER SECURITY BOUNDARY] / [SICHT 1] .. [SICHT 4]) in Section 4 of
+  both English (README.md) and German (README_de.md) documentation, formally mapping all 10 governance
+  and runtime invariants (INV-LOCAL-01 through INV-SLA-10).
+- Bilingual CONTRIBUTING Guidelines: Established comprehensive bilingual CONTRIBUTING.md in repository root
+  with 10 runtime invariants, unprivileged RunAsInvoker mode (INV-SEC-02), Plan D local development workflow
+  (C:\_Local_DEV\repos\ellmos-codecommander-mcp), quality gate requirements (npm run test:all), binding 48h
+  vulnerability response SLA, and statutory notice (§ 521 BGB Gefälligkeitsrecht); whitelisted in package.json files array.
+- Level 1 SBOM Re-Audit & Plain-Text Companion: Re-audited THIRD_PARTY_LICENSES.txt and THIRD_PARTY_LICENSES.md
+  to Stand 2026-10-03 with full permissive license inventory (MIT, BSD-2, BSD-3, Apache-2.0), zero copyleft,
+  100% zero-egress, and § 521 BGB disclaimer.
+- Badges & Documentation Parity: Updated Verified-2026--10--03 / Geprüft-2026--10--03 and tests-300 passed | 100%
+  badges; added Contributing Guidelines badge; synchronized llms.txt to 300 tests baseline and Stand 2026-10-03.
+- Automated Contract Tests: Expanded test/metadata.test.ts with new contract tests for four-view ASCII topology
+  parity, bilingual CONTRIBUTING guidelines integrity, Level 1 SBOM currency Stand 2026-10-03, and badge recency.
+  Total test surface: 304 automated assertions (100% green).
+- Non-Automated Marketing Recommendations:
+  1. Glama Showcase Feature: Submit CodeCommander MCP as featured server in the Glama developer tools category
+     highlighting the 23 code analysis and structural refactoring tools for Claude Code.
+  2. Awesome MCP Servers PR: Submit PR to github.com/punkpeye/awesome-mcp-servers under "Developer Tools" section.
+  3. Interactive Demo GIF / Video Walkthrough: Record a 45-second terminal GIF demonstrating cc_analyze_code,
+     cc_python_structural_edit diff preview, and cc_fix_json repair for embed in README hero section.

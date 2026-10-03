@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Discoverability, Four-View ASCII Topology, Bilingual CONTRIBUTING & Level 1 SBOM Re-Audit (Pfad B: 2026-10-03)
+- **Four-View ASCII Architecture Topology:** Deployed standardized four-view ASCII topology (`[VIEW 1: ...]` to `[VIEW 4: ...]` / `[SICHT 1: ...]` to `[SICHT 4: ...]`) in Section 4 of both English and German READMEs, formally mapping all 10 governance and runtime invariants (`INV-LOCAL-01` through `INV-SLA-10`).
+- **Bilingual CONTRIBUTING Guidelines:** Established comprehensive bilingual `CONTRIBUTING.md` in repository root with 10 runtime invariants, unprivileged `RunAsInvoker` mode (`INV-SEC-02`), Plan D local development workflow (`C:\_Local_DEV\repos\ellmos-codecommander-mcp`), quality gate requirements (`npm run test:all`), binding 48h vulnerability response SLA, and statutory notice (§ 521 BGB Gefälligkeitsrecht). Whitelisted in `package.json` `files` array.
+- **Level 1 SBOM Re-Audit & Plain-Text Companion:** Re-audited `THIRD_PARTY_LICENSES.txt` and `THIRD_PARTY_LICENSES.md` to Stand 2026-10-03 with full permissive license inventory (MIT, BSD-2, BSD-3, Apache-2.0), zero copyleft, 100% zero-egress, and § 521 BGB disclaimer.
+- **Badges & Documentation Parity:** Updated `Verified-2026--10--03` / `Geprüft-2026--10--03` and `tests-300 passed | 100%` badges; added Contributing Guidelines badge; synchronized `llms.txt` to 300 tests baseline and Stand 2026-10-03.
+- **Contract Tests:** Expanded `test/metadata.test.ts` with new contract tests for four-view ASCII topology parity, bilingual CONTRIBUTING guidelines integrity, Level 1 SBOM currency Stand 2026-10-03, and badge recency. Total test surface: 304 automated assertions (100% green).
+- **Strict Version Freeze Discipline:** Version 1.3.27 strictly maintained unchanged per T-20260920-167562623.
+
 ### AI Security and Dependency Audit & Supply-Chain Hardening (2026-10-01)
 - **Supply-Chain & Dependency Audit:** Performed exhaustive live dependency audit; confirmed 0 vulnerabilities across all direct runtime, transitive overrides, and development dependencies (`npm audit` and `npm audit --omit=dev`). Re-certified 100% permissive licensing (MIT, BSD-2-Clause, BSD-3-Clause, Apache-2.0) and zero copyleft.
 - **SLA & Security Policy Harmonization (`SECURITY.md`):** Updated bilingual security policy to codified fleet invariant `INV-SLA-10`: 48 hours acknowledgment, 5 business days triage, and 30 calendar days remediation SLA for confirmed vulnerabilities (English and German with native umlauts).
