@@ -10,7 +10,7 @@
 # Author:       Lukas Geiger
 # License:      MIT
 # Version:      1.3.27
-# Last Updated: 2026-10-03
+# Last Updated: 2026-10-09
 # ==============================================================================
 
 1. PRODUCT POSITIONING & VALUE PROPOSITION
@@ -259,3 +259,24 @@ i18n Multi-Language Support   | English only     | None             | 6 Language
   2. Awesome MCP Servers PR: Submit PR to github.com/punkpeye/awesome-mcp-servers under "Developer Tools" section.
   3. Interactive Demo GIF / Video Walkthrough: Record a 45-second terminal GIF demonstrating cc_analyze_code,
      cc_python_structural_edit diff preview, and cc_fix_json repair for embed in README hero section.
+
+14. AUDIT & RELEASE MILESTONE [Pfad B: 2026-10-09]
+------------------------------------------------------------------------------
+- Release: v1.3.27 (version frozen per T-20260920-167562623)
+- Scope: Pfad B Discoverability, Level 1 SBOM Stand 2026-10-09 Re-Audit & Contract Test Expansion (302 Tests)
+- Badge & Context Currency: Synchronized Verified-2026--10--09 / Geprüft-2026--10--09 and tests-302 passed | 100%
+  across README.md, README_de.md, and llms.txt.
+- Level 1 SBOM Plain-Text Companion & Re-Audit: Re-audited THIRD_PARTY_LICENSES.txt and THIRD_PARTY_LICENSES.md
+  to Stand 2026-10-09 affirming INV-LOCAL-01 through INV-SLA-10, unprivileged RunAsInvoker non-elevation, Zero-Copyleft
+  stack (MIT, BSD-2, BSD-3, Apache-2.0), 100% Zero-Egress local stdio architecture, and § 521 BGB disclaimer.
+- Discoverability & Registry Parity: Re-verified parity across package.json, server.json, glama.json, smithery.yaml,
+  and llms.txt.
+- Automated Contract Tests: test/metadata.test.ts expanded to assert 2026-10-09 audit recency, 302 passing assertions
+  (207 Vitest + 52 MCP stdio integration + 43 i18n = 302 total tests), and Level 1 SBOM currency.
+- Non-Automated Marketing Recommendations:
+  1. REC-20261009-01 (MCP Inspector Interactive Web Sandbox): Create an interactive, read-only demo script for
+     MCP Inspector with dummy files to demonstrate cc_analyze_code and cc_python_structural_edit diff preview without local setup.
+  2. REC-20261009-02 (Glama Metadata & Tags Optimization): Verify and align Glama server tags with the 20 package keywords
+     (local-first, zero-egress, python-ast, json-repair, mojibake-fix, unified-diff) to maximize category indexing.
+  3. REC-20261009-03 (Smithery CLI Quickstart Snippet): Add a 1-line copyable Smithery installation badge/snippet
+     (npx -y @smithery/cli install io.github.ellmos-ai/ellmos-codecommander-mcp) to README quickstart after next registry cycle.

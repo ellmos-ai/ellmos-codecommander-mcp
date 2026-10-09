@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Discoverability, Level 1 SBOM Re-Audit & Badge Currency (Pfad B: 2026-10-09)
+- **Documentation & Badge Parity:** Synchronized Verified-2026--10--09 / Geprüft-2026--10--09 and 	ests-302 passed | 100% badges across English (README.md) and German (README_de.md) documentation; updated llms.txt to Last-checked: 2026-10-09 (302 tests passed: 207 Vitest, 52 MCP stdio integration, 43 i18n assertions).
+- **Level 1 SBOM Stand 2026-10-09 Re-Audit:** Re-audited THIRD_PARTY_LICENSES.txt and THIRD_PARTY_LICENSES.md to Stand 2026-10-09 with full 10-invariant matrix (INV-LOCAL-01 through INV-SLA-10), unprivileged RunAsInvoker mode, Zero-Copyleft permissive stack, and § 521 BGB disclaimer.
+- **Marketing & Discoverability Log:** Added Milestone 14 to MARKETING-LOG.txt with 3 non-automated discoverability recommendations (MCP Inspector sandbox, Glama tags alignment, Smithery CLI quickstart).
+- **Automated Contract Tests:** Expanded 	est/metadata.test.ts to assert 2026-10-09 recency, 302 tests baseline, and Level 1 SBOM currency.
+- **Strict Version Freeze Discipline:** Version 1.3.27 strictly maintained unchanged per T-20260920-167562623.
+
 ### Discoverability, Four-View ASCII Topology, Bilingual CONTRIBUTING & Level 1 SBOM Re-Audit (Pfad B: 2026-10-03)
 - **Four-View ASCII Architecture Topology:** Deployed standardized four-view ASCII topology (`[VIEW 1: ...]` to `[VIEW 4: ...]` / `[SICHT 1: ...]` to `[SICHT 4: ...]`) in Section 4 of both English and German READMEs, formally mapping all 10 governance and runtime invariants (`INV-LOCAL-01` through `INV-SLA-10`).
 - **Bilingual CONTRIBUTING Guidelines:** Established comprehensive bilingual `CONTRIBUTING.md` in repository root with 10 runtime invariants, unprivileged `RunAsInvoker` mode (`INV-SEC-02`), Plan D local development workflow (`C:\_Local_DEV\repos\ellmos-codecommander-mcp`), quality gate requirements (`npm run test:all`), binding 48h vulnerability response SLA, and statutory notice (§ 521 BGB Gefälligkeitsrecht). Whitelisted in `package.json` `files` array.
