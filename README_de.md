@@ -4,7 +4,9 @@
 
 # ellmos CodeCommander MCP Server
 
-**🇬🇧 [English Version](README.md)**
+**README-Sprachen:** [English](README.md) | **Deutsch** | [Español](README_es.md)
+
+Diese Links zeigen die verfügbaren Sprachfassungen der README-Dokumentation. Die Sprachen der Werkzeugmeldungen zur Laufzeit stehen gesondert in Abschnitt 11.
 
 *Teil der [ellmos-ai](https://github.com/ellmos-ai) Familie.*
 
