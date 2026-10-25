@@ -4,11 +4,17 @@ import { es } from './es.js';
 import { zh } from './zh.js';
 import { ja } from './ja.js';
 import { ru } from './ru.js';
+import { fr } from './fr.js';
+import { hi } from './hi.js';
+import { ar } from './ar.js';
+import { bn } from './bn.js';
+import { pt } from './pt.js';
 import type { Translations } from './types.js';
 
-type Lang = 'de' | 'en' | 'es' | 'zh' | 'ja' | 'ru';
-const SUPPORTED: Lang[] = ['de', 'en', 'es', 'zh', 'ja', 'ru'];
-const langs: Record<Lang, Translations> = { de, en, es, zh, ja, ru };
+export const LANGUAGE_CODES = ['de', 'en', 'es', 'zh', 'ja', 'ru', 'fr', 'hi', 'ar', 'bn', 'pt'] as const;
+type Lang = typeof LANGUAGE_CODES[number];
+const SUPPORTED: Lang[] = [...LANGUAGE_CODES];
+const langs: Record<Lang, Translations> = { de, en, es, zh, ja, ru, fr, hi, ar, bn, pt };
 let current: Lang = (SUPPORTED.includes(process.env.CC_LANGUAGE as Lang)
   ? process.env.CC_LANGUAGE as Lang : 'de');
 

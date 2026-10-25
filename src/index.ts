@@ -25,7 +25,7 @@ import * as fsSync from "fs";
 import { exec, execFile, execFileSync, execSync } from "child_process";
 import { promisify } from "util";
 import { pathToFileURL, fileURLToPath } from "url";
-import { t, setLanguage, getLanguage, getSupportedLanguages } from './i18n/index.js';
+import { t, setLanguage, getLanguage, getSupportedLanguages, LANGUAGE_CODES } from './i18n/index.js';
 import * as yaml from 'js-yaml';
 import * as toml from 'smol-toml';
 import { XMLParser, XMLBuilder } from 'fast-xml-parser';
@@ -42,6 +42,9 @@ const server = new McpServer({
   name: "ellmos-codecommander-mcp",
   version: "1.3.27"
 });
+
+// This is the exact enum schema passed to the cc_set_language MCP tool.
+export const CC_LANGUAGE_ENUM = z.enum(LANGUAGE_CODES);
 
 // ============================================================================
 // Helper Functions
@@ -4078,6 +4081,12 @@ server.registerTool(
   }
 );
 
+export function getLanguageReport(): string {
+  const current = getLanguage();
+  const supported = getSupportedLanguages();
+  return t().cc_set_language.languageGet(current, supported);
+}
+
 // ============================================================================
 // Tool 16: Set Language
 // ============================================================================
@@ -4085,7 +4094,7 @@ server.registerTool(
 server.tool(
   "cc_set_language",
   "Set the output language for CodeCommander tools",
-  { language: z.enum(["de", "en", "es", "zh", "ja", "ru"]).describe("Language code") },
+  { language: CC_LANGUAGE_ENUM.describe("Language code") },
   async ({ language }) => {
     setLanguage(language);
     return { content: [{ type: "text", text: t().cc_set_language.languageSet(language) }] };
@@ -4097,9 +4106,7 @@ server.tool(
   "Get the currently configured output language and supported languages for CodeCommander tools",
   {},
   async () => {
-    const current = getLanguage();
-    const supported = getSupportedLanguages();
-    return { content: [{ type: "text", text: t().cc_set_language.languageGet(current, supported) }] };
+    return { content: [{ type: "text", text: getLanguageReport() }] };
   }
 );
 
