@@ -1,13 +1,13 @@
-<!-- worldset: {"translated_from_sha256": "7e92373bc84fb7d58a06a31082fa96be0baa674108040bff3a8aa0e88ede45c5", "translator": "gpt-6-luna", "translated_at": "2026-10-25 03:56:05+00:00"} -->
+<!-- worldset: {"translated_from_sha256": "a8f3a78e24362792ae63406370643225807d7555231ddfaa02dba69bac7911d3", "translator": "gpt-6-luna", "translated_at": "2026-10-25 03:56:05+00:00"} -->
 <p align="center">
   <img src="https://raw.githubusercontent.com/ellmos-ai/.github/master/profile/logo-ellmos-codecommander.jpg" alt="ellmos CodeCommander MCP emblem" width="400">
 </p>
 
 # Servidor MCP ellmos CodeCommander
 
-**🇬🇧 [Versión en inglés](README.md) | 🇩🇪 [Versión en alemán](README_de.md) | 🇪🇸 Español**
+[English](README.md) | [Deutsch](README_de.md) | **Español** | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Русский](README_ru.md)
 
-> **Idiomas de la documentación:** hay versiones en inglés, alemán y español. Estos enlaces indican los idiomas disponibles para la documentación. Los idiomas de los mensajes de las herramientas en tiempo de ejecución se indican en la sección 11; esto no afirma que exista una GUI, una CLI ni una API traducidas.
+> **Idiomas de la documentación:** Estos enlaces indican los idiomas disponibles de la documentación README. Los idiomas de los mensajes de las herramientas en tiempo de ejecución se indican por separado en la sección 11; esto no afirma que exista una GUI, una CLI ni una API traducidas.
 
 *Parte de la familia [ellmos-ai](https://github.com/ellmos-ai).*
 

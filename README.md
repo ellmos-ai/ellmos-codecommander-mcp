@@ -4,7 +4,7 @@
 
 # ellmos CodeCommander MCP Server
 
-**README languages:** **English** | [Deutsch](README_de.md) | [Español](README_es.md)
+**English** | [Deutsch](README_de.md) | [Español](README_es.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Русский](README_ru.md)
 
 These links describe available README documentation. Runtime tool-message languages are listed separately in section 11.
 
