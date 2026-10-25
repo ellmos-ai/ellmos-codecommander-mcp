@@ -1,13 +1,13 @@
-<!-- worldset: {"translated_from_sha256": "a8f3a78e24362792ae63406370643225807d7555231ddfaa02dba69bac7911d3", "translator": "gpt-6-luna", "translated_at": "2026-10-25 04:32:06+00:00"} -->
+<!-- worldset: {"translated_from_sha256": "c11dfac3a2a77d1275cd2e577e98e1cfb77f6a79e216cf05578e1215537972d8", "translator": "gpt-6-luna", "translated_at": "2026-10-25 04:32:06+00:00"} -->
 <p align="center">
   <img src="https://raw.githubusercontent.com/ellmos-ai/.github/master/profile/logo-ellmos-codecommander.jpg" alt="ellmos CodeCommander MCP emblem" width="400">
 </p>
 
 # ellmos CodeCommander MCP サーバー
 
-[English](README.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [简体中文](README_zh.md) | **日本語** | [Русский](README_ru.md)
+[English](README.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [简体中文](README_zh.md) | **日本語** | [Русский](README_ru.md) | [Français](README_fr.md) | [हिन्दी](README_hi.md) | [العربية](README_ar.md) | [বাংলা](README_bn.md) | [Português](README_pt.md)
 
-これらのリンクは、利用可能な README ドキュメントの言語を示します。実行時のツールメッセージの言語は第 11 節に別途記載しています。GUI、CLI、API が翻訳済みであることを示すものではありません。
+README のナビゲーションには利用できるドキュメント言語を記載します。第 11 節では、ツール出力メッセージと診断メッセージに使う実行時言語を別途説明します。MCP のツール検出や schema の説明、GUI、CLI、API が翻訳済みであることを示すものではありません。
 
 *[ellmos-ai](https://github.com/ellmos-ai) ファミリーの一部です。*
 
@@ -139,7 +139,7 @@ CodeCommander MCP は、最新の自律型 AI コーディング、ローカル�
 | **6. 汎用形式変換** | なし | 複数のばらばらな CLI ツール | SaaS 変換 API | 複数プラグインが必要 | **7 形式を損失なく変換（`JSON/YAML/TOML/XML/TOON`）** |
 | **7. 差分エンジンと正規表現ワークベンチ** | なし | 基本的な `diff`/`grep` | なし | GUI パネルのみ | **LCS unified diff とグループ/置換対応の正規表現** |
 | **8. ローカル優先とゼロ外部送信** | ホスト環境に依存 | ローカル | クラウド送信 / テレメトリ | 多くはクラウドに接続 | **100% オフラインの stdio JSON-RPC（`INV-LOCAL-01`）** |
-| **9. 多言語（i18n）サポート** | 英語のみ | なし | 英語のみ | 言語パック | **6 言語を動的にサポート（`cc_set_language`）** |
+| **9. 多言語（i18n）サポート** | 英語のみ | なし | 英語のみ | 言語パック | ツールの出力メッセージと診断メッセージは実行時に 11 言語に対応し、`cc_set_language` で切り替えられます。 |
 | **10. レジストリとマニフェストの整合性** | 最小限 | なし | 独自仕様 | マーケットプレイス固有 | **npm、Glama、Smithery、MCP Registry、`llms.txt`** |
 
 ---
@@ -154,7 +154,7 @@ CodeCommander MCP は、最新の自律型 AI コーディング、ローカル�
 | [VIEW 1: CLIENT RUNTIMES, USER INTERFACES & AGENT ENTRYPOINTS]                                               |
 |  - Stdio JSON-RPC Clients: Claude Desktop, Claude Code CLI, Cursor, Windsurf, Codex, Antigravity, Kimi Code  |
 |  - MCP Tool Ingestion: 23 Developer Tools via standard Model Context Protocol Specification                  |
-|  - Multi-Language Runtime (i18n): Dynamic Locale Selector [EN, DE, ES, ZH, JA, RU] (INV-I18N-09)             |
+|  - Runtime locales: DE EN ES ZH JA RU FR HI AR BN PT (INV-I18N-09)                                           |
 +--------------------------------------------------------------------------------------------------------------+
                                           | Stdio Transport (JSON-RPC)
                                           v
@@ -289,7 +289,7 @@ sequenceDiagram
 | `INV-GATE-06` | 明示的な言語ゲート | Python 専用パスツールは非 `.py` ファイルを明示的に拒否します。JS/TS 分析は読み取り専用の正規表現ベースです。 |
 | `INV-ENC-07` | 非破壊の文字コード修復 | 修復後のテキストでは、27 種類以上の文字化けと 70 種類以上のドイツ語ウムラウトを復元し、情報損失やバイナリ破損を防ぎます。 |
 | `INV-FMT-08` | 形式間の互換性 | JSON、CSV、INI、YAML、TOML、XML、TOON 間でスキーマを保持した損失のない変換を行います。 |
-| `INV-I18N-09` | ランタイム多言語 | `cc_set_language` により、6 言語（EN、DE、ES、ZH、JA、RU）のランタイム言語を動的に切り替えます。 |
+| `INV-I18N-09` | ランタイム多言語 | `cc_set_language` で 11 言語のツール出力・診断メッセージを切り替え、`cc_get_language` で現在のコードを確認できます。 |
 | `INV-SLA-10` | 48 時間のセキュリティ応答 SLA | Ubuntu、Windows、macOS の Node 20、22、24 で検証済み。公開の 48 時間以内の初回応答 / 5 日以内のトリアージを約束します。 |
 
 ---
@@ -367,7 +367,7 @@ sequenceDiagram
 
 | ツール | 説明 |
 |------|-------------|
-| `cc_set_language` | 有効なランタイム言語を切り替え（`en`、`de`、`es`、`zh`、`ja`、`ru`） |
+| `cc_set_language` | ツール出力メッセージと診断メッセージの実行時言語を設定（`de`、`en`、`es`、`zh`、`ja`、`ru`、`fr`、`hi`、`ar`、`bn`、`pt`）。 |
 | `cc_get_language` | 現在の言語とサポート対象のロケールコードを照会 |
 
 **23 個の開発者ツール**を `cc_` プレフィックスで利用できます。
@@ -475,16 +475,23 @@ FileCommander と CodeCommander は同時に実行できるよう設計されて
 <a id="sec-11"></a><a id="11-multi-language-support-i18n"></a><a id="multi-language-support-i18n"></a><a id="i18n"></a>
 ## 11. 多言語サポート（i18n）
 
-CodeCommander は、すべてのツール説明、出力通知、診断メッセージで 6 言語をネイティブサポートします。
+CodeCommander は、ツールが実行時に返すメッセージ（診断メッセージを含む）について、次の 11 言語に対応します。
 
-- `en` — 英語（既定）
-- `de` — ドイツ語
+- `de` — ドイツ語（既定）
+- `en` — 英語
 - `es` — スペイン語
 - `zh` — 簡体字中国語
 - `ja` — 日本語
 - `ru` — ロシア語
+- `fr` — フランス語
+- `hi` — ヒンディー語
+- `ar` — アラビア語
+- `bn` — ベンガル語
+- `pt` — ポルトガル語
 
-現在の言語を確認するには `cc_get_language` を使用します。有効な MCP セッション中に言語を動的に切り替えるには `cc_set_language` を使用します。
+これらのコードは、ツールの出力メッセージと診断メッセージの実行時言語を選びます。MCP のツール検出説明や schema の説明、GUI、CLI、API が翻訳されるわけではありません。README ナビゲーションではドキュメント言語を別に示します。
+
+サーバー起動時の初期言語は `CC_LANGUAGE` で選択します。MCP セッション中は `cc_set_language` で切り替え、`cc_get_language` で現在のコードと対応コードを確認できます。`CC_LANGUAGE` が未設定、または未対応の値の場合はドイツ語（`de`）にフォールバックします。`--lang` オプションはドキュメントに記載されていません。
 
 ---
 

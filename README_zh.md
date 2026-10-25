@@ -1,13 +1,13 @@
-<!-- worldset: {"translated_from_sha256": "a8f3a78e24362792ae63406370643225807d7555231ddfaa02dba69bac7911d3", "translator": "gpt-6-luna", "translated_at": "2026-10-25 04:32:06+00:00"} -->
+<!-- worldset: {"translated_from_sha256": "c11dfac3a2a77d1275cd2e577e98e1cfb77f6a79e216cf05578e1215537972d8", "translator": "gpt-6-luna", "translated_at": "2026-10-25 04:32:06+00:00"} -->
 <p align="center">
   <img src="https://raw.githubusercontent.com/ellmos-ai/.github/master/profile/logo-ellmos-codecommander.jpg" alt="ellmos CodeCommander MCP emblem" width="400">
 </p>
 
 # ellmos CodeCommander MCP 服务器
 
-[English](README.md) | [Deutsch](README_de.md) | [Español](README_es.md) | **简体中文** | [日本語](README_ja.md) | [Русский](README_ru.md)
+[English](README.md) | [Deutsch](README_de.md) | [Español](README_es.md) | **简体中文** | [日本語](README_ja.md) | [Русский](README_ru.md) | [Français](README_fr.md) | [हिन्दी](README_hi.md) | [العربية](README_ar.md) | [বাংলা](README_bn.md) | [Português](README_pt.md)
 
-这些链接表示 README 文档提供的语言。工具运行时消息语言在第 11 节单独列出；这不表示 GUI、CLI 或 API 已完成本地化。
+README 导航列出可用的文档语言。第 11 节单独介绍工具输出消息和诊断消息所用的运行时语言。这不表示 MCP 工具发现或 schema 描述、GUI、CLI 或 API 已翻译。
 
 *属于 [ellmos-ai](https://github.com/ellmos-ai) 工具系列。*
 
@@ -139,7 +139,7 @@ CodeCommander MCP 旨在解决现代自主 AI 编程、本地多智能体协作�
 | **6. 通用格式转换** | 无 | 多种互不相关的 CLI 工具 | SaaS 转换 API | 需要多个插件 | **7 种格式的无损转换（`JSON/YAML/TOML/XML/TOON`）** |
 | **7. 差异引擎与正则工作台** | 无 | 基础 `diff`/`grep` | 无 | 仅 GUI 面板 | **LCS 统一差异；正则支持分组与替换** |
 | **8. 本地优先与零外发** | 取决于宿主环境 | 本地 | 云端外发 / 遥测 | 通常连接云端 | **100% 离线 stdio JSON-RPC（`INV-LOCAL-01`）** |
-| **9. 多语言（i18n）支持** | 仅英语 | 无 | 仅英语 | 语言包 | **动态支持 6 种语言（`cc_set_language`）** |
+| **9. 多语言（i18n）支持** | 仅英语 | 无 | 仅英语 | 语言包 | 11 种用于运行时工具输出和诊断消息的语言，可通过 `cc_set_language` 切换。 |
 | **10. 注册表与清单一致性** | 最少 | 无 | 专有 | 依赖市场平台 | **npm、Glama、Smithery、MCP Registry、`llms.txt`** |
 
 ---
@@ -154,7 +154,7 @@ CodeCommander MCP 旨在解决现代自主 AI 编程、本地多智能体协作�
 | [VIEW 1: CLIENT RUNTIMES, USER INTERFACES & AGENT ENTRYPOINTS]                                               |
 |  - Stdio JSON-RPC Clients: Claude Desktop, Claude Code CLI, Cursor, Windsurf, Codex, Antigravity, Kimi Code  |
 |  - MCP Tool Ingestion: 23 Developer Tools via standard Model Context Protocol Specification                  |
-|  - Multi-Language Runtime (i18n): Dynamic Locale Selector [EN, DE, ES, ZH, JA, RU] (INV-I18N-09)             |
+|  - Runtime locales: DE EN ES ZH JA RU FR HI AR BN PT (INV-I18N-09)                                           |
 +--------------------------------------------------------------------------------------------------------------+
                                           | Stdio Transport (JSON-RPC)
                                           v
@@ -289,7 +289,7 @@ sequenceDiagram
 | `INV-GATE-06` | 显式语言门控 | 仅限 Python 的路径工具会明确拒绝非 `.py` 文件；JS/TS 分析只读且基于正则表达式。 |
 | `INV-ENC-07` | 非破坏性编码修复 | 修复文本时可还原 27 种以上乱码和 70 种以上德语变音符号模式，不丢失内容，也不会破坏二进制数据。 |
 | `INV-FMT-08` | 格式互换一致性 | 在 JSON、CSV、INI、YAML、TOML、XML 和 TOON 之间无损转换，并保留架构。 |
-| `INV-I18N-09` | 运行时多语言 | 通过 `cc_set_language`，可在 6 种语言（EN、DE、ES、ZH、JA、RU）之间动态切换运行时语言。 |
+| `INV-I18N-09` | 运行时多语言 | 可通过 `cc_set_language` 在 11 种工具输出和诊断消息的运行时语言之间切换；`cc_get_language` 会报告当前代码。 |
 | `INV-SLA-10` | 48 小时安全响应 SLA | 在 Ubuntu、Windows、macOS 上通过 Node 20、22、24 验证，公开承诺 48 小时内响应、5 天内分诊。 |
 
 ---
@@ -367,7 +367,7 @@ sequenceDiagram
 
 | 工具 | 说明 |
 |------|-------------|
-| `cc_set_language` | 切换当前运行时语言（`en`、`de`、`es`、`zh`、`ja`、`ru`） |
+| `cc_set_language` | 设置运行时工具输出和诊断消息的语言（`de`、`en`、`es`、`zh`、`ja`、`ru`、`fr`、`hi`、`ar`、`bn`、`pt`）。 |
 | `cc_get_language` | 查询当前语言和受支持的区域代码 |
 
 **23 项开发者工具**可通过 `cc_` 前缀使用。
@@ -475,16 +475,23 @@ FileCommander 和 CodeCommander 设计为可同时运行：
 <a id="sec-11"></a><a id="11-multi-language-support-i18n"></a><a id="multi-language-support-i18n"></a><a id="i18n"></a>
 ## 11. 多语言支持（i18n）
 
-CodeCommander 原生支持 6 种语言，用于所有工具说明、输出提示和诊断消息：
+CodeCommander 支持以下 11 种语言，用于工具在运行时返回的消息，包括诊断消息：
 
-- `en` — 英语（默认）
-- `de` — 德语
+- `de` — 德语（默认）
+- `en` — 英语
 - `es` — 西班牙语
 - `zh` — 简体中文
 - `ja` — 日语
 - `ru` — 俄语
+- `fr` — 法语
+- `hi` — 印地语
+- `ar` — 阿拉伯语
+- `bn` — 孟加拉语
+- `pt` — 葡萄牙语
 
-使用 `cc_get_language` 查询当前语言，或在 MCP 会话运行期间通过 `cc_set_language` 动态切换语言。
+这些代码用于选择运行时工具输出和诊断消息的语言。它们不会翻译 MCP 工具发现或 schema 描述、GUI、CLI 或 API；README 导航单独列出文档语言。
+
+启动服务器时，`CC_LANGUAGE` 用于选择初始语言。在活动 MCP 会话中，可使用 `cc_set_language` 切换语言；`cc_get_language` 会报告当前代码和受支持的代码。若未设置 `CC_LANGUAGE` 或其值不受支持，则回退到德语（`de`）。文档未介绍 `--lang` 选项。
 
 ---
 

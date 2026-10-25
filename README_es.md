@@ -1,13 +1,13 @@
-<!-- worldset: {"translated_from_sha256": "a8f3a78e24362792ae63406370643225807d7555231ddfaa02dba69bac7911d3", "translator": "gpt-6-luna", "translated_at": "2026-10-25 03:56:05+00:00"} -->
+<!-- worldset: {"translated_from_sha256": "c11dfac3a2a77d1275cd2e577e98e1cfb77f6a79e216cf05578e1215537972d8", "translator": "gpt-6-luna", "translated_at": "2026-10-25 03:56:05+00:00"} -->
 <p align="center">
   <img src="https://raw.githubusercontent.com/ellmos-ai/.github/master/profile/logo-ellmos-codecommander.jpg" alt="ellmos CodeCommander MCP emblem" width="400">
 </p>
 
 # Servidor MCP ellmos CodeCommander
 
-[English](README.md) | [Deutsch](README_de.md) | **Español** | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Русский](README_ru.md)
+[English](README.md) | [Deutsch](README_de.md) | **Español** | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Русский](README_ru.md) | [Français](README_fr.md) | [हिन्दी](README_hi.md) | [العربية](README_ar.md) | [বাংলা](README_bn.md) | [Português](README_pt.md)
 
-> **Idiomas de la documentación:** Estos enlaces indican los idiomas disponibles de la documentación README. Los idiomas de los mensajes de las herramientas en tiempo de ejecución se indican por separado en la sección 11; esto no afirma que exista una GUI, una CLI ni una API traducidas.
+La navegación del README enumera los idiomas de documentación disponibles. La sección 11 describe por separado los idiomas para los mensajes de salida y diagnóstico de las herramientas en tiempo de ejecución. Esto no afirma que estén traducidas las descripciones de descubrimiento o los esquemas MCP, ni la GUI, la CLI o la API.
 
 *Parte de la familia [ellmos-ai](https://github.com/ellmos-ai).*
 
@@ -141,7 +141,7 @@ La siguiente matriz compara CodeCommander MCP con otros enfoques de herramientas
 | **6. Conversión universal de formatos** | Ninguna | Varias herramientas CLI distintas | API de conversión SaaS | Configuración de varios complementos | **Conversión sin pérdida de 7 formatos (`JSON/YAML/TOML/XML/TOON`)** |
 | **7. Motor de diferencias y banco de pruebas de expresiones regulares** | Ninguno | `diff`/`grep` básicos | Ninguno | Solo panel gráfico | **Diferencias unificadas LCS y expresiones regulares con grupos y reemplazo** |
 | **8. Prioridad local y salida de red cero** | Depende del host | Local | Salida de datos / telemetría en la nube | A menudo se conecta a la nube | **JSON-RPC stdio 100 % sin conexión (`INV-LOCAL-01`)** |
-| **9. Compatibilidad multilingüe (i18n)** | Solo inglés | Ninguna | Solo inglés | Paquetes de idiomas | **6 idiomas dinámicos (`cc_set_language`)** |
+| **9. Compatibilidad multilingüe (i18n)** | Solo inglés | Ninguna | Solo inglés | Paquetes de idiomas | 11 idiomas para los mensajes de salida y diagnóstico de las herramientas en tiempo de ejecución; se cambian con `cc_set_language`. |
 | **10. Paridad de registros y manifiestos** | Mínima | Ninguna | Propietaria | Específica del marketplace | **npm, Glama, Smithery, registro MCP, `llms.txt`** |
 
 ---
@@ -156,7 +156,7 @@ La siguiente matriz compara CodeCommander MCP con otros enfoques de herramientas
 | [VIEW 1: CLIENT RUNTIMES, USER INTERFACES & AGENT ENTRYPOINTS]                                               |
 |  - Stdio JSON-RPC Clients: Claude Desktop, Claude Code CLI, Cursor, Windsurf, Codex, Antigravity, Kimi Code  |
 |  - MCP Tool Ingestion: 23 Developer Tools via standard Model Context Protocol Specification                  |
-|  - Multi-Language Runtime (i18n): Dynamic Locale Selector [EN, DE, ES, ZH, JA, RU] (INV-I18N-09)             |
+|  - Runtime locales: DE EN ES ZH JA RU FR HI AR BN PT (INV-I18N-09)                                           |
 +--------------------------------------------------------------------------------------------------------------+
                                           | Stdio Transport (JSON-RPC)
                                           v
@@ -291,7 +291,7 @@ sequenceDiagram
 | `INV-GATE-06` | Controles explícitos de lenguaje | Las herramientas de rutas específicas de Python rechazan explícitamente archivos que no sean `.py`; el análisis de JS/TS es de solo lectura y se basa en expresiones regulares. |
 | `INV-ENC-07` | Codificación no destructiva | El texto reparado recupera más de 27 patrones de mojibake y 70 de umlauts alemanes sin pérdidas ni daños binarios. |
 | `INV-FMT-08` | Paridad de intercambio de formatos | Conversión sin pérdida entre JSON, CSV, INI, YAML, TOML, XML y TOON, preservando el esquema. |
-| `INV-I18N-09` | Multilingüismo en tiempo de ejecución | Cambio dinámico entre 6 idiomas (EN, DE, ES, ZH, JA, RU) mediante `cc_set_language`. |
+| `INV-I18N-09` | Multilingüismo en tiempo de ejecución | Cambiar entre los 11 idiomas de los mensajes de salida y diagnóstico de las herramientas con `cc_set_language`; `cc_get_language` indica el código activo. |
 | `INV-SLA-10` | SLA de respuesta de seguridad de 48 h | Verificado en Ubuntu, Windows y macOS con Node 20, 22 y 24, con el compromiso público de responder en 48 h y clasificar en 5 días. |
 
 ---
@@ -370,7 +370,7 @@ sequenceDiagram
 
 | Herramienta | Descripción |
 |------|-------------|
-| `cc_set_language` | Cambia el idioma activo en tiempo de ejecución (`en`, `de`, `es`, `zh`, `ja`, `ru`) |
+| `cc_set_language` | Establecer el idioma de los mensajes de salida y diagnóstico de las herramientas en tiempo de ejecución (`de`, `en`, `es`, `zh`, `ja`, `ru`, `fr`, `hi`, `ar`, `bn`, `pt`). |
 | `cc_get_language` | Consulta el idioma actualmente activo y los códigos de configuración regional compatibles |
 
 **Total: 23 herramientas para desarrolladores** disponibles bajo el prefijo `cc_`.
@@ -478,15 +478,23 @@ FileCommander y CodeCommander están diseñados para ejecutarse al mismo tiempo:
 <a id="sec-11"></a><a id="11-multi-language-support-i18n"></a><a id="multi-language-support-i18n"></a><a id="i18n"></a>
 ## 11. Idiomas de los mensajes de las herramientas en tiempo de ejecución (i18n)
 
-CodeCommander admite de forma nativa 6 idiomas para todas las descripciones de herramientas, los avisos de salida y los mensajes de diagnóstico:
-- `en` — inglés (predeterminado)
-- `de` — alemán
+CodeCommander admite estos 11 idiomas en tiempo de ejecución para los mensajes que devuelven las herramientas, incluidos los mensajes de diagnóstico:
+
+- `de` — alemán (predeterminado)
+- `en` — inglés
 - `es` — español
 - `zh` — chino simplificado
 - `ja` — japonés
 - `ru` — ruso
+- `fr` — francés
+- `hi` — hindi
+- `ar` — árabe
+- `bn` — bengalí
+- `pt` — portugués
 
-Usa `cc_get_language` para consultar el idioma actual o `cc_set_language` para cambiarlo dinámicamente durante una sesión MCP activa.
+Estos códigos seleccionan el idioma de los mensajes de salida y diagnóstico de las herramientas en tiempo de ejecución. No traducen las descripciones de descubrimiento ni los esquemas MCP, ni la GUI, la CLI o la API; la navegación del README enumera por separado los idiomas de documentación.
+
+`CC_LANGUAGE` selecciona el idioma inicial al iniciar el servidor. Durante una sesión MCP activa, usa `cc_set_language` para cambiarlo; `cc_get_language` indica el código activo y los códigos admitidos. Si `CC_LANGUAGE` no está definido o no es compatible, se usa alemán (`de`) como alternativa. No se documenta ninguna opción `--lang`.
 
 ---
 

@@ -4,9 +4,9 @@
 
 # ellmos CodeCommander MCP Server
 
-[English](README.md) | **Deutsch** | [Español](README_es.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Русский](README_ru.md)
+[English](README.md) | **Deutsch** | [Español](README_es.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Русский](README_ru.md) | [Français](README_fr.md) | [हिन्दी](README_hi.md) | [العربية](README_ar.md) | [বাংলা](README_bn.md) | [Português](README_pt.md)
 
-Diese Links zeigen die verfügbaren Sprachfassungen der README-Dokumentation. Die Sprachen der Werkzeugmeldungen zur Laufzeit stehen gesondert in Abschnitt 11.
+Die README-Navigation listet die verfügbaren Dokumentationssprachen. Abschnitt 11 beschreibt separat die Sprachen für Werkzeugausgaben und Diagnosemeldungen zur Laufzeit. Das ist keine Aussage, dass MCP-Erkennungs- oder Schemainformationen, GUI, CLI oder API übersetzt sind.
 
 *Teil der [ellmos-ai](https://github.com/ellmos-ai) Familie.*
 
@@ -139,7 +139,7 @@ Die folgende Matrix vergleicht CodeCommander MCP mit alternativen Entwickler-Wer
 | **6. Universelle Formatkonvertierung** | Keine | Mehrere disparate CLI-Tools | SaaS-Konvertierungs-APIs | Multi-Plugin-Setup | **Verlustfreie 7 Formate (`JSON/YAML/TOML/XML/TOON`)** |
 | **7. Diff-Engine & Regex-Werkbank** | Keine | Einfaches `diff`/`grep` | Keine | Nur GUI-Bedienfeld | **LCS-Unified-Diff & Regex mit Gruppen/Ersetzung** |
 | **8. Local-First & Zero-Egress** | Host-abhängig | Lokal | Cloud-Egress / Telemetrie | Häufig Cloud-Verbindung | **100% Offline-Stdio-JSON-RPC (`INV-LOCAL-01`)** |
-| **9. Mehrsprachigkeit (i18n)** | Nur Englisch | Keine | Nur Englisch | Sprachpakete | **Dynamisch 6 Sprachen (`cc_set_language`)** |
+| **9. Mehrsprachigkeit (i18n)** | Nur Englisch | Keine | Nur Englisch | Sprachpakete | 11 Sprachen für Werkzeugausgaben und Diagnosemeldungen zur Laufzeit; Umschaltung mit `cc_set_language`. |
 | **10. Registry- & Manifest-Parität** | Minimal | Keine | Proprietär | Marktplatz-spezifisch | **npm, Glama, Smithery, MCP Registry, `llms.txt`** |
 
 ---
@@ -154,7 +154,7 @@ Die folgende Matrix vergleicht CodeCommander MCP mit alternativen Entwickler-Wer
 | [SICHT 1: CLIENT-LAUFZEITEN, BENUTZEROBERFLÄCHEN & AGENTEN-EINSTIEGSPUNKTE]                                  |
 |  - Stdio JSON-RPC Clients: Claude Desktop, Claude Code CLI, Cursor, Windsurf, Codex, Antigravity, Kimi Code  |
 |  - MCP Tool-Eingang: 23 Entwickler-Werkzeuge über standardisierte Model Context Protocol Spezifikation       |
-|  - Mehrsprachige Laufzeit (i18n): Dynamischer Sprachselektor [EN, DE, ES, ZH, JA, RU] (INV-I18N-09)          |
+|  - Runtime locales: DE EN ES ZH JA RU FR HI AR BN PT (INV-I18N-09)                                           |
 +--------------------------------------------------------------------------------------------------------------+
                                           | Stdio Transport (JSON-RPC)
                                           v
@@ -289,7 +289,7 @@ sequenceDiagram
 | `INV-GATE-06` | Explizite Sprachschranken | Python-Tools weisen Nicht-`.py`-Dateien explizit ab; JS/TS-Analyse ist rein lesend und regex-basiert. |
 | `INV-ENC-07` | Zerstörungsfreie Zeichenreparatur | Textkorrektur repariert 27+ Mojibake- und 70+ Umlaut-Muster ohne Datenverlust oder Binärkorruption. |
 | `INV-FMT-08` | Format-Interchange-Parität | Verlustfreie Formatkonvertierung zwischen JSON, CSV, INI, YAML, TOML, XML und TOON mit Schemabewahrung. |
-| `INV-I18N-09` | Laufzeit-Mehrsprachigkeit | Dynamische Umschaltung über 6 Sprachen (EN, DE, ES, ZH, JA, RU) via `cc_set_language` und `cc_get_language`. |
+| `INV-I18N-09` | Laufzeit-Mehrsprachigkeit | Mit `cc_set_language` zwischen den 11 Laufzeitsprachen für Werkzeugausgaben und Diagnosemeldungen umschalten; `cc_get_language` meldet den aktiven Code. |
 | `INV-SLA-10` | 48h Sicherheits-SLA | Verifiziert über Ubuntu, Windows, macOS auf Node 20, 22, 24 mit öffentlicher 48h-Reaktions- / 5-Tage-Triage-Zusage. |
 
 ---
@@ -367,7 +367,7 @@ sequenceDiagram
 
 | Tool | Beschreibung |
 |------|-------------|
-| `cc_set_language` | Aktive Sprache zur Laufzeit umschalten (`en`, `de`, `es`, `zh`, `ja`, `ru`) |
+| `cc_set_language` | Sprache für Werkzeugausgaben und Diagnosemeldungen zur Laufzeit festlegen (`de`, `en`, `es`, `zh`, `ja`, `ru`, `fr`, `hi`, `ar`, `bn`, `pt`). |
 | `cc_get_language` | Aktuell gesetzte Sprache und unterstützte Sprachcodes abfragen |
 
 **Gesamt: 23 Entwickler-Werkzeuge** unter dem `cc_`-Präfix verfügbar.
@@ -475,15 +475,23 @@ FileCommander und CodeCommander können problemlos gleichzeitig betrieben werden
 <a id="sec-11"></a><a id="11-mehrsprachigkeit--lokalisierung-i18n"></a><a id="mehrsprachigkeit--lokalisierung-i18n"></a><a id="i18n"></a>
 ## 11. Mehrsprachigkeit & Lokalisierung (i18n)
 
-CodeCommander unterstützt 6 Sprachen nativ für alle Toolbeschreibungen, Hinweistexte und Diagnosemeldungen:
-- `en` — English (Standard)
-- `de` — Deutsch
-- `es` — Español (Spanisch)
-- `zh` — 简体中文 (Chinesisch)
-- `ja` — 日本語 (Japanisch)
-- `ru` — Русский (Russisch)
+CodeCommander unterstützt zur Laufzeit diese 11 Sprachen für von Werkzeugen zurückgegebene Meldungen, darunter Diagnosemeldungen:
 
-Über `cc_get_language` kann die aktuelle Sprache abgefragt und via `cc_set_language` während einer aktiven Sitzung dynamisch umgeschaltet werden.
+- `de` — Deutsch (Standard)
+- `en` — Englisch
+- `es` — Spanisch
+- `zh` — vereinfachtes Chinesisch
+- `ja` — Japanisch
+- `ru` — Russisch
+- `fr` — Französisch
+- `hi` — Hindi
+- `ar` — Arabisch
+- `bn` — Bengalisch
+- `pt` — Portugiesisch
+
+Diese Codes legen die Sprache von Werkzeugausgaben und Diagnosemeldungen zur Laufzeit fest. Sie übersetzen keine MCP-Erkennungs- oder Schemainformationen und keine GUI, CLI oder API; die README-Navigation listet die Dokumentationssprachen separat.
+
+Mit `CC_LANGUAGE` wird beim Serverstart die anfängliche Sprache gewählt. Während einer aktiven MCP-Sitzung lässt sie sich mit `cc_set_language` wechseln; `cc_get_language` meldet den aktiven Code und die unterstützten Codes. Ist `CC_LANGUAGE` nicht gesetzt oder enthält es einen nicht unterstützten Wert, gilt Deutsch (`de`) als Fallback. Eine `--lang`-Option ist nicht dokumentiert.
 
 ---
 
