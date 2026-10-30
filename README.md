@@ -4,7 +4,9 @@
 
 # ellmos CodeCommander MCP Server
 
-**🇩🇪 [Deutsche Version](README_de.md)**
+**English** | [Deutsch](README_de.md) | [Español](README_es.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Русский](README_ru.md) | [Français](README_fr.md) | [हिन्दी](README_hi.md) | [العربية](README_ar.md) | [বাংলা](README_bn.md) | [Português](README_pt.md)
+
+The README navigation lists the available documentation languages. Section 11 separately describes the runtime languages used for tool output messages and diagnostics. This does not claim that MCP discovery or schema descriptions, the GUI, CLI, or API are translated.
 
 *Part of the [ellmos-ai](https://github.com/ellmos-ai) family.*
 
@@ -137,7 +139,7 @@ The following matrix compares CodeCommander MCP against alternative developer to
 | **6. Universal Format Conversion** | None | Multiple disparate CLI tools | SaaS conversion API | Multi-plugin setup | **Lossless 7 formats (`JSON/YAML/TOML/XML/TOON`)** |
 | **7. Diff Engine & Regex Workbench** | None | Basic `diff`/`grep` | None | GUI panel only | **LCS Unified Diff & Regex with groups/replace** |
 | **8. Local-First & Zero-Egress** | Host-dependent | Local | Cloud egress / telemetry | Often connects to cloud | **100% Offline Stdio JSON-RPC (`INV-LOCAL-01`)** |
-| **9. Multi-Language (i18n) Support** | English only | None | English only | Language packs | **Dynamic 6 languages (`cc_set_language`)** |
+| **9. Multi-Language (i18n) Support** | English only | None | English only | Language packs | 11 runtime languages for tool output and diagnostic messages; switchable with `cc_set_language`. |
 | **10. Registry & Manifest Parity** | Minimal | None | Proprietary | Marketplace specific | **npm, Glama, Smithery, MCP Registry, `llms.txt`** |
 
 ---
@@ -152,7 +154,7 @@ The following matrix compares CodeCommander MCP against alternative developer to
 | [VIEW 1: CLIENT RUNTIMES, USER INTERFACES & AGENT ENTRYPOINTS]                                               |
 |  - Stdio JSON-RPC Clients: Claude Desktop, Claude Code CLI, Cursor, Windsurf, Codex, Antigravity, Kimi Code  |
 |  - MCP Tool Ingestion: 23 Developer Tools via standard Model Context Protocol Specification                  |
-|  - Multi-Language Runtime (i18n): Dynamic Locale Selector [EN, DE, ES, ZH, JA, RU] (INV-I18N-09)             |
+|  - Runtime locales: DE EN ES ZH JA RU FR HI AR BN PT (INV-I18N-09)                                           |
 +--------------------------------------------------------------------------------------------------------------+
                                           | Stdio Transport (JSON-RPC)
                                           v
@@ -287,7 +289,7 @@ sequenceDiagram
 | `INV-GATE-06` | Explicit Language Gates | Python-specific path tools reject non-`.py` files explicitly; JS/TS analysis is read-only and regex-based. |
 | `INV-ENC-07` | Non-Destructive Encoding | Repaired text restores 27+ Mojibake and 70+ German umlaut patterns without loss or binary corruption. |
 | `INV-FMT-08` | Format Interchange Parity | Lossless format conversions across JSON, CSV, INI, YAML, TOML, XML, and TOON with schema preservation. |
-| `INV-I18N-09` | Runtime Multi-Language | Dynamic runtime language switching across 6 languages (EN, DE, ES, ZH, JA, RU) via `cc_set_language`. |
+| `INV-I18N-09` | Runtime Multi-Language | Switch among the 11 runtime languages for tool output and diagnostic messages with `cc_set_language`; `cc_get_language` reports the active code. |
 | `INV-SLA-10` | 48h Security Response SLA | Verified across Ubuntu, Windows, macOS on Node 20, 22, 24 with public 48h response / 5-day triage commitment. |
 
 ---
@@ -365,7 +367,7 @@ sequenceDiagram
 
 | Tool | Description |
 |------|-------------|
-| `cc_set_language` | Switch active runtime language (`en`, `de`, `es`, `zh`, `ja`, `ru`) |
+| `cc_set_language` | Set the language used for runtime tool output and diagnostic messages (`de`, `en`, `es`, `zh`, `ja`, `ru`, `fr`, `hi`, `ar`, `bn`, `pt`). |
 | `cc_get_language` | Query currently active language and supported locale codes |
 
 **Total: 23 developer tools** available under the `cc_` prefix.
@@ -473,15 +475,23 @@ FileCommander and CodeCommander are designed to run concurrently:
 <a id="sec-11"></a><a id="11-multi-language-support-i18n"></a><a id="multi-language-support-i18n"></a><a id="i18n"></a>
 ## 11. Multi-Language Support (i18n)
 
-CodeCommander natively supports 6 languages for all tool descriptions, output notices, and diagnostic messages:
-- `en` — English (Default)
-- `de` — Deutsch (German)
-- `es` — Español (Spanish)
-- `zh` — 简体中文 (Chinese Simplified)
-- `ja` — 日本語 (Japanese)
-- `ru` — Русский (Russian)
+CodeCommander supports these 11 languages for messages returned by tools, including diagnostic messages at runtime:
 
-Use `cc_get_language` to check the current language or `cc_set_language` to dynamically change it during an active MCP session.
+- `de` — German (default)
+- `en` — English
+- `es` — Spanish
+- `zh` — Simplified Chinese
+- `ja` — Japanese
+- `ru` — Russian
+- `fr` — French
+- `hi` — Hindi
+- `ar` — Arabic
+- `bn` — Bengali
+- `pt` — Portuguese
+
+These codes select the language of runtime tool output and diagnostic messages. They do not translate MCP discovery or schema descriptions, the GUI, CLI, or API; README navigation lists documentation languages separately.
+
+`CC_LANGUAGE` selects the initial language when the server starts. During an active MCP session, use `cc_set_language` to switch languages; `cc_get_language` reports the active code and supported codes. If `CC_LANGUAGE` is unset or unsupported, the fallback is German (`de`). No `--lang` option is documented.
 
 ---
 
