@@ -77,13 +77,13 @@
   },
   "homepage": "https://github.com/ellmos-ai/ellmos-codecommander-mcp#readme",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.31.0",
+    "@modelcontextprotocol/sdk": "^1.32.0",
     "@toon-format/toon": "^2.3.1",
     "fast-xml-parser": "^5.8.0",
     "js-yaml": "^4.3.1",
     "smol-toml": "^1.9.0",
     "update-notifier": "^7.3.1",
-    "zod": "^3.23.8"
+    "zod": "^4.6.7"
   },
   "overrides": {
     "hono": "^4.13.0",
