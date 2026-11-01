@@ -225,8 +225,8 @@ describe("project metadata", () => {
     expect(ci).toContain("[20, 22, 24]");
     expect(ci).toContain("[ubuntu-latest, windows-latest, macos-latest]");
     expect(ci).toContain("timeout-minutes: 15");
-    expect(ci).toContain("actions/checkout@v4");
-    expect(ci).toContain("actions/setup-node@v4");
+    expect(ci).toContain("actions/checkout@v7");
+    expect(ci).toContain("actions/setup-node@v7");
     expect(ci).toContain("cancel-in-progress: true");
     expect(ci).toContain("npm test");
     expect(ci).toContain("npm run test:integration");
