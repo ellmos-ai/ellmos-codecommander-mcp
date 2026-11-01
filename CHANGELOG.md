@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### CI-Matrix Hardening, Level 1 SBOM Re-Audit & Multi-Agent Defense (Pfad A: 2026-11-01)
+- **CI Matrix Hardening & Deterministic Whitespace Gate:** Added git diff --check to .github/workflows/tests.yml to prevent whitespace regressions and verify line-ending integrity across Ubuntu, Windows, and macOS test matrices.
+- **GitHub Actions Dependabot Ecosystem:** Expanded .github/dependabot.yml to include the github-actions package ecosystem alongside
+pm, with weekly security updates and grouping.
+- **Multi-Agent & Local Development Defense (.gitignore):** Hardened exclusion rules against IDE and multi-agent coordination artifacts (.gemini/, .antigravity/, .cursor/), local configuration files (*.local.json), and compiled Python caches (__pycache__/, *.pyc, *.pyo, *.pyd).
+- **Level 1 SBOM Stand 2026-11-01 Re-Audit (THIRD_PARTY_LICENSES.md, THIRD_PARTY_LICENSES.txt):** Re-audited full dependency inventory and invariant matrix (INV-LOCAL-01 through INV-SLA-10), confirming zero copyleft, 100% zero-egress, unprivileged RunAsInvoker user mode, statutory notice (§ 521 BGB), and 48h SLA response.
+- **Documentation & Badges Synchronization:** Updated Verified-2026--11--01 and 	ests-322 passed | 100% badges across English (README.md), German (README_de.md), and all 9 international translation READMEs; synchronized llms.txt to Last-checked: 2026-11-01 (322 tests: 227 Vitest, 52 MCP stdio integration, 43 i18n assertions).
+- **Automated Hygiene Contract Tests:** Expanded 	est/metadata.test.ts with contract tests verifying CI matrix whitespace gate, dependabot github-actions ecosystem, .gitignore multi-agent defense patterns, Level 1 SBOM currency Stand 2026-11-01, and test surface parity.
+- **Strict Version Freeze Discipline:** Version 1.3.27 strictly maintained unchanged per T-20260920-167562623.
+
 ### Discoverability, Level 1 SBOM Re-Audit & Badge Currency (Pfad B: 2026-10-09)
 - **Documentation & Badge Parity:** Synchronized Verified-2026--10--09 / Geprüft-2026--10--09 and 	ests-302 passed | 100% badges across English (README.md) and German (README_de.md) documentation; updated llms.txt to Last-checked: 2026-10-09 (302 tests passed: 207 Vitest, 52 MCP stdio integration, 43 i18n assertions).
 - **Level 1 SBOM Stand 2026-10-09 Re-Audit:** Re-audited THIRD_PARTY_LICENSES.txt and THIRD_PARTY_LICENSES.md to Stand 2026-10-09 with full 10-invariant matrix (INV-LOCAL-01 through INV-SLA-10), unprivileged RunAsInvoker mode, Zero-Copyleft permissive stack, and § 521 BGB disclaimer.

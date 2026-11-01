@@ -3,6 +3,9 @@ dist/
 *.js.map
 *.d.ts.map
 .claude/
+.cursor/
+.gemini/
+.antigravity/
 .idea/
 .vscode/
 *.swp
@@ -21,6 +24,7 @@ Thumbs.db
 !.env.example
 !.env.sample
 .npmrc
+*.local.json
 secrets.json
 credentials.json
 token.json
@@ -88,6 +92,10 @@ desktop.ini
 .coverage*
 coverage/
 .nyc_output/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 .pytest_cache/
 .pytest_temp/
 .pytest_tmp*/
