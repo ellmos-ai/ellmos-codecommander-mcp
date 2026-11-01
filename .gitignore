@@ -101,3 +101,6 @@ coverage/
 *.bak
 
 mobile_icons/
+
+# Interne Analyse-Unterlagen (nicht Teil des Pakets)
+docs/MEHRSPRACHIGKEIT-ANALYSE_*.md
