@@ -14,7 +14,7 @@ La navegación del README enumera los idiomas de documentación disponibles. La 
 [![Licencia: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Versión de npm](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![Pruebas de CI](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Pruebas](https://img.shields.io/badge/tests-302%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
+[![Pruebas](https://img.shields.io/badge/tests-322%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Plataforma](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacidad](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
@@ -25,7 +25,7 @@ La navegación del README enumera los idiomas de documentación disponibles. La 
 [![Auditoría de terceros](https://img.shields.io/badge/third--party-audited-success.svg)](THIRD_PARTY_LICENSES.md)
 [![Registro de marketing](https://img.shields.io/badge/marketing-audited-blueviolet.svg)](MARKETING-LOG.txt)
 [![Atribución: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
-[![Verificado: 2026-10-09](https://img.shields.io/badge/Verified-2026--10--09-success.svg)](CHANGELOG.md)
+[![Verificado: 2026-10-09](https://img.shields.io/badge/Verified-2026--11--01-success.svg)](CHANGELOG.md)
 [![Ecosistema](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Organización paraguas](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![Indexación para LLM](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -513,7 +513,7 @@ npm run test:i18n         # Translation parity test suite (43 assertions)
 npm run test:all          # Run full QA pipeline (build + vitest + integration + i18n)
 ```
 
-Los controles de pruebas están separados deliberadamente y se ejecutan de forma automatizada en CI en **Ubuntu**, **macOS** y **Windows**, con Node.js 20, 22 y 24 (302 aserciones automatizadas en total, todas aprobadas). El flujo de contribución y las directrices de desarrollo se detallan en [CONTRIBUTING.md](CONTRIBUTING.md).
+Los controles de pruebas están separados deliberadamente y se ejecutan de forma automatizada en CI en **Ubuntu**, **macOS** y **Windows**, con Node.js 20, 22 y 24 (322 aserciones automatizadas en total, todas aprobadas). El flujo de contribución y las directrices de desarrollo se detallan en [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 

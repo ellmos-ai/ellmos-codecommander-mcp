@@ -14,7 +14,7 @@ README 导航列出可用的文档语言。第 11 节单独介绍工具输出消
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CI Tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Tests](https://img.shields.io/badge/tests-302%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
+[![Tests](https://img.shields.io/badge/tests-322%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
@@ -25,7 +25,7 @@ README 导航列出可用的文档语言。第 11 节单独介绍工具输出消
 [![Third-Party Audited](https://img.shields.io/badge/third--party-audited-success.svg)](THIRD_PARTY_LICENSES.md)
 [![Marketing Log](https://img.shields.io/badge/marketing-audited-blueviolet.svg)](MARKETING-LOG.txt)
 [![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
-[![Verified: 2026-10-09](https://img.shields.io/badge/Verified-2026--10--09-success.svg)](CHANGELOG.md)
+[![Verified: 2026-10-09](https://img.shields.io/badge/Verified-2026--11--01-success.svg)](CHANGELOG.md)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -509,7 +509,7 @@ npm run test:i18n         # Translation parity test suite (43 assertions)
 npm run test:all          # Run full QA pipeline (build + vitest + integration + i18n)
 ```
 
-测试门槛经 CI 自动执行，并分别覆盖 **Ubuntu**、**macOS** 和 **Windows** 上的 Node.js 20、22、24（共 302 项自动断言，全部通过）。贡献流程和开发指南详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+测试门槛经 CI 自动执行，并分别覆盖 **Ubuntu**、**macOS** 和 **Windows** 上的 Node.js 20、22、24（共 322 项自动断言，全部通过）。贡献流程和开发指南详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ---
 

@@ -14,7 +14,7 @@ README नेविगेशन उपलब्ध दस्तावेज़�
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CI Tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Tests](https://img.shields.io/badge/tests-302%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
+[![Tests](https://img.shields.io/badge/tests-322%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
@@ -25,7 +25,7 @@ README नेविगेशन उपलब्ध दस्तावेज़�
 [![Third-Party Audited](https://img.shields.io/badge/third--party-audited-success.svg)](THIRD_PARTY_LICENSES.md)
 [![Marketing Log](https://img.shields.io/badge/marketing-audited-blueviolet.svg)](MARKETING-LOG.txt)
 [![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
-[![Verified: 2026-10-09](https://img.shields.io/badge/Verified-2026--10--09-success.svg)](CHANGELOG.md)
+[![Verified: 2026-10-09](https://img.shields.io/badge/Verified-2026--11--01-success.svg)](CHANGELOG.md)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -512,7 +512,7 @@ npm run test:i18n         # Translation parity test suite (43 assertions)
 npm run test:all          # Run full QA pipeline (build + vitest + integration + i18n)
 ```
 
-परीक्षण गेट जानबूझकर अलग रखे गए हैं और CI में **Ubuntu**, **macOS** तथा **Windows** पर Node.js 20, 22 और 24 के साथ स्वचालित रूप से चलते हैं (कुल 302 स्वचालित assertions, सभी सफल)। योगदान प्रक्रिया और विकास दिशानिर्देश [CONTRIBUTING.md](CONTRIBUTING.md) में दिए गए हैं।
+परीक्षण गेट जानबूझकर अलग रखे गए हैं और CI में **Ubuntu**, **macOS** तथा **Windows** पर Node.js 20, 22 और 24 के साथ स्वचालित रूप से चलते हैं (कुल 322 स्वचालित assertions, सभी सफल)। योगदान प्रक्रिया और विकास दिशानिर्देश [CONTRIBUTING.md](CONTRIBUTING.md) में दिए गए हैं।
 
 ---
 

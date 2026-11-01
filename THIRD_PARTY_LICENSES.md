@@ -1,7 +1,7 @@
 # Third-Party Licenses and Open-Source Transparency Notice
 
 > **Project:** `ellmos-ai/ellmos-codecommander-mcp` (CodeCommander)
-> **Audited:** 2026-10-09  |  **Stand:** 2026-10-09
+> **Audited:** 2026-11-01  |  **Stand:** 2026-11-01
 > **Repository License:** [MIT License](LICENSE)
 > **Development Guidelines:** [CONTRIBUTING.md](CONTRIBUTING.md)
 > **Architecture & Privacy:** 100% Local-First, Zero-Egress by default, Unprivileged User-Mode (`RunAsInvoker`)
@@ -109,7 +109,7 @@ Used by `typescript`.
 
 ## 6. Level 1 SBOM Invariant Cross-Reference Matrix & Governance Statement
 
-> **Stand:** 2026-10-09 | **Level 1 SBOM Transparency:** Deterministischer Lizenz- und Invariantenabgleich aller direkten und transitiven Pakete unter `RunAsInvoker`. Ergänzende Plain-Text-Begleitdatei: [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt). Richtlinien zur Mitwirkung in [`CONTRIBUTING.md`](CONTRIBUTING.md).
+> **Stand:** 2026-11-01 | **Level 1 SBOM Transparency:** Deterministischer Lizenz- und Invariantenabgleich aller direkten und transitiven Pakete unter `RunAsInvoker`. Ergänzende Plain-Text-Begleitdatei: [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt). Richtlinien zur Mitwirkung in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 `ellmos-codecommander-mcp` binds all runtime tools, dependency usage, and file mutations to 10 verified architectural invariants:
 
@@ -125,3 +125,9 @@ Used by `typescript`.
 | `INV-FMT-08` | Lossless Format Parity | Roundtrip format conversion across JSON, CSV, INI, YAML, TOML, XML, and TOON preserving types and schemas. | `test/test_new_tools.mjs` roundtrip assertions |
 | `INV-I18N-09` | Dynamic Multi-Language | Full runtime i18n across 6 languages (EN, DE, ES, ZH, JA, RU) via `cc_set_language` and `cc_get_language`. | `test-i18n.mjs` & `test/i18n.test.ts` |
 | `INV-SLA-10` | 48h Response / 5d Triage / 30d Remediation SLA | Multi-OS CI (Ubuntu, Windows, macOS across Node 20, 22, 24), binding 48h vulnerability response SLA, and 30 calendar days remediation SLA. | `.github/workflows/tests.yml` & `SECURITY.md` |
+
+---
+
+## 7. Statutory Notice & Disclaimer (§ 521 BGB)
+
+Die Bereitstellung dieser Open-Source-Software und Dokumentation erfolgt unentgeltlich im Sinne einer Gefälligkeit (§ 521 BGB). Die Haftung für Sach- und Rechtsmängel ist auf Vorsatz und grobe Fahrlässigkeit beschränkt.
