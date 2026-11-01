@@ -1,0 +1,15 @@
+# Normalize all text files to LF in the repository.
+# Without this, a checkout on Windows (core.autocrlf=true) and one on
+# Linux/macOS disagree about every text file, which shows up as a
+# whole-file diff ("phantom diff") that hides the real change.
+* text=auto eol=lf
+
+# Binary assets must never be touched by EOL normalization.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
