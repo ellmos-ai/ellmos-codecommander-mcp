@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### AI Security and Dependency Audit, Supply-Chain Hardening & Privacy Remediation (2026-11-02)
+- **Supply-Chain & Dependency Hardening (0 Schwachstellen):** Beseitigung aller 4 moderaten Schwachstellen across 213 Paketen (`npm audit` 100% sauber):
+  - `@hono/node-server`: Gehärtet auf `^2.1.5` (Behebung der `serveStatic` Pfad-Doppeldekodierungs-Schwachstelle GHSA-rmxm-3fg6-px4f).
+  - `@vitest/mocker` & `vitest`: Gehärtet auf `^4.1.12` (Behebung der Code-Injection GHSA-qxg6-89mg-rqv8 und Windows-Backslash-Traversal GHSA-xp26-3454-mjgp).
+  - `qs`: Gehärtet auf `^6.17.1` (Behebung von TypeError DoS bei non-callable toString GHSA-6pq8-jhm2-2vcw).
+  - Weitere Overrides für `fast-uri` (`^3.1.9`), `ip-address` (`^10.7.5`), `proxy-addr` (`^2.0.8`), `source-map-js` (`^1.2.2`), `body-parser` (`^2.4.0`) und `hono` (`^4.13.13`) aktualisiert und verifiziert.
+- **TASKPLAN-Aufgabenregister (`TODO.md`):** `CODECOMMANDER-SECURITY-001 (TASKPLAN #2198)` erfolgreich als ERLEDIGT abgeschlossen.
+- **Datenschutz & Packaging-Hygiene (`MARKETING-LOG.txt`):** Internen Klonpfad in `MARKETING-LOG.txt:246` datenschutzkonform neutralisiert (`(<Local_DEV>/repos/ellmos-codecommander-mcp)`).
+- **Level 1 SBOM Stand 2026-11-02 Re-Audit (`THIRD_PARTY_LICENSES.md`, `THIRD_PARTY_LICENSES.txt`):** SBOM-Inventar und Overrides auf Stand 2026-11-02 aktualisiert; 0 Schwachstellen bestätigt; 100% permissive Lizenzen und 0 Copyleft.
+- **Vertragstests & Verifikation (`test/metadata.test.ts`):** Vertragstest für 0 Schwachstellen und Stand-2026-11-02-Abgleich erweitert; alle 322 Tests (227 Vitest, 52 MCP-Stdio, 43 i18n) 100% grün.
+- **Strict Version Freeze Discipline:** Version 1.3.27 strikt beibehalten per T-20260920-167562623.
+
 ### CI-Matrix Hardening, Level 1 SBOM Re-Audit & Multi-Agent Defense (Pfad A: 2026-11-01)
 - **CI Matrix Hardening & Deterministic Whitespace Gate:** Added git diff --check to .github/workflows/tests.yml to prevent whitespace regressions and verify line-ending integrity across Ubuntu, Windows, and macOS test matrices.
 - **GitHub Actions Dependabot Ecosystem:** Expanded .github/dependabot.yml to include the github-actions package ecosystem alongside

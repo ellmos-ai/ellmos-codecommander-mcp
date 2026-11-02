@@ -243,7 +243,7 @@ i18n Multi-Language Support   | English only     | None             | 6 Language
   and runtime invariants (INV-LOCAL-01 through INV-SLA-10).
 - Bilingual CONTRIBUTING Guidelines: Established comprehensive bilingual CONTRIBUTING.md in repository root
   with 10 runtime invariants, unprivileged RunAsInvoker mode (INV-SEC-02), Plan D local development workflow
-  (C:\_Local_DEV\repos\ellmos-codecommander-mcp), quality gate requirements (npm run test:all), binding 48h
+  (<Local_DEV>/repos/ellmos-codecommander-mcp), quality gate requirements (npm run test:all), binding 48h
   vulnerability response SLA, and statutory notice (§ 521 BGB Gefälligkeitsrecht); whitelisted in package.json files array.
 - Level 1 SBOM Re-Audit & Plain-Text Companion: Re-audited THIRD_PARTY_LICENSES.txt and THIRD_PARTY_LICENSES.md
   to Stand 2026-10-03 with full permissive license inventory (MIT, BSD-2, BSD-3, Apache-2.0), zero copyleft,

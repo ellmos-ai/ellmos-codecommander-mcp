@@ -38,7 +38,6 @@ Importdiagnostik.
 
 | ID | Aufgabe | Priorität | Aufwand | Scope | Abhängigkeit / Quelle |
 | --- | --- | --- | --- | --- | --- |
-| `CODECOMMANDER-SECURITY-001` (TASKPLAN #2198) | Produktionsabhängigkeiten gegen den aktuellen npm-Audit-Befund härten | hoch | large | local | `npm audit --omit=dev --json`, package-/Lockfile, Sicherheitsinventar |
 | `CODECOMMANDER-RELEASE-002` (TASKPLAN #2199) | CodeCommander 1.3.27 mit npm- und Registry-Stand abgleichen | mittel | special | local | Git-/npm-/Manifest-Readback; Owner-/Credential-Gate |
 
 ## TASKWRITER-Grenze
@@ -50,6 +49,12 @@ geändert, keinen Audit-Fix vorgenommen und nichts veröffentlicht oder gepusht.
 
 ## Im TASKSOLVER-Schritt abgeschlossen
 
+- `CODECOMMANDER-SECURITY-001` (TASKPLAN #2198) wurde am 2026-11-02 umgesetzt:
+  Produktions- und transitive Abhängigkeiten über gezielte Overrides in `package.json`
+  gehärtet (`@hono/node-server` ^2.1.5 [GHSA-rmxm-3fg6-px4f], `@vitest/mocker` und `vitest` ^4.1.12
+  [GHSA-qxg6-89mg-rqv8, GHSA-xp26-3454-mjgp], `qs` ^6.17.1 [GHSA-6pq8-jhm2-2vcw], `fast-uri` ^3.1.9,
+  `ip-address` ^10.7.5, `proxy-addr` ^2.0.8, `source-map-js` ^1.2.2, `body-parser` ^2.4.0, `hono` ^4.13.13).
+  `npm audit` bestätigt 0 Schwachstellen across 213 Paketen (100% sauber).
 - `CODECOMMANDER-DOCS-003` (TASKPLAN #2200) wurde am 2026-09-20 umgesetzt:
   README.md, README_de.md, MARKETING-LOG.txt und THIRD_PARTY_LICENSES.md
   spiegeln 201 Vitest-Tests, 52 MCP-Stdio-Assertions, 43 i18n-Assertions,

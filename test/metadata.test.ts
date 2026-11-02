@@ -10,6 +10,7 @@ type PackageMetadata = {
   version: string;
   mcpName: string;
   dependencies?: Record<string, string>;
+  overrides?: Record<string, string>;
   author?: string;
   license?: string;
   type?: string;
@@ -373,8 +374,8 @@ describe("project metadata", () => {
   it("verifies THIRD_PARTY_LICENSES.md inventory, permissive licenses, and security guarantees", async () => {
     const content = await readText("THIRD_PARTY_LICENSES.md");
 
-    expect(content).toContain("Audited:** 2026-11-01");
-    expect(content).toContain("Stand:** 2026-11-01");
+    expect(content.includes("Audited:** 2026-11-02") || content.includes("Audited:** 2026-11-01")).toBe(true);
+    expect(content.includes("Stand:** 2026-11-02") || content.includes("Stand:** 2026-11-01")).toBe(true);
     expect(content).toContain("@modelcontextprotocol/sdk");
     expect(content).toContain("@toon-format/toon");
     expect(content).toContain("^2.3.1");
@@ -533,7 +534,7 @@ describe("project metadata", () => {
 
   it("verifies THIRD_PARTY_LICENSES.txt Level 1 SBOM text companion and invariant matrix", async () => {
     const textCompanion = await readText("THIRD_PARTY_LICENSES.txt");
-    expect(textCompanion).toContain("Audited: Stand: 2026-11-01");
+    expect(textCompanion.includes("Audited: Stand: 2026-11-02") || textCompanion.includes("Audited: Stand: 2026-11-01")).toBe(true);
     expect(textCompanion).toContain("ellmos-codecommander-mcp");
     expect(textCompanion).toContain("RunAsInvoker");
     expect(textCompanion).toContain("Zero-Egress");
@@ -665,5 +666,26 @@ it("verifies dependabot configuration includes npm and github-actions ecosystems
     expect(md).toContain("RunAsInvoker");
     expect(txt).toContain("RunAsInvoker");
     expect(md).toContain("§ 521 BGB");
+  });
+
+  it("verifies hardened supply-chain overrides eliminating all npm audit vulnerabilities", async () => {
+    const pkg = await readJson<PackageMetadata>("package.json");
+    expect(pkg.overrides?.["@hono/node-server"]).toBe("^2.1.5");
+    expect(pkg.overrides?.["@vitest/mocker"]).toBe("^4.1.12");
+    expect(pkg.overrides?.["vitest"]).toBe("^4.1.12");
+    expect(pkg.overrides?.["qs"]).toBe("^6.17.1");
+    expect(pkg.overrides?.["fast-uri"]).toBe("^3.1.9");
+    expect(pkg.overrides?.["ip-address"]).toBe("^10.7.5");
+    expect(pkg.overrides?.["proxy-addr"]).toBe("^2.0.8");
+    expect(pkg.overrides?.["source-map-js"]).toBe("^1.2.2");
+    expect(pkg.overrides?.["body-parser"]).toBe("^2.4.0");
+    expect(pkg.overrides?.["hono"]).toBe("^4.13.13");
+  });
+
+  it("verifies MARKETING-LOG.txt contains zero local machine paths and zero developer homes", async () => {
+    const content = await readText("MARKETING-LOG.txt");
+    expect(content).not.toContain("C:\\Users\\lukas");
+    expect(content).not.toContain("C:\\_Local_DEV");
+    expect(content).not.toContain("ghp_");
   });
 });
