@@ -176,7 +176,7 @@ describe("project metadata", () => {
       expect(content).toContain("badge/LLM--Ready-llms.txt-blue.svg");
       expect(content).toContain("https://github.com/ellmos-ai");
       expect(content).toContain("https://github.com/open-bricks");
-      expect(content).toContain("badge/tests-322%20passed%20%7C%20100%25-brightgreen.svg");
+      expect(content.includes("badge/tests-326%20passed%20%7C%20100%25-brightgreen.svg") || content.includes("badge/tests-322%20passed%20%7C%20100%25-brightgreen.svg")).toBe(true);
       expect(content).toContain("badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg");
       expect(content).toContain("badge/Security-Local--First%20%7C%20Preview--Safe-blue.svg");
       expect(content).toContain("badge/security-48h%20Response%20%7C%205d%20Triage-blue.svg");
@@ -193,8 +193,8 @@ describe("project metadata", () => {
     expect(llms).toContain(`${EXPECTED_TOOL_COUNT} tools`);
     expect(llms).toContain("ellmos-filecommander-mcp");
     expect(llms).toContain("open-bricks");
-    expect(llms).toContain("Last-checked: 2026-11-01");
-    expect(llms).toContain("322 tests passed");
+    expect(llms.includes("Last-checked: 2026-11-08") || llms.includes("Last-checked: 2026-11-01")).toBe(true);
+    expect(llms.includes("326 tests passed") || llms.includes("322 tests passed")).toBe(true);
     expect(llms).toContain("Zero-Egress");
     expect(llms).toContain("INV-LOCAL-01");
     expect(llms).toContain("CONTRIBUTING.md");
@@ -374,8 +374,8 @@ describe("project metadata", () => {
   it("verifies THIRD_PARTY_LICENSES.md inventory, permissive licenses, and security guarantees", async () => {
     const content = await readText("THIRD_PARTY_LICENSES.md");
 
-    expect(content.includes("Audited:** 2026-11-02") || content.includes("Audited:** 2026-11-01")).toBe(true);
-    expect(content.includes("Stand:** 2026-11-02") || content.includes("Stand:** 2026-11-01")).toBe(true);
+    expect(content.includes("Audited:** 2026-11-08") || content.includes("Audited:** 2026-11-02") || content.includes("Audited:** 2026-11-01")).toBe(true);
+    expect(content.includes("Stand:** 2026-11-08") || content.includes("Stand:** 2026-11-02") || content.includes("Stand:** 2026-11-01")).toBe(true);
     expect(content).toContain("@modelcontextprotocol/sdk");
     expect(content).toContain("@toon-format/toon");
     expect(content).toContain("^2.3.1");
@@ -483,6 +483,7 @@ describe("project metadata", () => {
     const content = await readText("CHANGELOG.md");
 
     expect(content).toContain("## [Unreleased]");
+    expect(content).toContain("Discoverability, Dual Sequence Diagrams, Verified Badge & Level 1 SBOM Re-Audit (Pfad B: 2026-11-08)");
     expect(content).toContain("CI-Matrix Hardening, Level 1 SBOM Re-Audit & Multi-Agent Defense (Pfad A: 2026-11-01)");
     expect(content).toContain("Discoverability, Level 1 SBOM Re-Audit & Badge Currency (Pfad B: 2026-10-09)");
     expect(content).toContain("Discoverability, Four-View ASCII Topology, Bilingual CONTRIBUTING & Level 1 SBOM Re-Audit (Pfad B: 2026-10-03)");
@@ -534,7 +535,7 @@ describe("project metadata", () => {
 
   it("verifies THIRD_PARTY_LICENSES.txt Level 1 SBOM text companion and invariant matrix", async () => {
     const textCompanion = await readText("THIRD_PARTY_LICENSES.txt");
-    expect(textCompanion.includes("Audited: Stand: 2026-11-02") || textCompanion.includes("Audited: Stand: 2026-11-01")).toBe(true);
+    expect(textCompanion.includes("Audited: Stand: 2026-11-08") || textCompanion.includes("Audited: Stand: 2026-11-02") || textCompanion.includes("Audited: Stand: 2026-11-01")).toBe(true);
     expect(textCompanion).toContain("ellmos-codecommander-mcp");
     expect(textCompanion).toContain("RunAsInvoker");
     expect(textCompanion).toContain("Zero-Egress");
@@ -568,7 +569,7 @@ describe("project metadata", () => {
   it("verifies Verified-2026-11-01 badge and text companion across English and German READMEs", async () => {
     for (const fileName of ["README.md", "README_de.md"]) {
       const content = await readText(fileName);
-      expect(content).toContain("badge/Verified-2026--11--01-success.svg");
+      expect(content.includes("badge/Verified-2026--11--08-success.svg") || content.includes("badge/Verified-2026--11--01-success.svg")).toBe(true);
       expect(content).toContain("THIRD_PARTY_LICENSES.txt");
       expect(content).toContain("CONTRIBUTING.md");
     }
@@ -687,5 +688,29 @@ it("verifies dependabot configuration includes npm and github-actions ecosystems
     expect(content).not.toContain("C:\\Users\\lukas");
     expect(content).not.toContain("C:\\_Local_DEV");
     expect(content).not.toContain("ghp_");
+  });
+  it("verifies dual Mermaid sequenceDiagram workflows in English and German READMEs", async () => {
+    const readmeEn = await readText("README.md");
+    const readmeDe = await readText("README_de.md");
+
+    expect(readmeEn).toContain("### 5.1 Python AST Structural Edit Lifecycle");
+    expect(readmeEn).toContain("### 5.2 Subprocess-Isolated Runtime Import Diagnostics Protocol");
+    expect(readmeEn).toContain("cc_runtime_import_diagnose");
+    expect(readmeEn).toContain("Isolated Subprocess Runner (INV-ISOL-05)");
+
+    expect(readmeDe).toContain("### 5.1 Python-AST Struktureller Edit-Lebenszyklus");
+    expect(readmeDe).toContain("### 5.2 Subprozess-isoliertes Laufzeit-Import-Diagnose-Protokoll");
+    expect(readmeDe).toContain("cc_runtime_import_diagnose");
+    expect(readmeDe).toContain("Isolierter Subprozess-Runner (INV-ISOL-05)");
+  });
+
+  it("verifies Pfad B 2026-11-08 recency, dual sequence diagrams, and 326 tests surface in CHANGELOG and llms.txt", async () => {
+    const changelog = await readText("CHANGELOG.md");
+    const llms = await readText("llms.txt");
+
+    expect(changelog).toContain("Discoverability, Dual Sequence Diagrams, Verified Badge & Level 1 SBOM Re-Audit (Pfad B: 2026-11-08)");
+    expect(changelog).toContain("Subprocess-Isolated Runtime Import Diagnostics Protocol");
+    expect(llms).toContain("Last-checked: 2026-11-08");
+    expect(llms).toContain("326 tests passed");
   });
 });

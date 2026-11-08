@@ -13,7 +13,7 @@ Die README-Navigation listet die verfügbaren Dokumentationssprachen. Abschnitt 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/ellmos-codecommander-mcp.svg)](https://www.npmjs.com/package/ellmos-codecommander-mcp)
 [![CI Tests](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp/actions/workflows/tests.yml)
-[![Tests](https://img.shields.io/badge/tests-322%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
+[![Tests](https://img.shields.io/badge/tests-326%20passed%20%7C%20100%25-brightgreen.svg)](https://github.com/ellmos-ai/ellmos-codecommander-mcp)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://nodejs.org/)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success.svg)](SECURITY.md)
@@ -24,7 +24,7 @@ Die README-Navigation listet die verfügbaren Dokumentationssprachen. Abschnitt 
 [![Third-Party Audited](https://img.shields.io/badge/third--party-audited-success.svg)](THIRD_PARTY_LICENSES.md)
 [![Marketing Log](https://img.shields.io/badge/marketing-audited-blueviolet.svg)](MARKETING-LOG.txt)
 [![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
-[![Verified: 2026-10-09](https://img.shields.io/badge/Verified-2026--11--01-success.svg)](CHANGELOG.md)
+[![Verified: 2026-11-08](https://img.shields.io/badge/Verified-2026--11--08-success.svg)](CHANGELOG.md)
 [![Ecosystem](https://img.shields.io/badge/ellmos--ai-Ecosystem-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/open--bricks-Umbrella-purple.svg)](https://github.com/open-bricks)
 [![LLM Indexing](https://img.shields.io/badge/LLM--Ready-llms.txt-blue.svg)](llms.txt)
@@ -244,6 +244,8 @@ graph TD
 <a id="sec-05"></a><a id="5-sicherer-struktureller-edit-lebenszyklus"></a><a id="sicherer-struktureller-edit-lebenszyklus"></a><a id="safe-structural-edit-lifecycle"></a>
 ## 5. Sicherer struktureller Edit-Lebenszyklus
 
+### 5.1 Python-AST Struktureller Edit-Lebenszyklus
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -269,6 +271,36 @@ sequenceDiagram
             Core-->>Stdio: Bestätigung mit angewendetem Diff & Backup-Pfad
             Stdio-->>Developer: Erfolgs-Payload
         end
+    end
+```
+
+### 5.2 Subprozess-isoliertes Laufzeit-Import-Diagnose-Protokoll
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Developer as Entwickler / KI-Agent
+    participant Stdio as CodeCommander Server (stdio)
+    participant Runner as Isolierter Subprozess-Runner (INV-ISOL-05)
+    participant Python as Python 3 Sandbox (sys.path isoliert)
+    participant Target as Zielmodul / Abhängigkeiten
+
+    Developer->>Stdio: cc_runtime_import_diagnose (module_path, timeout_ms: 10000)
+    Stdio->>Runner: Starte ephemeren Runner mit strikter Timeout-Grenze
+    Runner->>Python: Führe speicherinterne Import-Prüfung in isoliertem sys.path aus
+    activate Python
+    Python->>Target: Import-Versuch und Auflösung des Abhängigkeitsbaums
+    alt Zyklische oder fehlende Abhängigkeit
+        Target-->>Python: Import- / Syntax- / Auflösungsfehler
+        Python-->>Runner: Erfasse strukturierte Traceback- und Diagnose-Frames
+        Runner-->>Stdio: Rückgabe der Fehlerursache (zyklisch, fehlend, Syntax)
+        Stdio-->>Developer: Fehlerdiagnose mit Hinweisen zur Behebung
+    else Import erfolgreich
+        Target-->>Python: Modul geladen und inspizierbar
+        Python-->>Runner: Ermittle geladene Modulnamen und Pfade
+        deactivate Python
+        Runner-->>Stdio: Rückgabe der Import-Hierarchie (0 Seiteneffekte, INV-LOCAL-01)
+        Stdio-->>Developer: Diagnose-Ergebnis (saubere Modulauflösung)
     end
 ```
 
