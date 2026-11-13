@@ -670,16 +670,28 @@ it("verifies dependabot configuration includes npm and github-actions ecosystems
 
   it("verifies hardened supply-chain overrides eliminating all npm audit vulnerabilities", async () => {
     const pkg = await readJson<PackageMetadata>("package.json");
-    expect(pkg.overrides?.["@hono/node-server"]).toBe("^2.1.5");
-    expect(pkg.overrides?.["@vitest/mocker"]).toBe("^4.1.12");
-    expect(pkg.overrides?.["vitest"]).toBe("^4.1.12");
-    expect(pkg.overrides?.["qs"]).toBe("^6.17.1");
-    expect(pkg.overrides?.["fast-uri"]).toBe("^3.1.9");
-    expect(pkg.overrides?.["ip-address"]).toBe("^10.7.5");
-    expect(pkg.overrides?.["proxy-addr"]).toBe("^2.0.8");
-    expect(pkg.overrides?.["source-map-js"]).toBe("^1.2.2");
-    expect(pkg.overrides?.["body-parser"]).toBe("^2.4.0");
-    expect(pkg.overrides?.["hono"]).toBe("^4.13.13");
+    // Floors, not exact pins: Dependabot security bumps raise these ranges and must not turn CI red.
+    const floors: Record<string, string> = {
+      "@hono/node-server": "2.1.5",
+      "@vitest/mocker": "4.1.12",
+      vitest: "4.1.12",
+      qs: "6.17.1",
+      "fast-uri": "3.1.9",
+      "ip-address": "10.7.5",
+      "proxy-addr": "2.0.8",
+      "source-map-js": "1.2.2",
+      "body-parser": "2.4.0",
+      hono: "4.13.13",
+    };
+    const parse = (v: string) => v.split(".").map(Number);
+    for (const [name, floor] of Object.entries(floors)) {
+      const range = pkg.overrides?.[name] ?? "";
+      expect(range, name).toMatch(/^\^\d+\.\d+\.\d+$/);
+      const [maj, min, pat] = parse(range.slice(1));
+      const [fMaj, fMin, fPat] = parse(floor);
+      expect(maj, `${name} major`).toBe(fMaj);
+      expect(min * 1e6 + pat >= fMin * 1e6 + fPat, `${name} ${range} >= ^${floor}`).toBe(true);
+    }
   });
 
   it("verifies MARKETING-LOG.txt contains zero local machine paths and zero developer homes", async () => {
