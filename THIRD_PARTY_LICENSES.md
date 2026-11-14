@@ -1,7 +1,7 @@
 # Third-Party Licenses and Open-Source Transparency Notice
 
 > **Project:** `ellmos-ai/ellmos-codecommander-mcp` (CodeCommander)
-> **Audited:** 2026-11-02  |  **Stand:** 2026-11-02
+> **Audited:** 2026-11-08  |  **Stand:** 2026-11-08
 > **Repository License:** [MIT License](LICENSE)
 > **Development Guidelines:** [CONTRIBUTING.md](CONTRIBUTING.md)
 > **Architecture & Privacy:** 100% Local-First, Zero-Egress by default, Unprivileged User-Mode (`RunAsInvoker`)
@@ -25,7 +25,7 @@ Furthermore, `ellmos-codecommander-mcp` guarantees:
 
 ## Current Dependency Audit Status
 
-The current dependency audit (`npm audit` and `npm audit --omit=dev --json`, checked 2026-11-02) confirms **0 vulnerabilities** across all direct runtime, transitive overrides, and development dependencies. Previous transitive findings in `@hono/node-server`, `vitest`, `@vitest/mocker`, `qs`, `hono`, `fast-uri`, and `ip-address` have been fully mitigated via pinned overrides and verified clean.
+The current dependency audit (`npm audit` and `npm audit --omit=dev --json`, checked 2026-11-08) confirms **0 vulnerabilities** across all direct runtime, transitive overrides, and development dependencies. Previous transitive findings in `@hono/node-server`, `vitest`, `@vitest/mocker`, `qs`, `hono`, `fast-uri`, and `ip-address` have been fully mitigated via pinned overrides and verified clean.
 
 ---
 

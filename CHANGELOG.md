@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Discoverability, Dual Sequence Diagrams, Verified Badge & Level 1 SBOM Re-Audit (Pfad B: 2026-11-08)
+- **Dual Visual Sequence Diagrams (Section 5):** Expanded architectural workflows with a second comprehensive sequence diagram for the Subprocess-Isolated Runtime Import Diagnostics Protocol (`cc_runtime_import_diagnose`), illustrating ephemeral runner lifecycles, timeout boundaries (`INV-ISOL-05`), sandboxed `sys.path` dependency tree inspection, and zero-egress diagnostics (`INV-LOCAL-01`) across both English (`README.md`) and German (`README_de.md`) documentation.
+- **Test Surface Expansion & Badge Currency:** Updated test suite counters to 326 automated tests (231 Vitest, 52 MCP stdio integration, 43 i18n assertions; 100% green); updated `tests-326 passed | 100%` badges and `Verified-2026--11--08` badges across English, German, and all 9 international translation READMEs.
+- **LLM Discovery Index (`llms.txt`):** Synchronized `llms.txt` to `Last-checked: 2026-11-08 (326 tests passed: 231 Vitest, 52 MCP stdio integration, 43 i18n assertions)`.
+- **Level 1 SBOM Stand 2026-11-08 Re-Audit (`THIRD_PARTY_LICENSES.md`, `THIRD_PARTY_LICENSES.txt`):** Re-audited full dependency inventory and 10-invariant matrix (`INV-LOCAL-01` through `INV-SLA-10`), confirming zero copyleft, 100% permissive licensing (MIT, BSD-2, BSD-3, Apache-2.0), unprivileged `RunAsInvoker` mode, statutory notice (§ 521 BGB), and 0 npm audit vulnerabilities.
+- **Automated Metadata & Discoverability Contract Tests:** Expanded `test/metadata.test.ts` to 38 Vitest contract tests validating dual sequence diagram parity, 2026-11-08 verification recency, Level 1 SBOM currency, and 326 tests passing baseline.
+- **Strict Version Freeze Discipline:** Version 1.3.27 strictly maintained unchanged per T-20260920-167562623.
+
 ### AI Security and Dependency Audit, Supply-Chain Hardening & Privacy Remediation (2026-11-02)
 - **Supply-Chain & Dependency Hardening (0 Schwachstellen):** Beseitigung aller 4 moderaten Schwachstellen across 213 Paketen (`npm audit` 100% sauber):
   - `@hono/node-server`: Gehärtet auf `^2.1.5` (Behebung der `serveStatic` Pfad-Doppeldekodierungs-Schwachstelle GHSA-rmxm-3fg6-px4f).
